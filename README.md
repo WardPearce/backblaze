@@ -37,3 +37,8 @@ loop.close()
     - file_versions(self, bucket_id, **kwargs)
     - file_names(self, bucket_id, **kwargs)
     - buckets(self, account_id, **kwargs)
+#### upload
+    - get_url(self, bucket_id)
+    - get_part_url(self, file_id)
+    - file(self, bucket_id, file_name, file_pathway, content_type="b2/x-auto", **kwargs)
+    - part(self, file_id, part_data, bytes_count, x_bz_part_number: int)

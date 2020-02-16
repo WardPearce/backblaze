@@ -1,8 +1,10 @@
-# Backblaze Asynchronous Wrapper
+# Backblaze B2 Asynchronous Wrapper
+Simple asynchronous wrapper for Backblaze B2 with 100% coverage.
+
 [Backblaze Documentation](https://www.backblaze.com/b2/docs)
 
 ## Notes
-Our wrapper only adjusts the names for required inputs, e.g. if we wanted to use https://www.backblaze.com/b2/docs/b2_list_parts.html
+Our wrapper only adjusts the names for required inputs, e.g. if we wanted to use https://www.backblaze.com/b2/docs/b2_list_parts.html. Most of the time the required inputs are all you need. 
 ```py
 await b2_client.list.file_names(file_id="", startPartNumber="1", maxPartCount="100")
 ```

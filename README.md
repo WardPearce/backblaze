@@ -1,7 +1,7 @@
 # Backblaze B2 Asynchronous Wrapper
 Simple asynchronous wrapper for Backblaze B2 with 100% coverage.
 
-[Backblaze Documentation](https://www.backblaze.com/b2/docs)
+[Backblaze Documentation](https://www.backblaze.com/b2/docs) | [API](#API)
 
 ## Install
 Install git and run ``pip3 install git+https://github.com/WardPearce/aiob2.git``
@@ -28,3 +28,12 @@ loop = asyncio.get_event_loop()
 loop.run_until_complete(testing())
 loop.close()
 ```
+
+### API
+#### list
+    - unfinished_large_files(self, bucket_id, **kwargs)
+    - parts(self, file_id, **kwargs)
+    - keys(self, account_id, **kwargs)
+    - file_versions(self, bucket_id, **kwargs)
+    - file_names(self, bucket_id, **kwargs)
+    - buckets(self, account_id, **kwargs)

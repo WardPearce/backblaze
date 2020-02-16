@@ -2,6 +2,7 @@ from upload import B2Upload
 from routes import ROUTES
 
 import aiohttp
+import hashlib
 import aiofiles
 import os
 import asyncio
@@ -10,9 +11,10 @@ import base64
 class b2(object):
     """ B2 API Interface. """
 
-    def __init__(self, application_key_id, application_key):
+    def __init__(self, application_key_id, application_key, debug=False):
         self.ROUTES = ROUTES
-
+        self.debug = debug
+        
         self.loop = asyncio.get_event_loop()
         self.session = aiohttp.ClientSession(loop=self.loop)
         self.loop.run_until_complete(self.auth(application_key_id, application_key))
@@ -28,21 +30,37 @@ class b2(object):
     def part_number(self, number):
         if number > 10000 and number < 1:
             raise Exception("InvalidPartNumber")
+    
+    def get_sha1(self, data):
+        return hashlib.sha1(data).hexdigest()
 
     async def read_file(self, file_pathway):
         if os.path.isfile(file_pathway):
-            async with aiofiles.open(file_pathway, mode="r") as f:
-                contents = await f.read()
-                
+            sha1 = hashlib.sha1()
+
+            contents = {
+                "data": b"",
+                "bytes":str(os.path.getsize(file_pathway)),
+            }
+
+            async with aiofiles.open(file_pathway, mode="rb") as f:
+                async for line in f:
+                    sha1.update(line)
+                    contents["data"] += line
+
+            contents["sha1"] = sha1.hexdigest()
+            
             return contents
 
         raise Exception("CantReadFile")
 
     async def post(self, url, **kwargs):
-        async with self.session.post(url, headers=self.authorization, **kwargs) as resp:
+        async with self.session.post(url, **kwargs) as resp:
             if resp.status == 200:
                 return await resp.json()
             else:
+                if self.debug == True:
+                    print(await resp.json())
                 return False
 
     async def auth(self, application_key_id, application_key):
@@ -59,16 +77,16 @@ class b2(object):
                 self.download_url = resp_json["downloadUrl"]
                 self.account_id = resp_json["accountId"]
                 self.authorization = {"Authorization": resp_json["authorizationToken"]}
-
-                return resp_json
             else:
                 raise Exception("InvalidAuthorization")
 
 if __name__ == "__main__":
-    b2_client = b2(application_key_id="", application_key="")
+    b2_client = b2(application_key_id="", application_key="", debug=True)
 
     async def testing():
-        print(await b2_client.upload.get_url(bucket_id="33e138c438fbe35e6be90b11"))
+        CURRECT_DIR = os.path.dirname(os.path.realpath(__file__))
+
+        print(await b2_client.upload.file(bucket_id="33e138c438fbe35e6be90b11", file_name="test.json", file_pathway="{}/test.json".format(CURRECT_DIR)))
 
         await b2_client.session.close()
         

@@ -1,5 +1,5 @@
 # Backblaze B2 Asynchronous Wrapper
-Simple asynchronous wrapper for Backblaze B2 with 100% coverage.
+Simple asynchronous wrapper for Backblaze B2 with 100% coverage. In the future I'm planning to add more developer friendly functions like the upload.file() what handles everything for you.
 
 [Backblaze Documentation](https://www.backblaze.com/b2/docs) | [API](#API)
 
@@ -42,3 +42,27 @@ loop.close()
     - get_part_url(self, file_id)
     - file(self, bucket_id, file_name, file_pathway, content_type="b2/x-auto", **kwargs)
     - part(self, file_id, part_data, bytes_count, x_bz_part_number: int)
+#### get
+    - upload_url(self, bucket_id)
+    - part_url(self, file_id)
+    - file_info(self, file_id)
+    - download_authorization(self, bucket_id, file_name_prefix, valid_duration_in_seconds, **kwargs)
+#### finish
+    - large_file(self, file_id, part_sha1_array)
+#### hide
+    - file(self, bucket_id, file_name)
+#### download
+    - file_by_name(self, bucket_name, file_pathway)
+    - file_by_id(self, file_id)
+#### delete
+    - key(self, application_key_id)
+    - file_version(self, file_name, file_id)
+    - bucket(self, account_id, bucket_id)
+#### create
+    - key(self, account_id, capabilities, key_name, **kwargs)
+    - bucket(self, account_id, bucket_name, bucket_type, **kwargs)
+#### copy
+    - part(self, source_file_id, large_file_id, part_number, **kwargs)
+    - file(self, source_file_id, file_name, **kwargs)
+#### cancel
+    - large_file(self, file_id)

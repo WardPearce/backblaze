@@ -1,5 +1,13 @@
 from upload import B2Upload
 from lists import B2List
+from hide import B2Hide
+from get import B2Get
+from finish import B2Finish
+from download import B2Download
+from delete import B2Delete
+from create import B2Create
+from copy import B2Copy
+from cancel import B2Cancel
 
 from routes import ROUTES
 
@@ -21,8 +29,16 @@ class b2(object):
         self.session = aiohttp.ClientSession(loop=self.loop)
         self.loop.run_until_complete(self.auth(application_key_id, application_key))
 
+        self.get = B2Get(obj=self)
         self.upload = B2Upload(obj=self)
         self.list = B2List(obj=self)
+        self.hide = B2Hide(obj=self)
+        self.finish = B2Finish(obj=self)
+        self.download = B2Download(obj=self)
+        self.delete = B2Delete(obj=self)
+        self.create = B2Create(obj=self)
+        self.copy = B2Copy(obj=self)
+        self.cancel = B2Cancel(obj=self)
 
     def part_number(self, number):
         if number > 10000 and number < 1:
@@ -51,16 +67,29 @@ class b2(object):
 
         raise Exception("CantReadFile")
 
-    async def post(self, url, **kwargs):
+    async def debugger(self, resp):
+        try:
+            print(await resp.json())
+        except:
+            print("Debug couldn't render json.")
+
+    async def _post(self, url, **kwargs):
         async with self.session.post(url, **kwargs) as resp:
             if resp.status == 200:
                 return await resp.json()
             else:
                 if self.debug == True:
-                    try:
-                        print(await resp.json())
-                    except:
-                        print("Debug couldn't render json.")
+                    await self.debugger(resp)
+
+                return False
+
+    async def _get(self, url, **kwargs):
+        async with self.session.get(url, **kwargs) as resp:
+            if resp.status == 200:
+                return await resp.read()
+            else:
+                if self.debug == True:
+                    await self.debugger(resp)
 
                 return False
 

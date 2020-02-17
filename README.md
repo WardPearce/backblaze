@@ -9,7 +9,7 @@ Install git and run ``pip3 install git+https://github.com/WardPearce/aiob2.git``
 ## Notes
 Our wrapper only adjusts the names for required inputs, e.g. if we wanted to use https://www.backblaze.com/b2/docs/b2_list_parts.html. Most of the time the required inputs are all you need. 
 ```py
-await b2_client.list.file_names(file_id="", startPartNumber="1", maxPartCount="100")
+await b2_client.list.file_names(bucket_id="", startPartNumber="1", maxPartCount="100")
 ```
 
 ### Example

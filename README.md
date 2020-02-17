@@ -17,7 +17,7 @@ await b2_client.list.file_names(file_id="", startPartNumber="1", maxPartCount="1
 import asyncio
 import aiob2
 
-b2_client = aiob2(application_key_id="", application_key="")
+b2_client = aiob2.b2(application_key_id="", application_key="")
 
 async def testing():
     print(await b2_client.list.file_names(bucket_id=""))

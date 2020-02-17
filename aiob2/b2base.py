@@ -1,15 +1,15 @@
-from upload import B2Upload
-from lists import B2List
-from hide import B2Hide
-from get import B2Get
-from finish import B2Finish
-from download import B2Download
-from delete import B2Delete
-from create import B2Create
-from copy import B2Copy
-from cancel import B2Cancel
+from .upload import B2Upload
+from .lists import B2List
+from .hide import B2Hide
+from .get import B2Get
+from .finish import B2Finish
+from .download import B2Download
+from .delete import B2Delete
+from .create import B2Create
+from .copy import B2Copy
+from .cancel import B2Cancel
 
-from routes import ROUTES
+from .routes import ROUTES
 
 import aiohttp
 import hashlib

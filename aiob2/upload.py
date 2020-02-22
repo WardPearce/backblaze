@@ -15,7 +15,6 @@ class B2Upload(object):
         if upload_url != False:
             file_content = await self.obj.read_file(file_pathway)
 
-
             headers = {
                 "Authorization": upload_url["authorizationToken"],
                 "X-Bz-File-Name": file_name,

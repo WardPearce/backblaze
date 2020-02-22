@@ -41,6 +41,7 @@ loop.close()
     - get_url(self, bucket_id)
     - get_part_url(self, file_id)
     - file(self, bucket_id, file_name, file_pathway, content_type="b2/x-auto", **kwargs)
+    - data(self, bucket_id, upload_data, file_name, content_type="b2/x-auto", **kwargs)
     - part(self, file_id, part_data, bytes_count, x_bz_part_number: int)
 #### get
     - upload_url(self, bucket_id)

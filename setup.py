@@ -6,7 +6,7 @@ def get_requirements():
 
 setup(
     name='aiob2',
-    version='0.0.6',
+    version='0.0.7',
     description='Asynchronous backblaze b2 wrapper.',
     author='WardPearce',
     author_email='contact@districtnine.host',

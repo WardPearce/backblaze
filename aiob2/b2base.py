@@ -25,13 +25,16 @@ class b2(object):
         self.ROUTES = ROUTES
         self.debug = debug
         
+        self.loop = asyncio.get_event_loop()
         if session == None:
-            self.loop = asyncio.get_event_loop()
             self.session = aiohttp.ClientSession(loop=self.loop)
         else:
             self.session = session
-            
-        asyncio.ensure_future(self.auth(application_key_id, application_key))
+
+        try:
+            self.loop.run_until_complete(self.auth(application_key_id, application_key))
+        except:
+            asyncio.ensure_future(self.auth(application_key_id, application_key))
 
         self.get = B2Get(obj=self)
         self.upload = B2Upload(obj=self)

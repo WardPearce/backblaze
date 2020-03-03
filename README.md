@@ -17,7 +17,8 @@ await b2_client.list.file_names(bucket_id="", startPartNumber="1", maxPartCount=
 import asyncio
 import aiob2
 
-b2_client = aiob2.b2(application_key_id="", application_key="")
+# If you want to pass your own session pass it here.
+b2_client = aiob2.b2(application_key_id="", application_key="", session=None)
 
 async def testing():
     print(await b2_client.list.file_names(bucket_id=""))

@@ -21,12 +21,16 @@ import base64
 class b2(object):
     """ B2 API Interface. """
 
-    def __init__(self, application_key_id, application_key, debug=False):
+    def __init__(self, application_key_id, application_key, session=None, debug=False):
         self.ROUTES = ROUTES
         self.debug = debug
         
         self.loop = asyncio.get_event_loop()
-        self.session = aiohttp.ClientSession(loop=self.loop)
+        if session == None:
+            self.session = aiohttp.ClientSession(loop=self.loop)
+        else:
+            self.session = session
+            
         self.loop.run_until_complete(self.auth(application_key_id, application_key))
 
         self.get = B2Get(obj=self)

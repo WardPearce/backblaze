@@ -12,6 +12,7 @@ from .cancel import B2Cancel
 from .routes import ROUTES
 
 import aiohttp
+import requests
 import hashlib
 import aiofiles
 import os
@@ -31,10 +32,7 @@ class b2(object):
         else:
             self.session = session
 
-        try:
-            self.loop.run_until_complete(self.auth(application_key_id, application_key))
-        except:
-            asyncio.ensure_future(self.auth(application_key_id, application_key))
+        self.auth(application_key_id, application_key)
 
         self.get = B2Get(obj=self)
         self.upload = B2Upload(obj=self)
@@ -100,19 +98,19 @@ class b2(object):
 
                 return False
 
-    async def auth(self, application_key_id, application_key):
+    def auth(self, application_key_id, application_key):
         """ https://www.backblaze.com/b2/docs/b2_authorize_account.html """
 
         encoded_bytes = base64.b64encode("{}:{}".format(application_key_id, application_key).encode("utf-8"))
         basic_auth_string = "Basic {}".format(str(encoded_bytes, "utf-8"))
 
-        async with self.session.get(self.ROUTES["authorize"], headers={"Authorization": basic_auth_string}) as resp:
-            if resp.status == 200:
-                resp_json = await resp.json()
+        resp = requests.get(self.ROUTES["authorize"], headers={"Authorization": basic_auth_string})
+        if resp.status_code == 200:
+            resp_json = resp.json()
 
-                self.api_url = resp_json["apiUrl"]
-                self.download_url = resp_json["downloadUrl"]
-                self.account_id = resp_json["accountId"]
-                self.authorization = {"Authorization": resp_json["authorizationToken"]}
-            else:
-                raise Exception("InvalidAuthorization")
+            self.api_url = resp_json["apiUrl"]
+            self.download_url = resp_json["downloadUrl"]
+            self.account_id = resp_json["accountId"]
+            self.authorization = {"Authorization": resp_json["authorizationToken"]}
+        else:
+            raise Exception("InvalidAuthorization")

@@ -1,6 +1,7 @@
 from .bucket.bucket import Bucket
 from .file.file import File
 from .account.account import Account
+from .source_file.source_file import SourceFile
 from routes import ROUTES
 
 import aiohttp
@@ -32,6 +33,13 @@ class client(object):
 
         return Bucket(bucket_id=bucket_id, obj=self)
 
+    def source_file(self, source_file_id):
+        """ Source File Object
+                - source_file_id, required.
+        """
+
+        return SourceFile(source_file_id=source_file_id, obj=self)
+
     def file(self, file_id):
         """ File Object.
                 - file_id, required.
@@ -41,7 +49,7 @@ class client(object):
 
     def account(self, account_id):
         """ Account Object 
-                - account_id
+                - account_id, required.
         """
 
         return Account(account_id=account_id, obj=self)

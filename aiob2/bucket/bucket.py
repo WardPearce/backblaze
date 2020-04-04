@@ -6,12 +6,6 @@ class Bucket(object):
         self.obj = obj
         self.bucket_id = bucket_id
 
-    async def unfinished_large_files(self, **kwargs):
-        """ https://www.backblaze.com/b2/docs/b2_list_unfinished_large_files.html """
-
-        return await self.obj._post(url=self.obj.ROUTES["list_unfinished_large_files"].format(self.obj.api_url),
-                                    json={"bucketId": self.bucket_id, **kwargs,})
-
     @property
     def upload(self):
         """ Upload object """

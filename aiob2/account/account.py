@@ -1,4 +1,6 @@
 from create import Create
+from list import List
+from delete import Delete
 
 class Account(object):
     def __init__(self, account_id, obj):
@@ -11,14 +13,14 @@ class Account(object):
         
         return Create(account_id=self.account_id, obj=self.obj)
 
-    async def keys(self, **kwargs):
-        """ https://www.backblaze.com/b2/docs/b2_list_keys.html """
+    @property
+    def list(self):
+        """ List Object """
 
-        return await self.obj._post(self.obj.ROUTES["list_keys"].format(self.obj.api_url),
-                                   json={"accountId": self.account_id, **kwargs,})
+        return List(account_id=self.account_id, obj=self.obj)
 
-    async def buckets(self, **kwargs):
-        """ https://www.backblaze.com/b2/docs/b2_list_buckets.html """
+    @property
+    def delete(self):
+        """ Delete Object """
 
-        return await self.obj._post(self.obj.ROUTES["list_buckets"].format(self.obj.api_url),
-                                   json={"accountId": self.account_id, **kwargs,})
+        return Delete(account_id=self.account_id, obj=self.obj)

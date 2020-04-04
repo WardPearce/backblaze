@@ -7,7 +7,7 @@ class Upload(object):
         """ https://www.backblaze.com/b2/docs/b2_get_upload_url.html """
 
         return await self.obj._post(url=self.obj.ROUTES["get_upload_url"].format(self.obj.api_url),
-                                    json={"bucketId": self.bucket_id})
+                                    json={"bucketId": self.bucket_id,})
 
     async def file(self, file_name, file_pathway, content_type="b2/x-auto", **kwargs):
         """ https://www.backblaze.com/b2/docs/b2_upload_file.html 
@@ -29,7 +29,8 @@ class Upload(object):
                 **kwargs,
             }
 
-            return await self.obj._post(url=upload_url["uploadUrl"], headers=headers, data=file_content["data"])
+            return await self.obj._post(url=upload_url["uploadUrl"], headers=headers, 
+                                        data=file_content["data"])
 
         return False
 
@@ -51,6 +52,7 @@ class Upload(object):
                 **kwargs,
             }
 
-            return await self.obj._post(url=upload_url["uploadUrl"], headers=headers, data=data)
+            return await self.obj._post(url=upload_url["uploadUrl"], headers=headers, 
+                                        data=data)
 
         return False

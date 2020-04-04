@@ -1,4 +1,4 @@
-from upload import Upload
+from .upload import Upload
 
 class File(object):
     def __init__(self, file_id, obj):

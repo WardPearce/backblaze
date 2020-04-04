@@ -1,7 +1,7 @@
-from .bucket.bucket import Bucket
-from .file.file import File
-from .account.account import Account
-from .source_file.source_file import SourceFile
+from bucket.bucket import Bucket
+from file.file import File
+from account.account import Account
+from source_file.source_file import SourceFile
 from routes import ROUTES
 
 import aiohttp
@@ -47,12 +47,11 @@ class client(object):
 
         return File(file_id=file_id, obj=self)
 
-    def account(self, account_id):
-        """ Account Object 
-                - account_id, required.
-        """
+    @property
+    def account(self):
+        """ Account Object """
 
-        return Account(account_id=account_id, obj=self)
+        return Account(obj=self)
 
     def part_number(self, number):
         if number > 10000 and number < 1:

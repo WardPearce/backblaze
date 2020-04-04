@@ -1,3 +1,3 @@
-from .b2base import b2
+from .base import client
 
-assert b2
+assert client

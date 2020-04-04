@@ -1,15 +1,7 @@
-from .upload import B2Upload
-from .lists import B2List
-from .hide import B2Hide
-from .get import B2Get
-from .finish import B2Finish
-from .download import B2Download
-from .delete import B2Delete
-from .create import B2Create
-from .copy import B2Copy
-from .cancel import B2Cancel
-
-from .routes import ROUTES
+from .bucket.bucket import Bucket
+from .file.file import File
+from .account.account import Account
+from routes import ROUTES
 
 import aiohttp
 import requests
@@ -19,31 +11,40 @@ import os
 import asyncio
 import base64
 
-class b2(object):
+class client(object):
     """ B2 API Interface. """
 
     def __init__(self, application_key_id, application_key, session=None, debug=False):
         self.ROUTES = ROUTES
         self.debug = debug
         
-        self.loop = asyncio.get_event_loop()
-        if session == None:
-            self.session = aiohttp.ClientSession(loop=self.loop)
-        else:
+        if session:
             self.session = session
+        else:
+            self.session = aiohttp.ClientSession(loop=asyncio.get_event_loop())
 
         self.auth(application_key_id, application_key)
 
-        self.get = B2Get(obj=self)
-        self.upload = B2Upload(obj=self)
-        self.list = B2List(obj=self)
-        self.hide = B2Hide(obj=self)
-        self.finish = B2Finish(obj=self)
-        self.download = B2Download(obj=self)
-        self.delete = B2Delete(obj=self)
-        self.create = B2Create(obj=self)
-        self.copy = B2Copy(obj=self)
-        self.cancel = B2Cancel(obj=self)
+    def bucket(self, bucket_id):
+        """ Bucket Object.
+                - bucket_id, required.
+        """
+
+        return Bucket(bucket_id=bucket_id, obj=self)
+
+    def file(self, file_id):
+        """ File Object.
+                - file_id, required.
+        """
+
+        return File(file_id=file_id, obj=self)
+
+    def account(self, account_id):
+        """ Account Object 
+                - account_id
+        """
+
+        return Account(account_id=account_id, obj=self)
 
     def part_number(self, number):
         if number > 10000 and number < 1:
@@ -76,24 +77,30 @@ class b2(object):
         try:
             print(await resp.json())
         except:
-            print("Debug couldn't render json.")
+            print("Couldn't phrase json.")
 
-    async def _post(self, url, **kwargs):
-        async with self.session.post(url, **kwargs) as resp:
+    async def _post(self, **kwargs):
+        if not kwargs.get("headers"):
+            kwargs["headers"] = self.authorization
+
+        async with self.session.post(**kwargs) as resp:
             if resp.status == 200:
                 return await resp.json()
             else:
-                if self.debug == True:
+                if self.debug:
                     await self.debugger(resp)
 
                 return False
 
-    async def _get(self, url, **kwargs):
-        async with self.session.get(url, **kwargs) as resp:
+    async def _get(self, **kwargs):
+        if not kwargs.get("headers"):
+            kwargs["headers"] = self.authorization
+
+        async with self.session.get(**kwargs) as resp:
             if resp.status == 200:
                 return await resp.read()
             else:
-                if self.debug == True:
+                if self.debug:
                     await self.debugger(resp)
 
                 return False

@@ -26,3 +26,9 @@ class Upload(object):
             return await self.obj._post(upload_url["uploadUrl"], headers=headers, data=data)
 
         return False
+
+    async def cancel(self):
+        """ https://www.backblaze.com/b2/docs/b2_cancel_large_file.html """
+
+        return await self.obj._post(url=self.obj.ROUTES["cancel_large_file"].format(self.obj.api_url),
+                                    json={"fileId": self.file_id,})

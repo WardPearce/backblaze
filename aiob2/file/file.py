@@ -23,12 +23,6 @@ class File(object):
         return await self.obj._get(url=self.obj.ROUTES["download_file_by_id"].format(self.obj.api_url, self.file_id), 
                                    headers=self.obj.authorization)
 
-    async def cancel(self):
-        """ https://www.backblaze.com/b2/docs/b2_copy_part.html """
-
-        return await self.obj._post(url=self.obj.ROUTES["cancel_large_file"].format(self.obj.api_url),
-                                    json={"fileId": self.file_id,})
-
     async def parts(self, **kwargs):
         """ https://www.backblaze.com/b2/docs/b2_list_parts.html """
 

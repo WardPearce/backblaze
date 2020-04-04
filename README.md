@@ -4,7 +4,7 @@ Simple asynchronous wrapper for Backblaze B2 with 100% coverage. In the future I
 [Backblaze Documentation](https://www.backblaze.com/b2/docs) | [API](#API)
 
 ## Install
-Install git and run ``pip3 install git+https://github.com/WardPearce/aiob2.git``
+Install git and run ``pip3 install git+https://github.com/WardPearce/aiob2.git@0.0.9``
 
 ## Notes
 Our wrapper only adjusts the names for required inputs, e.g. if we wanted to use https://www.backblaze.com/b2/docs/b2_list_parts.html. Most of the time the required inputs are all you need. 

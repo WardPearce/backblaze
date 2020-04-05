@@ -3,7 +3,7 @@
 #### Simple asynchronous wrapper for Backblaze B2 with 100% coverage.
 
 ## Install 
-Install git and run pip3 ``install git+https://github.com/WardPearce/aiob2.git``
+Install git and run ``pip3 install git+https://github.com/WardPearce/aiob2.git``
 
 ## Notes
 - Our wrapper only adjusts the names for required inputs, any non-required input what uses a '-' replace it with '__'.

@@ -20,6 +20,8 @@ class Upload(object):
         if upload_url != False:
             file_content = await self.obj.read_file(file_pathway)
 
+            kwargs = self.obj.format_keys(kwargs)
+
             headers = {
                 "Authorization": upload_url["authorizationToken"],
                 "X-Bz-File-Name": file_name,
@@ -43,6 +45,8 @@ class Upload(object):
 
         upload_url = await self.get()
         if upload_url != False:
+            kwargs = self.obj.format_keys(kwargs)
+            
             headers = {
                 "Authorization": upload_url["authorizationToken"],
                 "X-Bz-File-Name": file_name,

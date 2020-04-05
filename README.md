@@ -1,10 +1,18 @@
-Simple asynchronous wrapper for Backblaze B2 with 100% coverage.
+##### Version 0.1.0 is NOT backwards compatibility with anything below that version.
+
+#### Simple asynchronous wrapper for Backblaze B2 with 100% coverage.
 
 ## Install 
 Install git and run pip3 ``install git+https://github.com/WardPearce/aiob2.git``
 
 ## Notes
-Our wrapper only adjusts the names for required inputs, any input what uses a '.' replace it with '__'.
+- Our wrapper only adjusts the names for required inputs, any non-required input what uses a '-' replace it with '__'.
+- Don't start a pathway with a '/'.
+
+## Index
+    - [Backblaze Docs](https://www.backblaze.com/b2/docs/)
+    - [API](#api)
+    - [Example](#example)
 
 ## API
 ##### aiob2.client
@@ -72,3 +80,17 @@ Our wrapper only adjusts the names for required inputs, any input what uses a '.
             Copies from an existing B2 file.
         - file(self, file_name, **kwargs)
             Creates a new file by copying from an existing file.
+
+## Example
+```py
+async def example():
+    b2 = client(application_key="....", application_key_id="....")
+
+    print(await b2.bucket(bucket_id="33e138c438fbe35e6be90b11").upload.data(data=b"world", file_name="test/hello.txt"))
+
+    await b2.session.close()
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(example())
+loop.close()
+```

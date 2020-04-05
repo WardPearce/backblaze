@@ -53,6 +53,13 @@ class client(object):
 
         return Account(obj=self)
 
+    def format_keys(self, given_dict):
+        params = {}
+        for key in given_dict:
+            params[key.replace("__", "-")] = given_dict[key]
+
+        return params
+
     def part_number(self, number):
         if number > 10000 and number < 1:
             raise Exception("InvalidPartNumber")

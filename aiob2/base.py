@@ -1,8 +1,8 @@
-from aiob2.bucket.bucket import Bucket
-from aiob2.file.file import File
-from aiob2.account.account import Account
-from aiob2.source_file.source_file import SourceFile
-from aiob2.routes import ROUTES
+from .bucket.bucket import Bucket
+from .file.file import File
+from .account.account import Account
+from .source_file.source_file import SourceFile
+from .routes import ROUTES
 
 import aiohttp
 import requests

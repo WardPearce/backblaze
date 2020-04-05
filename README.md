@@ -10,9 +10,9 @@ Install git and run ``pip3 install git+https://github.com/WardPearce/aiob2.git``
 - Don't start a pathway with a '/'.
 
 ## Index
-    - [Backblaze Docs](https://www.backblaze.com/b2/docs/)
-    - [API](#api)
-    - [Example](#example)
+- [Backblaze Docs](https://www.backblaze.com/b2/docs/)
+- [API](#api)
+- [Example](#example)
 
 ## API
 ##### aiob2.client

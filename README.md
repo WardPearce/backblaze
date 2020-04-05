@@ -1,7 +1,5 @@
 ##### Version 0.1.0 is NOT backwards compatibility with anything below that version.
 
-#### Simple asynchronous wrapper for Backblaze B2 with 100% coverage.
-
 ## Install 
 Install git and run ``pip3 install git+https://github.com/WardPearce/aiob2.git``
 

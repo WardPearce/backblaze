@@ -83,8 +83,11 @@ Install git and run ``pip3 install git+https://github.com/WardPearce/aiob2.git``
 
 ## Example
 ```py
+import asyncio
+import aiob2
+
 async def example():
-    b2 = client(application_key="....", application_key_id="....")
+    b2 = aiob2.client(application_key="....", application_key_id="....")
 
     print(await b2.bucket(bucket_id="33e138c438fbe35e6be90b11").upload.data(data=b"world", file_name="test/hello.txt"))
 

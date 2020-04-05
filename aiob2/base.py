@@ -1,8 +1,8 @@
-from ..bucket.bucket import Bucket
-from ..file.file import File
-from ..account.account import Account
-from ..source_file.source_file import SourceFile
-from ..routes import ROUTES
+from bucket.bucket import Bucket
+from file.file import File
+from account.account import Account
+from source_file.source_file import SourceFile
+from routes import ROUTES
 
 import aiohttp
 import requests

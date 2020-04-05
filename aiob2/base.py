@@ -40,7 +40,7 @@ class client(object):
 
         return SourceFile(source_file_id=source_file_id, obj=self)
 
-    def file(self, file_id):
+    def file(self, file_id=None):
         """ File Object.
                 - file_id, required.
         """

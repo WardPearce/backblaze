@@ -1,8 +1,8 @@
 ##### Version 0.1.0 is NOT backwards compatibility with anything below that version.
 
 ## Install 
-Pypi: ``pip3 install aiob2``
-Git: ``pip3 install git+https://github.com/WardPearce/aiob2.git``
+- Pypi: ``pip3 install aiob2``
+- Git: ``pip3 install git+https://github.com/WardPearce/aiob2.git``
 
 ## Notes
 - Our wrapper only adjusts the names for required inputs, any non-required input what uses a '-' replace it with '__'.

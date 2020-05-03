@@ -13,13 +13,16 @@ import os
 import asyncio
 import base64
 
+__version__ = "0.1.0"
+
+
 class client(object):
     """ B2 API Interface. """
 
     def __init__(self, application_key_id, application_key, session=None, debug=False):
         self.ROUTES = ROUTES
         self.debug = debug
-        
+
         if session:
             self.session = session
         else:

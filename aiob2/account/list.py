@@ -23,7 +23,7 @@ class List:
         return await AWR(
             ROUTES.list_buckets,
             json={
-                "accountId": self.obj.account_id,
+                "accountId": self.account_id,
                 **kwargs,
             }
         ).post()

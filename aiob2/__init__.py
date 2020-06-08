@@ -20,7 +20,7 @@ class client:
 
     AUTH_URL = "https://api.backblazeb2.com/b2api/v2/b2_authorize_account"
 
-    def __init__(self, max_cache=200):
+    def __init__(self, max_cache=100):
         """ max_cache, how many cached upload urls do we allow. """
 
         CONFIG.max_cache = max_cache

@@ -50,6 +50,10 @@ class Routes:
     create_bucket = "create_bucket"
     list_keys = "list_keys"
     list_buckets = "list_buckets"
+    get_upload_part_url = "get_upload_part_url"
+    cancel_large_file = "cancel_large_file"
+    copy_part = "copy_part"
+    copy_file = "copy_file"
 
     def format_routes(self):
         """

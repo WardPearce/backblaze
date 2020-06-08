@@ -1,7 +1,7 @@
 from .bucket import Bucket
 from .file import File
-from .account import Account
 from .source_file import SourceFile
+from .key import Key
 
 from .resources import SESSIONS, CONFIG
 
@@ -58,18 +58,22 @@ class client:
             else:
                 raise InvalidAuthorization()
 
-    def account(self, account_id=None):
-        """ Account Object
-                - account_id, optional.
+    def key(self, capabilities=None, key_name=None, **kwargs):
+        """ Key Object
+                - capabilities, optional.
+                - key_name, optional.
 
-        If account ID is left none, uses current account.
         """
 
-        return Account(account_id=account_id)
+        return Key(
+            capabilities=capabilities,
+            key_name=key_name,
+            **kwargs
+        )
 
-    def bucket(self, bucket_id):
+    def bucket(self, bucket_id=None):
         """ Bucket Object
-                - bucket_id, required.
+                - bucket_id, optional.
         """
 
         return Bucket(bucket_id=bucket_id)
@@ -81,7 +85,7 @@ class client:
 
         return SourceFile(source_file_id=source_file_id)
 
-    def file(self, file_id=None):
+    def file(self, file_id):
         """ File Object.
                 - file_id, required.
         """

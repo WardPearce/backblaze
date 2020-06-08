@@ -8,6 +8,17 @@ class File:
     def __init__(self, file_id):
         self.file_id = file_id
 
+    async def delete(self, file_name):
+        """ https://www.backblaze.com/b2/docs/b2_delete_file_version.html """
+
+        return await AWR(
+            ROUTES.delete_file_version,
+            json={
+                "fileName": file_name,
+                "fileId": self.file_id,
+            }
+        ).post()
+
     async def info(self):
         """ https://www.backblaze.com/b2/docs/b2_get_file_info.html """
 

@@ -21,14 +21,14 @@ class Upload:
             if datetime.now() < CACHE.bucket_upload_urls[self.bucket_id][1]:
                 return CACHE.bucket_upload_urls[self.bucket_id][0]
 
-        get_url = await self.get()
+        upload_url = await self.get()
 
         CACHE.bucket_upload_urls[self.bucket_id] = [
-            get_url["uploadUrl"],
+            upload_url,
             datetime.now() + timedelta(hours=23.0, minutes=58.0)
         ]
 
-        return get_url
+        return upload_url
 
     async def get(self):
         """ https://www.backblaze.com/b2/docs/b2_get_upload_url.html """

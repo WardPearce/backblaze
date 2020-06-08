@@ -11,6 +11,7 @@ class Config:
     download_url = None
     account_id = None
     authorization = None
+    max_cache = None
 
 
 CONFIG = Config()

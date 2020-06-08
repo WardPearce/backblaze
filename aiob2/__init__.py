@@ -17,6 +17,11 @@ class client:
 
     AUTH_URL = "https://api.backblazeb2.com/b2api/v2/b2_authorize_account"
 
+    def __init__(self, max_cache=200):
+        """ max_cache, how many cached upload urls do we allow. """
+
+        CONFIG.max_cache = max_cache
+
     async def connect(self, application_key_id, application_key):
         """ Gets authorization details to send requests.
             https://www.backblaze.com/b2/docs/b2_authorize_account.html

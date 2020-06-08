@@ -2,6 +2,7 @@ from .wrapped_requests import AWR
 from .routes import ROUTES
 from .utils import format_keys, read_file, get_sha1
 from .cache import CACHE
+from .resources import CONFIG
 
 from datetime import datetime, timedelta
 
@@ -20,6 +21,9 @@ class Upload:
         if self.bucket_id in CACHE.bucket_upload_urls:
             if datetime.now() < CACHE.bucket_upload_urls[self.bucket_id][1]:
                 return CACHE.bucket_upload_urls[self.bucket_id][0]
+
+        if len(CACHE.bucket_upload_urls) > CONFIG.max_cache:
+            CACHE.bucket_upload_urls = {}
 
         upload_url = await self.get()
 

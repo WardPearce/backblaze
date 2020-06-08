@@ -4,23 +4,27 @@ import aiob2
 import settings
 
 import sys
-import os
 import re
+import requests
 
 
-def get_version(package):
-    with open(os.path.join(
-        os.path.dirname(os.path.abspath(__file__)),
-        "../",
-        package,
-        "__init__.py"
-    )) as f:
-        return re.search(
-            "__version__ = ['\"]([^'\"]+)['\"]", f.read()
-        ).group(1)
+def get_latest_version(location):
+    url = "https://raw.githubusercontent.com/" + location
+
+    with requests.get(url) as resp:
+        if resp.status_code == 200:
+            return re.search(
+                "__version__ = ['\"]([^'\"]+)['\"]", resp.text
+            ).group(1)
+        else:
+            sys.exit("Request to {} failed with status code {}".format(
+                url, resp.status_code
+            ))
 
 
-if aiob2.__version__ != get_version("aiob2"):
+if aiob2.__version__ != get_latest_version(
+    "WardPearce/aiob2/master/aiob2/__init__.py"
+        ):
     sys.exit("""PLEASE INSTALL THE LATEST VERSION BEFORE TESTING
                 `pip3 install aiob2`""")
 

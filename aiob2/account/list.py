@@ -1,15 +1,29 @@
-class List(object):
-    def __init__(self, obj):
-        self.obj = obj
+from .wrapped_requests import AWR
+from .routes import ROUTES
+
+
+class List:
+    def __init__(self, account_id):
+        self.account_id = account_id
 
     async def keys(self, **kwargs):
         """ https://www.backblaze.com/b2/docs/b2_list_keys.html """
 
-        return await self.obj._post(url=self.obj.ROUTES["list_keys"].format(self.obj.api_url),
-                                   json={"accountId": self.obj.account_id, **kwargs,})
+        return await AWR(
+            ROUTES.list_keys,
+            json={
+                "accountId": self.account_id,
+                **kwargs,
+            }
+        ).post()
 
     async def buckets(self, **kwargs):
         """ https://www.backblaze.com/b2/docs/b2_list_buckets.html """
 
-        return await self.obj._post(url=self.obj.ROUTES["list_buckets"].format(self.obj.api_url),
-                                   json={"accountId": self.obj.account_id, **kwargs,})
+        return await AWR(
+            ROUTES.list_buckets,
+            json={
+                "accountId": self.obj.account_id,
+                **kwargs,
+            }
+        ).post()

@@ -1,4 +1,4 @@
-from .resources import AIOHTTP, CONFIG
+from .resources import SESSIONS, CONFIG
 from .exceptions import BadRequest, InvalidAuthorization, \
     Forbidden, RequestTimeout, TooManyRequests, InternalError, \
     ServiceUnavailable
@@ -47,11 +47,11 @@ class AWR:
     async def get(self):
         """ Wrapped async get request. """
 
-        async with AIOHTTP.get(self.route, **self.kwargs) as resp:
+        async with SESSIONS.AIOHTTP.get(self.route, **self.kwargs) as resp:
             return await self._validate(resp)
 
     async def post(self):
         """ Wrapped async post request. """
 
-        async with AIOHTTP.post(self.route, **self.kwargs) as resp:
+        async with SESSIONS.AIOHTTP.post(self.route, **self.kwargs) as resp:
             return await self._validate(resp)

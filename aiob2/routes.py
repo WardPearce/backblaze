@@ -1,6 +1,5 @@
 from .resources import CONFIG
 
-
 ROUTES = {
     "list_unfinished_large_files": "{}/b2api/v2/b2_list_unfinished_large_files",
     "list_parts": "{}/b2api/v2/b2_list_parts",
@@ -47,24 +46,34 @@ class Routes:
     download_file_by_id = "download_file_by_id?fileId={}"
     get_upload_url = "get_upload_url"
     list_parts = "list_parts"
+    create_key = "create_key"
+    create_bucket = "create_bucket"
+    list_keys = "list_keys"
+    list_buckets = "list_buckets"
 
-    def __init__(self):
-        attach_auth = [
-            self.delete_bucket,
-            self.hide_file,
-            self.list_file_versions,
-            self.list_file_names,
-            self.get_download_authorization,
-            self.list_unfinished_large_files,
-            self.get_file_info,
-            self.finish_large_file,
-            self.download_file_by_id,
-            self.get_upload_url,
-            self.list_parts
+    def format_routes(self):
+        """
+        Formats the B2 routes using the auth url.
+        """
+
+        routes = [
+            attr for attr in dir(Routes())
+            if not callable(getattr(Routes(), attr))
+            and not attr.startswith("__")
         ]
 
-        for var in attach_auth:
-            var = "{}/b2api/v2/b2_{}".format(CONFIG.api_url, var)
+        for var_name in routes:
+            setattr(
+                self,
+                var_name,
+                "{}/b2api/v2/b2_{}".format(
+                    CONFIG.api_url,
+                    getattr(
+                        self,
+                        var_name
+                    )
+                )
+            )
 
 
 ROUTES = Routes()

@@ -1,7 +1,8 @@
-import aiohttp
+class Sessions:
+    AIOHTTP = None
 
 
-AIOHTTP = aiohttp.ClientSession()
+SESSIONS = Sessions()
 
 
 class Config:

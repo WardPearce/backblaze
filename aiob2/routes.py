@@ -1,6 +1,7 @@
-ROUTES = {
-    "authorize": "https://api.backblazeb2.com/b2api/v2/b2_authorize_account",
+from .resources import CONFIG
 
+
+ROUTES = {
     "list_unfinished_large_files": "{}/b2api/v2/b2_list_unfinished_large_files",
     "list_parts": "{}/b2api/v2/b2_list_parts",
     "list_keys": "{}/b2api/v2/b2_list_keys",
@@ -32,3 +33,20 @@ ROUTES = {
 
     "cancel_large_file": "{}/b2api/v2/b2_cancel_large_file",
 }
+
+
+class Routes:
+    delete_bucket = "b2_delete_bucket"
+    hide_file = "b2_hide_file"
+
+    def __init__(self):
+        attach_auth = [
+            self.delete_bucket,
+            self.hide_file
+        ]
+
+        for var in attach_auth:
+            var = "{}/{}".format(CONFIG.api_url, var)
+
+
+ROUTES = Routes()

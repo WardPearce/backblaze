@@ -1,6 +1,5 @@
-class Upload(object):
-    def __init__(self, bucket_id, obj):
-        self.obj = obj
+class Upload:
+    def __init__(self, bucket_id):
         self.bucket_id = bucket_id
 
     async def get(self):
@@ -46,7 +45,7 @@ class Upload(object):
         upload_url = await self.get()
         if upload_url != False:
             kwargs = self.obj.format_keys(kwargs)
-            
+
             headers = {
                 "Authorization": upload_url["authorizationToken"],
                 "X-Bz-File-Name": file_name,

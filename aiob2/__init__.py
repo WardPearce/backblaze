@@ -5,12 +5,8 @@ from .source_file import SourceFile
 
 from .resources import AIOHTTP, CONFIG
 
-from .exceptions import InvalidAuthorization, NoSuchFile, \
-    InvalidPartNumber
+from .exceptions import InvalidAuthorization
 
-import hashlib
-import aiofiles
-import os
 import base64
 
 __version__ = "1.0.0"
@@ -65,38 +61,3 @@ class client:
         """ Account Object """
 
         return Account(obj=self)
-
-    def format_keys(self, given_dict):
-        params = {}
-        for key in given_dict:
-            params[key.replace("__", "-")] = given_dict[key]
-
-        return params
-
-    def part_number(self, number):
-        if number > 10000 or number < 1:
-            raise InvalidPartNumber()
-
-    def get_sha1(self, data):
-        return hashlib.sha1(data).hexdigest()
-
-    async def read_file(self, file_pathway):
-        if os.path.isfile(file_pathway):
-            sha1 = hashlib.sha1()
-            sha1_update = sha1.update
-
-            contents = {
-                "data": b"",
-                "bytes": str(os.path.getsize(file_pathway)),
-            }
-
-            async with aiofiles.open(file_pathway, mode="rb") as f:
-                async for line in f:
-                    sha1_update(line)
-                    contents["data"] += line
-
-            contents["sha1"] = sha1.hexdigest()
-
-            return contents
-
-        raise NoSuchFile()

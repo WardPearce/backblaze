@@ -36,17 +36,35 @@ ROUTES = {
 
 
 class Routes:
-    delete_bucket = "b2_delete_bucket"
-    hide_file = "b2_hide_file"
+    delete_bucket = "delete_bucket"
+    hide_file = "hide_file"
+    list_file_versions = "list_file_versions"
+    list_file_names = "list_file_names"
+    get_download_authorization = "get_download_authorization"
+    list_unfinished_large_files = "list_unfinished_large_files"
+    get_file_info = "get_file_info"
+    finish_large_file = "finish_large_file"
+    download_file_by_id = "download_file_by_id?fileId={}"
+    get_upload_url = "get_upload_url"
+    list_parts = "list_parts"
 
     def __init__(self):
         attach_auth = [
             self.delete_bucket,
-            self.hide_file
+            self.hide_file,
+            self.list_file_versions,
+            self.list_file_names,
+            self.get_download_authorization,
+            self.list_unfinished_large_files,
+            self.get_file_info,
+            self.finish_large_file,
+            self.download_file_by_id,
+            self.get_upload_url,
+            self.list_parts
         ]
 
         for var in attach_auth:
-            var = "{}/{}".format(CONFIG.api_url, var)
+            var = "{}/b2api/v2/b2_{}".format(CONFIG.api_url, var)
 
 
 ROUTES = Routes()

@@ -1,36 +1,54 @@
 from .upload import Upload
 
-class File(object):
-    def __init__(self, file_id, obj):
-        self.obj = obj
+from .wrapped_requests import AWR
+from .routes import ROUTES
+
+
+class File:
+    def __init__(self, file_id):
         self.file_id = file_id
 
     async def info(self):
         """ https://www.backblaze.com/b2/docs/b2_get_file_info.html """
 
-        return await self.obj._post(url=self.obj.ROUTES["get_file_info"].format(self.obj.api_url),
-                                    json={"fileId": self.file_id,})
+        return await AWR(
+            ROUTES.get_file_info,
+            json={
+                "fileId": self.file_id,
+            }
+        ).post()
 
     async def finish(self, part_sha1_array):
         """ https://www.backblaze.com/b2/docs/b2_finish_large_file.html """
 
-        return await self.obj._post(url=self.obj.ROUTES["finish_large_file"].format(self.obj.api_url),
-                                    json={"fileId": self.file_id, "partSha1Array": part_sha1_array,})
+        return await AWR(
+            ROUTES.finish_large_file,
+            json={
+                "fileId": self.file_id,
+                "partSha1Array": part_sha1_array,
+            }
+        ).post()
 
     async def download(self):
         """ https://www.backblaze.com/b2/docs/b2_download_file_by_id.html """
 
-        return await self.obj._get(url=self.obj.ROUTES["download_file_by_id"].format(self.obj.api_url, self.file_id), 
-                                   headers=self.obj.authorization)
+        return await AWR(
+            ROUTES.download_file_by_id.format(self.file_id)
+        ).get()
 
     async def parts(self, **kwargs):
         """ https://www.backblaze.com/b2/docs/b2_list_parts.html """
 
-        return await self.obj._post(url=self.obj.ROUTES["list_parts"].format(self.obj.api_url),
-                                    json={"fileId": self.file_id, **kwargs,})
+        return await AWR(
+            ROUTES.list_parts,
+            json={
+                "fileId": self.file_id,
+                **kwargs,
+            }
+        ).post()
 
     @property
     def upload(self):
         """ Upload Object """
-        
-        return Upload(file_id=self.file_id, obj=self.obj)
+
+        return Upload(file_id=self.file_id)

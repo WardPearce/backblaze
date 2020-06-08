@@ -25,7 +25,7 @@ class Bucket:
         """ https://www.backblaze.com/b2/docs/b2_delete_bucket.html """
 
         return await AWR(
-            url=ROUTES.delete_bucket,
+            ROUTES.delete_bucket,
             json={
                 "bucketId": self.bucket_id,
             },

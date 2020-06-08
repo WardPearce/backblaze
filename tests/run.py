@@ -1,5 +1,6 @@
 import asyncio
 import aiob2
+import aiohttp
 
 import settings
 
@@ -35,7 +36,8 @@ async def connection_test():
     try:
         await b2.connect(
             settings.APP_ID,
-            settings.KEY
+            settings.KEY,
+            aiohttp.ClientSession()
         )
     except aiob2.exceptions.InvalidAuthorization:
         print("Check settings.py, your account details are wrong.")

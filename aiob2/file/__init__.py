@@ -1,7 +1,7 @@
 from .upload import Upload
 
-from .wrapped_requests import AWR
-from .routes import ROUTES
+from ..wrapped_requests import AWR
+from ..routes import ROUTES
 
 
 class File:

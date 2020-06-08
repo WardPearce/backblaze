@@ -1,8 +1,8 @@
-from .wrapped_requests import AWR
-from .routes import ROUTES
-from .utils import format_keys, read_file, get_sha1
-from .cache import CACHE
-from .resources import CONFIG
+from ..wrapped_requests import AWR
+from ..routes import ROUTES
+from ..utils import format_keys, read_file, get_sha1
+from ..cache import CACHE
+from ..resources import CONFIG
 
 from datetime import datetime, timedelta
 

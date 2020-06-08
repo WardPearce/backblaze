@@ -35,7 +35,6 @@ setup(
     license='Apache License 2.0',
     packages=[
         'aiob2',
-        'aiob2.account',
         'aiob2.bucket',
         'aiob2.file',
         'aiob2.source_file'

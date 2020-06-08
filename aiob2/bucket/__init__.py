@@ -1,9 +1,9 @@
 from .upload import Upload
 from .file import File
 
-from .wrapped_requests import AWR
-from .routes import ROUTES
-from .resources import CONFIG
+from ..wrapped_requests import AWR
+from ..routes import ROUTES
+from ..resources import CONFIG
 
 
 class Bucket:

@@ -1,6 +1,6 @@
-from .wrapped_requests import AWR
-from .routes import ROUTES
-from .utils import part_number as _part_number
+from ..wrapped_requests import AWR
+from ..routes import ROUTES
+from ..utils import part_number as _part_number
 
 
 class Copy:

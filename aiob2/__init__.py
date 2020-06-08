@@ -58,6 +58,11 @@ class client:
             else:
                 raise InvalidAuthorization()
 
+    async def close(self):
+        """ Closes sessions """
+
+        await SESSIONS.AIOHTTP.close()
+
     def key(self, capabilities=None, key_name=None, **kwargs):
         """ Key Object
                 - capabilities, optional.

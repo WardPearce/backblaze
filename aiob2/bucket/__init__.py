@@ -1,5 +1,6 @@
 from .upload import Upload
 from .file import File
+from .models import BucketModel
 
 from ..wrapped_requests import AWR
 from ..routes import ROUTES
@@ -10,29 +11,34 @@ class Bucket:
     def __init__(self, bucket_id):
         self.bucket_id = bucket_id
 
-    async def create(self, bucket_name, bucket_type, **kwargs):
+    async def create(self, name, type, **kwargs):
         """ https://www.backblaze.com/b2/docs/b2_create_bucket.html """
 
-        return await AWR(
+        data = await AWR(
             ROUTES.create_bucket,
             json={
                 "accountId": CONFIG.account_id,
-                "bucketName": bucket_name,
-                "bucketType": bucket_type,
+                "bucketName": name,
+                "bucketType": type,
                 **kwargs,
             }
         ).post()
 
+        return BucketModel(data)
+
     async def list(self, **kwargs):
         """ https://www.backblaze.com/b2/docs/b2_list_buckets.html """
 
-        return await AWR(
+        data = await AWR(
             ROUTES.list_buckets,
             json={
                 "accountId": CONFIG.account_id,
                 **kwargs,
             }
         ).post()
+
+        for bucket in data["buckets"]:
+            yield BucketModel(bucket)
 
     @property
     def upload(self):
@@ -49,9 +55,12 @@ class Bucket:
     async def delete(self):
         """ https://www.backblaze.com/b2/docs/b2_delete_bucket.html """
 
-        return await AWR(
+        data = await AWR(
             ROUTES.delete_bucket,
             json={
+                "accountId": CONFIG.account_id,
                 "bucketId": self.bucket_id,
             },
         ).post()
+
+        return BucketModel(data)

@@ -1,2 +1,2 @@
-KEY = ""
-APP_ID = ""
+KEY_ID = ""
+APP_KEY = ""

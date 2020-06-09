@@ -37,7 +37,7 @@ class Upload:
     async def get(self):
         """ https://www.backblaze.com/b2/docs/b2_get_upload_url.html """
 
-        return AWR(
+        return await AWR(
             ROUTES.get_upload_url,
             json={
                 "bucketId": self.bucket_id,
@@ -65,7 +65,7 @@ class Upload:
             **kwargs,
         }
 
-        return AWR(
+        return await AWR(
             upload_url["uploadUrl"],
             headers=headers,
             data=file_content["data"],

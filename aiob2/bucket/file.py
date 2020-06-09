@@ -1,6 +1,8 @@
 from ..wrapped_requests import AWR
 from ..routes import ROUTES
 
+from .models import FileModel
+
 
 class File:
     def __init__(self, bucket_id):
@@ -9,13 +11,15 @@ class File:
     async def hide(self, file_name):
         """ https://www.backblaze.com/b2/docs/b2_hide_file.html """
 
-        return await AWR(
+        data = await AWR(
             ROUTES.hide_file,
             json={
                 "bucketId": self.bucket_id,
                 "fileName": file_name,
             }
         ).post()
+
+        return FileModel(data)
 
     async def versions(self, **kwargs):
         """ https://www.backblaze.com/b2/docs/b2_list_file_versions.html """

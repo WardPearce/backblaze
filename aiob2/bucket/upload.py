@@ -4,6 +4,8 @@ from ..utils import format_keys, read_file, get_sha1
 from ..cache import CACHE
 from ..resources import CONFIG
 
+from .models import GetUploadUrlModel, FileModel
+
 from datetime import datetime, timedelta
 
 
@@ -37,12 +39,14 @@ class Upload:
     async def get(self):
         """ https://www.backblaze.com/b2/docs/b2_get_upload_url.html """
 
-        return await AWR(
+        data = await AWR(
             ROUTES.get_upload_url,
             json={
                 "bucketId": self.bucket_id,
             }
         ).post()
+
+        return GetUploadUrlModel(data)
 
     async def file(self, file_name, file_pathway,
                    content_type="b2/x-auto", **kwargs):
@@ -52,12 +56,12 @@ class Upload:
                 content_type, content type to post with, defaults to b2/x-auto.
         """
 
-        upload_url = await self._cached_upload()
+        get_upload = await self._cached_upload()
 
         file_content = await read_file(file_pathway)
         kwargs = format_keys(kwargs)
         headers = {
-            "Authorization": upload_url["authorizationToken"],
+            "Authorization": get_upload.authorization_token,
             "X-Bz-File-Name": file_name,
             "Content-Type": content_type,
             "Content-Length": file_content["bytes"],
@@ -65,11 +69,13 @@ class Upload:
             **kwargs,
         }
 
-        return await AWR(
-            upload_url["uploadUrl"],
+        data = await AWR(
+            get_upload.upload_url,
             headers=headers,
             data=file_content["data"],
         ).post()
+
+        return FileModel(data)
 
     async def data(self, data, file_name, content_type="b2/x-auto", **kwargs):
         """ https://www.backblaze.com/b2/docs/b2_upload_file.html
@@ -78,11 +84,11 @@ class Upload:
                 content_type, content type to post with, defaults to b2/x-auto.
         """
 
-        upload_url = await self._cached_upload()
+        get_upload = await self._cached_upload()
 
         kwargs = format_keys(kwargs)
         headers = {
-            "Authorization": upload_url["authorizationToken"],
+            "Authorization": get_upload.authorization_token,
             "X-Bz-File-Name": file_name,
             "Content-Type": content_type,
             "Content-Length": str(len(data)),
@@ -90,8 +96,10 @@ class Upload:
             **kwargs,
         }
 
-        return await AWR(
-            upload_url["uploadUrl"],
+        data = await AWR(
+            get_upload.upload_url,
             headers=headers,
             data=data
         ).post()
+
+        return FileModel(data)

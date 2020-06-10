@@ -1,7 +1,7 @@
 from ..wrapped_requests import AWR
 from ..routes import ROUTES
 
-from .models import FileModel
+from .models import FileModel, GetDowloadAuthModel
 
 
 class File:
@@ -24,7 +24,7 @@ class File:
     async def versions(self, **kwargs):
         """ https://www.backblaze.com/b2/docs/b2_list_file_versions.html """
 
-        return await AWR(
+        data = await AWR(
             ROUTES.list_file_versions,
             json={
                 "bucketId": self.bucket_id,
@@ -32,10 +32,13 @@ class File:
             }
         ).post()
 
+        for file in data["files"]:
+            yield FileModel(file)
+
     async def names(self, **kwargs):
         """ https://www.backblaze.com/b2/docs/b2_list_file_names.html """
 
-        return await AWR(
+        data = await AWR(
             ROUTES.list_file_names,
             json={
                 "bucketId": self.bucket_id,
@@ -43,13 +46,16 @@ class File:
             }
         ).post()
 
+        for file in data["files"]:
+            yield FileModel(file)
+
     async def download_authorization(self, file_name_prefix,
                                      valid_duration_in_seconds, **kwargs):
         """
         https://www.backblaze.com/b2/docs/b2_get_download_authorization.html
         """
 
-        return await AWR(
+        data = await AWR(
             ROUTES.get_download_authorization,
             json={
                 "bucketId": self.bucket_id,
@@ -59,15 +65,20 @@ class File:
             }
         ).post()
 
+        return GetDowloadAuthModel(data)
+
     async def unfinished_large_files(self, **kwargs):
         """
         https://www.backblaze.com/b2/docs/b2_list_unfinished_large_files.html
         """
 
-        return await AWR(
+        data = await AWR(
             ROUTES.list_unfinished_large_files,
             json={
                 "bucketId": self.bucket_id,
                 **kwargs,
             }
         ).post()
+
+        for file in data["files"]:
+            yield FileModel(file)

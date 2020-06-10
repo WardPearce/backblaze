@@ -108,9 +108,16 @@ async def bucket_test():
 
         print("Hiding test_image.png")
 
-        await bucket.file.hide("test_image.png")
+        await bucket.file.hide("aiob2/foobar.png")
 
         print("test_image.png is hidden")
+
+        async for file in bucket.file.versions():
+            print("Deleting file {}".format(file.file_name))
+
+            await b2.file(file.file_id).delete(file.file_name)
+
+            print("Deleted file {}".format(file.file_name))
 
         print("Deleting {}".format(bucket.bucket_id))
 

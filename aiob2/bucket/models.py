@@ -19,14 +19,22 @@ class FileModel:
         self.file_info = data["fileInfo"]
         self.file_name = data["fileName"]
         self.timestamp = datetime.utcfromtimestamp(
-            data["uploadTimestamp"]
+            data["uploadTimestamp"] / 1000
         )
 
 
-class FileVersionModel:
+class GetDowloadAuthModel:
     def __init__(self, data):
-        self.next_file_name = data["nextFileName"]
-        self.next_file_id = data["nextFileId"]
+        self.bucket_id = data["bucketId"]
+        self.file_name_prefix = data["fileNamePrefix"]
+        self.authorization_token = data["authorizationToken"]
+
+
+class GetUploadUrlModel:
+    def __init__(self, data):
+        self.bucket_id = data["bucketId"]
+        self.upload_url = data["uploadUrl"]
+        self.authorization_token = data["authorizationToken"]
 
 
 class BucketModel:

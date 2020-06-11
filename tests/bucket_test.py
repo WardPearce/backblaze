@@ -6,31 +6,8 @@ from uuid import uuid4
 
 import settings
 
-import sys
-import re
-import requests
 import os
 
-
-def get_latest_version(location):
-    url = "https://raw.githubusercontent.com/" + location
-
-    with requests.get(url) as resp:
-        if resp.status_code == 200:
-            return re.search(
-                "__version__ = ['\"]([^'\"]+)['\"]", resp.text
-            ).group(1)
-        else:
-            sys.exit("Request to {} failed with status code {}".format(
-                url, resp.status_code
-            ))
-
-
-if aiob2.__version__ != get_latest_version(
-    "WardPearce/aiob2/master/aiob2/__init__.py"
-        ):
-    sys.exit("""PLEASE INSTALL THE LATEST VERSION BEFORE TESTING
-                `pip3 install aiob2`""")
 
 b2 = aiob2.client()
 
@@ -67,9 +44,9 @@ async def bucket_test():
     try:
         bucket_ids = []
         buckets_append = bucket_ids.append
-        async for bucket in b2.bucket().list():
+        async for data, bucket in b2.buckets():
             buckets_append(
-                bucket.bucket_id
+                data.bucket_id
             )
 
         print("Current bucket IDs:\n {}".format(bucket_ids))

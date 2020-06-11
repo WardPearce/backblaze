@@ -1,7 +1,7 @@
-from .upload import Upload
-
 from ..wrapped_requests import AWR
 from ..routes import ROUTES
+
+from .parts import Parts
 
 
 class File:
@@ -47,19 +47,8 @@ class File:
             ROUTES.download_file_by_id.format(self.file_id)
         ).get()
 
-    async def parts(self, **kwargs):
-        """ https://www.backblaze.com/b2/docs/b2_list_parts.html """
-
-        return await AWR(
-            ROUTES.list_parts,
-            json={
-                "fileId": self.file_id,
-                **kwargs,
-            }
-        ).post()
-
     @property
-    def upload(self):
-        """ Upload Object """
+    def parts(self):
+        """ Parts Object """
 
-        return Upload(file_id=self.file_id)
+        return Parts(file_id=self.file_id)

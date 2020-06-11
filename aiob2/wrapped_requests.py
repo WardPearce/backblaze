@@ -48,7 +48,7 @@ class AWR:
         """ Wrapped async get request. """
 
         async with SESSIONS.AIOHTTP.get(self.route, **self.kwargs) as resp:
-            return await self._validate(resp)
+            return await self._validate(resp, json=False)
 
     async def post(self):
         """ Wrapped async post request. """

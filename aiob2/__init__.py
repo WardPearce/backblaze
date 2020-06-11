@@ -2,6 +2,7 @@ from .bucket import Bucket
 from .file import File
 from .source_file import SourceFile
 from .key import Key
+from .misc import Misc
 
 from .resources import SESSIONS, CONFIG
 
@@ -15,7 +16,7 @@ import aiohttp
 __version__ = "1.0.0"
 
 
-class client:
+class client(Misc):
     """ B2 API Interface. """
 
     AUTH_URL = "https://api.backblazeb2.com/b2api/v2/b2_authorize_account"

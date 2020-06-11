@@ -1,6 +1,6 @@
 from .upload import Upload
 from .file import File
-from .models import BucketModel
+from .models import BucketModel, BucketTypes
 
 from ..wrapped_requests import AWR
 from ..routes import ROUTES
@@ -11,7 +11,7 @@ class Bucket:
     def __init__(self, bucket_id):
         self.bucket_id = bucket_id
 
-    async def create(self, name, type, **kwargs):
+    async def create(self, name, type: BucketTypes, **kwargs):
         """ https://www.backblaze.com/b2/docs/b2_create_bucket.html """
 
         data = await AWR(
@@ -24,21 +24,9 @@ class Bucket:
             }
         ).post()
 
+        self.bucket_id = data["bucketId"]
+
         return BucketModel(data)
-
-    async def list(self, **kwargs):
-        """ https://www.backblaze.com/b2/docs/b2_list_buckets.html """
-
-        data = await AWR(
-            ROUTES.list_buckets,
-            json={
-                "accountId": CONFIG.account_id,
-                **kwargs,
-            }
-        ).post()
-
-        for bucket in data["buckets"]:
-            yield BucketModel(bucket)
 
     @property
     def upload(self):

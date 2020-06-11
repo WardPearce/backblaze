@@ -44,7 +44,7 @@ class Upload:
             }
         ).post()
 
-    async def part(self, data, bytes_count, x_bz_part_number: int):
+    async def data(self, data, bytes_count, x_bz_part_number: int):
         """ https://www.backblaze.com/b2/docs/b2_upload_part.html """
 
         upload_url = await self._cached_upload()

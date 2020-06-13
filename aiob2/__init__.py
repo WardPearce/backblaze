@@ -6,7 +6,7 @@ from .misc import Misc
 
 from .resources import SESSIONS, CONFIG
 
-from .routes import ROUTES
+from .routes import ROUTES, DL_ROUTES
 
 from .exceptions import InvalidAuthorization
 
@@ -61,6 +61,7 @@ class client(Misc):
                 }
 
                 ROUTES.format_routes()
+                DL_ROUTES.format_routes()
             else:
                 raise InvalidAuthorization()
 

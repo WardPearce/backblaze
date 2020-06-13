@@ -4,8 +4,10 @@ from ..routes import ROUTES
 from ..file.models import FileModel
 from .models import GetDowloadAuthModel
 
+from ..file import File
 
-class File:
+
+class Files:
     def __init__(self, bucket_id):
         self.bucket_id = bucket_id
 
@@ -20,7 +22,7 @@ class File:
             }
         ).post()
 
-        return FileModel(data)
+        return FileModel(data), File(data["fileId"])
 
     async def versions(self, **kwargs):
         """ https://www.backblaze.com/b2/docs/b2_list_file_versions.html """
@@ -34,7 +36,7 @@ class File:
         ).post()
 
         for file in data["files"]:
-            yield FileModel(file)
+            yield FileModel(file), File(file["fileId"])
 
     async def names(self, **kwargs):
         """ https://www.backblaze.com/b2/docs/b2_list_file_names.html """
@@ -48,7 +50,7 @@ class File:
         ).post()
 
         for file in data["files"]:
-            yield FileModel(file)
+            yield FileModel(file), File(file["fileId"])
 
     async def download_authorization(self, file_name_prefix,
                                      valid_duration_in_seconds, **kwargs):
@@ -82,4 +84,4 @@ class File:
         ).post()
 
         for file in data["files"]:
-            yield FileModel(file)
+            yield FileModel(file), File(file["fileId"])

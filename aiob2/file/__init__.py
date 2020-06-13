@@ -5,6 +5,8 @@ from .parts import Parts
 
 from .models import FileModel, FileDeleteModel
 
+from .. import bucket
+
 
 class File:
     def __init__(self, file_id):
@@ -33,7 +35,7 @@ class File:
             }
         ).post()
 
-        return FileModel(data)
+        return FileModel(data), bucket.Bucket(data["bucketId"])
 
     async def finish(self, part_sha1_array):
         """ https://www.backblaze.com/b2/docs/b2_finish_large_file.html """
@@ -46,7 +48,7 @@ class File:
             }
         ).post()
 
-        return FileModel(data)
+        return FileModel(data), bucket.Bucket(data["bucketId"])
 
     async def download(self):
         """ https://www.backblaze.com/b2/docs/b2_download_file_by_id.html """

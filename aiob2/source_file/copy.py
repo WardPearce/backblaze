@@ -2,6 +2,10 @@ from ..wrapped_requests import AWR
 from ..routes import ROUTES
 from ..utils import part_number as _part_number
 
+from ..file.models import PartModel, FileModel
+
+from ..file import File
+
 
 class Copy:
     def __init__(self, source_file_id):
@@ -12,7 +16,7 @@ class Copy:
 
         _part_number(part_number)
 
-        return await AWR(
+        data = await AWR(
             ROUTES.copy_part,
             json={
                 "sourceFileId": self.source_file_id,
@@ -22,10 +26,12 @@ class Copy:
             }
         ).post()
 
+        return PartModel(data), File(data["fileId"])
+
     async def file(self, file_name, **kwargs):
         """ https://www.backblaze.com/b2/docs/b2_copy_file.html """
 
-        return await AWR(
+        data = await AWR(
             ROUTES.copy_file,
             json={
                 "sourceFileId": self.source_file_id,
@@ -33,3 +39,5 @@ class Copy:
                 **kwargs,
             }
         ).post()
+
+        return FileModel(data), File(data["fileId"])

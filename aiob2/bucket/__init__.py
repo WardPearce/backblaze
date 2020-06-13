@@ -1,5 +1,5 @@
 from .upload import Upload
-from .file import File
+from .files import Files
 from .models import BucketModel, BucketTypes
 
 from ..wrapped_requests import AWR
@@ -35,10 +35,10 @@ class Bucket:
         return Upload(bucket_id=self.bucket_id)
 
     @property
-    def file(self):
+    def files(self):
         """ File object """
 
-        return File(bucket_id=self.bucket_id)
+        return Files(bucket_id=self.bucket_id)
 
     async def delete(self):
         """ https://www.backblaze.com/b2/docs/b2_delete_bucket.html """

@@ -2,8 +2,6 @@ import asyncio
 import aiohttp
 import aiob2
 
-import settings
-
 from resources import B2
 
 from bucket import BucketTest
@@ -12,8 +10,6 @@ from bucket import BucketTest
 async def start_test():
     try:
         await B2.connect(
-            settings.KEY_ID,
-            settings.APP_KEY,
             aiohttp.ClientSession()
         )
     except aiob2.exceptions.InvalidAuthorization:

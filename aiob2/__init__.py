@@ -21,13 +21,15 @@ class client(Misc):
 
     AUTH_URL = "https://api.backblazeb2.com/b2api/v2/b2_authorize_account"
 
-    def __init__(self, max_cache=100):
+    def __init__(self, key_id, application_key,  max_cache=100):
         """ max_cache, how many cached upload urls do we allow. """
+
+        self.key_id = key_id
+        self.application_key = application_key
 
         CONFIG.max_cache = max_cache
 
-    async def connect(self, application_key_id, application_key,
-                      session: aiohttp.ClientSession = None):
+    async def connect(self, session: aiohttp.ClientSession = None):
         """ Gets authorization details to send requests.
             https://www.backblaze.com/b2/docs/b2_authorize_account.html
         """
@@ -38,7 +40,10 @@ class client(Misc):
             SESSIONS.AIOHTTP = aiohttp.ClientSession()
 
         encoded_bytes = base64.b64encode(
-            "{}:{}".format(application_key_id, application_key).encode("utf-8")
+            "{}:{}".format(
+                self.key_id,
+                self.application_key
+            ).encode("utf-8")
         )
         basic_auth_string = "Basic {}".format(str(encoded_bytes, "utf-8"))
 

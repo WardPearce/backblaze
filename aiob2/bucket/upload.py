@@ -7,6 +7,8 @@ from ..resources import CONFIG
 from ..file.models import FileModel
 from .models import GetUploadUrlModel
 
+from ..file import File
+
 from datetime import datetime, timedelta
 
 
@@ -76,7 +78,7 @@ class Upload:
             data=file_content["data"],
         ).post()
 
-        return FileModel(data)
+        return FileModel(data), File(data["fileId"])
 
     async def data(self, data, file_name, content_type="b2/x-auto", **kwargs):
         """ https://www.backblaze.com/b2/docs/b2_upload_file.html
@@ -103,4 +105,4 @@ class Upload:
             data=data
         ).post()
 
-        return FileModel(data)
+        return FileModel(data), File(data["fileId"])

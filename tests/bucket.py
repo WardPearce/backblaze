@@ -25,12 +25,12 @@ class BucketTest:
             await asyncio.sleep(0.001)
 
     async def delete(self):
-        async for file in self.bucket.file.versions():
-            print("Deleting file {}".format(file.file_name))
+        async for data, file in self.bucket.files.versions():
+            print("Deleting file {}".format(data.file_name))
 
-            await B2.file(file.file_id).delete(file.file_name)
+            await file.delete(data.file_name)
 
-            print("Deleted file {}".format(file.file_name))
+            print("Deleted file {}".format(data.file_name))
 
         print("Deleting bucket {}".format(self.bucket.bucket_id))
 
@@ -81,7 +81,7 @@ class BucketTest:
 
             print("Hiding test_image.png")
 
-            await self.bucket.file.hide("aiob2/foobar.png")
+            await self.bucket.files.hide("aiob2/foobar.png")
 
             print("test_image.png is hidden")
 

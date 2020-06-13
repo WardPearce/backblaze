@@ -3,6 +3,8 @@ from ..routes import ROUTES
 
 from .parts import Parts
 
+from .models import FileModel, FileDeleteModel
+
 
 class File:
     def __init__(self, file_id):
@@ -11,7 +13,7 @@ class File:
     async def delete(self, file_name):
         """ https://www.backblaze.com/b2/docs/b2_delete_file_version.html """
 
-        return await AWR(
+        data = await AWR(
             ROUTES.delete_file_version,
             json={
                 "fileName": file_name,
@@ -19,26 +21,32 @@ class File:
             }
         ).post()
 
+        return FileDeleteModel(data)
+
     async def info(self):
         """ https://www.backblaze.com/b2/docs/b2_get_file_info.html """
 
-        return await AWR(
+        data = await AWR(
             ROUTES.get_file_info,
             json={
                 "fileId": self.file_id,
             }
         ).post()
 
+        return FileModel(data)
+
     async def finish(self, part_sha1_array):
         """ https://www.backblaze.com/b2/docs/b2_finish_large_file.html """
 
-        return await AWR(
+        data = await AWR(
             ROUTES.finish_large_file,
             json={
                 "fileId": self.file_id,
                 "partSha1Array": part_sha1_array,
             }
         ).post()
+
+        return FileModel(data)
 
     async def download(self):
         """ https://www.backblaze.com/b2/docs/b2_download_file_by_id.html """

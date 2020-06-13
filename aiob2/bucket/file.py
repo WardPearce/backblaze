@@ -1,7 +1,8 @@
 from ..wrapped_requests import AWR
 from ..routes import ROUTES
 
-from .models import FileModel, GetDowloadAuthModel
+from ..file.models import FileModel
+from .models import GetDowloadAuthModel
 
 
 class File:

@@ -4,7 +4,8 @@ from ..utils import format_keys, read_file, get_sha1
 from ..cache import CACHE
 from ..resources import CONFIG
 
-from .models import GetUploadUrlModel, FileModel
+from ..file.models import FileModel
+from .models import GetUploadUrlModel
 
 from datetime import datetime, timedelta
 

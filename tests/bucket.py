@@ -84,4 +84,3 @@ class BucketTest:
             await self.bucket.files.hide("aiob2/foobar.png")
 
             print("test_image.png is hidden")
-

@@ -1,5 +1,5 @@
 from ..wrapped_requests import AWR
-from ..routes import ROUTES
+from ..routes import ROUTES, DL_ROUTES
 
 from .parts import Parts
 
@@ -54,7 +54,7 @@ class File:
         """ https://www.backblaze.com/b2/docs/b2_download_file_by_id.html """
 
         return await AWR(
-            ROUTES.download_file_by_id.format(self.file_id)
+            DL_ROUTES.file_by_id.format(self.file_id)
         ).get()
 
     @property

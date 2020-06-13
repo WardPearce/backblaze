@@ -2,6 +2,11 @@ from .resources import CONFIG
 
 
 class Routes:
+    """
+    Holds all routes what use the auth url.
+    Most routes are stored here.
+    """
+
     delete_bucket = "delete_bucket"
     hide_file = "hide_file"
     list_file_versions = "list_file_versions"
@@ -10,7 +15,6 @@ class Routes:
     list_unfinished_large_files = "list_unfinished_large_files"
     get_file_info = "get_file_info"
     finish_large_file = "finish_large_file"
-    download_file_by_id = "download_file_by_id?fileId={}"
     get_upload_url = "get_upload_url"
     list_parts = "list_parts"
     create_key = "create_key"
@@ -50,3 +54,40 @@ class Routes:
 
 
 ROUTES = Routes()
+
+
+class DownloadRoutes:
+    """
+    Holds all the routes what use the download url.
+    Only a few routes use this.
+    """
+
+    file_by_id = "/b2api/v2/b2_download_file_by_id?fileId={}"
+    file_by_name = "/file/{}/{}"
+
+    def format_routes(self):
+        """
+        Formats the B2 routes using the download url.
+        """
+
+        routes = [
+            attr for attr in dir(Routes())
+            if not callable(getattr(Routes(), attr))
+            and not attr.startswith("__")
+        ]
+
+        for var_name in routes:
+            setattr(
+                self,
+                var_name,
+                "{}{}".format(
+                    CONFIG.download_url,
+                    getattr(
+                        self,
+                        var_name
+                    )
+                )
+            )
+
+
+DL_ROUTES = DownloadRoutes()

@@ -2,7 +2,7 @@ from .bucket.models import BucketModel
 from .bucket import Bucket
 
 from .wrapped_requests import AWR
-from .routes import ROUTES
+from .routes import ROUTES, DL_ROUTES
 from .resources import CONFIG
 
 
@@ -19,4 +19,13 @@ class Misc:
         ).post()
 
         for bucket in data["buckets"]:
-            yield Bucket(bucket["bucketId"]), BucketModel(bucket)
+            yield BucketModel(bucket), Bucket(bucket["bucketId"])
+
+    async def download_from_name(self, bucket_name, file_name):
+        """ https://www.backblaze.com/b2/docs/b2_download_file_by_name.html """
+
+        return await AWR(
+            DL_ROUTES.file_by_name.format(
+                bucket_name, file_name
+            )
+        ).get()

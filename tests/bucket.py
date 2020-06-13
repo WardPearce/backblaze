@@ -42,7 +42,7 @@ class BucketTest:
         try:
             bucket_ids = []
             buckets_append = bucket_ids.append
-            async for data, _ in B2.buckets():
+            async for _, data in B2.buckets():
                 buckets_append(
                     data.bucket_id
                 )

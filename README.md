@@ -1,14 +1,9 @@
-### USE 0.1.0, this is under construction.
+##### Version 1.0.0 is NOT backwards compatibility with anything below that version.
+Version 1.0.0 is considered the last major update for this module.
 
-### ToDo
-- ~~Improve syntax.~~
-- ~~Add data models.~~
-- ~~Initialize relevant object (if possible).~~
-- ~~Remove pointless account object.~~
-- ~~Improve route formatting.~~
-- ~~Add smart caching for getting upload urls.~~
-- ~~Add download file from name function.~~
-- ~~Add asynchronous downloading.~~
-- ~~Create test files.~~
-- Write Documentation.
-- Create examples.
+# About
+aiob2 is a powerful & simple asynchronous wrapper for Backblaze's b2 API.
+
+# Install 
+- Pypi: ``pip3 install aiob2``
+- Git: ``pip3 install git+https://github.com/WardPearce/aiob2.git``

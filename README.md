@@ -8,7 +8,7 @@
 - ~~Improve route formatting.~~
 - ~~Add smart caching for getting upload urls.~~
 - ~~Add download file from name function.~~
-- Add asynchronous downloading.
-- Create test files.
+- ~~Add asynchronous downloading.~~
+- ~~Create test files.~~
 - Write Documentation.
 - Create examples.

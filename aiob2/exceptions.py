@@ -72,3 +72,10 @@ class ServiceUnavailable(Exception):
     between retries in response to this error.
     """
     pass
+
+
+class UndefinedError(Exception):
+    """
+    API has given an error what aiob2 doesn't understand.
+    """
+    pass

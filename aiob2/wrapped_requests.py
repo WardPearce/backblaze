@@ -1,7 +1,7 @@
 from .resources import SESSIONS, CONFIG
 from .exceptions import BadRequest, InvalidAuthorization, \
     Forbidden, RequestTimeout, TooManyRequests, InternalError, \
-    ServiceUnavailable
+    ServiceUnavailable, UndefinedError
 
 
 class AWR:
@@ -37,6 +37,8 @@ class AWR:
             raise InternalError(error_message)
         elif resp.status == 503:
             raise ServiceUnavailable(error_message)
+        else:
+            raise UndefinedError()
 
     async def _validate_streamed(self, resp):
         if resp.status == 200:

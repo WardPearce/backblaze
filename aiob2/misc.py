@@ -29,3 +29,15 @@ class Misc:
                 bucket_name, file_name
             )
         ).get()
+
+    async def download_from_name_iterate(self, bucket_name, file_name):
+        """ https://www.backblaze.com/b2/docs/b2_download_file_by_name.html """
+
+        request = AWR(
+            DL_ROUTES.file_by_name.format(
+                bucket_name, file_name
+            )
+        )
+
+        async for response in request.get_streamed():
+            yield response

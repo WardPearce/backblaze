@@ -13,6 +13,7 @@ class Config:
     account_id = None
     authorization = None
     max_cache = None
+    chunk_size = None
 
 
 CONFIG = Config()

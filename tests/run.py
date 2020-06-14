@@ -5,6 +5,7 @@ import aiob2
 from resources import B2
 
 from bucket import BucketTest
+from file import FileTest
 
 
 async def start_test():
@@ -18,6 +19,10 @@ async def start_test():
         # Runs bucket test.
         bucket_test = BucketTest()
         await bucket_test.run()
+
+        file_test = FileTest()
+        await file_test.run()
+
         await bucket_test.delete()
 
     await B2.close()

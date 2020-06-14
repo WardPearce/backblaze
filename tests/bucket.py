@@ -2,23 +2,29 @@ import os
 import asyncio
 import aiob2
 
-from resources import B2, BUCKET_NAME
+from resources import B2, BUCKET_NAME, FILENAME_FORMAT, SHARD_VARS
 
 
 class BucketTest:
     async def _save_files(self):
         for counter in range(0, 4):
-            file_name = "aiob2/test{}.bin".format(counter)
+            file_name = FILENAME_FORMAT.format(
+                "test{}.bin".format(
+                    counter
+                )
+            )
 
             print("Saving {} into {}".format(
                 file_name,
                 self.bucket.bucket_id
             ))
 
-            await self.bucket.upload.data(
+            data, _ = await self.bucket.upload.data(
                 data=b"c43f25647e967cecd5ea7f967ee3c1f9",
                 file_name=file_name
             )
+
+            SHARD_VARS.file_id = data.file_id
 
             print("Saved {}".format(file_name))
 
@@ -72,8 +78,12 @@ class BucketTest:
             if os.path.exists(pathway):
                 print("Attempting to upload {}".format(pathway))
 
+                file = FILENAME_FORMAT.format(
+                    "foobar.png"
+                )
+
                 await self.bucket.upload.file(
-                    "aiob2/foobar.png",
+                    file,
                     pathway
                 )
 
@@ -81,6 +91,6 @@ class BucketTest:
 
             print("Hiding test_image.png")
 
-            await self.bucket.files.hide("aiob2/foobar.png")
+            await self.bucket.files.hide(file)
 
             print("test_image.png is hidden")

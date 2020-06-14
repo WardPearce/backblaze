@@ -1,3 +1,5 @@
+import aiofiles
+
 from ..wrapped_requests import AWR
 from ..routes import ROUTES, DL_ROUTES
 
@@ -50,12 +52,33 @@ class File:
 
         return FileModel(data), bucket.Bucket(data["bucketId"])
 
+    async def save(self, pathway):
+        """
+        Save's file to given pathway.
+
+        Uses download_iterate to avoid heavy memory usage.
+        """
+
+        async with aiofiles.open(pathway, mode="wb") as file:
+            async for data in self.download_iterate():
+                await file.write(data)
+
     async def download(self):
         """ https://www.backblaze.com/b2/docs/b2_download_file_by_id.html """
 
         return await AWR(
             DL_ROUTES.file_by_id.format(self.file_id)
         ).get()
+
+    async def download_iterate(self):
+        """ https://www.backblaze.com/b2/docs/b2_download_file_by_id.html """
+
+        request = AWR(
+            DL_ROUTES.file_by_id.format(self.file_id)
+        )
+
+        async for response in request.get_streamed():
+            yield response
 
     @property
     def parts(self):

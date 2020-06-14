@@ -21,12 +21,13 @@ class client(Misc):
 
     AUTH_URL = "https://api.backblazeb2.com/b2api/v2/b2_authorize_account"
 
-    def __init__(self, key_id, application_key,  max_cache=100):
+    def __init__(self, key_id, application_key,  max_cache=100, chunk_size=25):
         """ max_cache, how many cached upload urls do we allow. """
 
         self.key_id = key_id
         self.application_key = application_key
 
+        CONFIG.chunk_size = chunk_size
         CONFIG.max_cache = max_cache
 
     async def connect(self, session: aiohttp.ClientSession = None):

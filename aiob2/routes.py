@@ -71,8 +71,8 @@ class DownloadRoutes:
         """
 
         routes = [
-            attr for attr in dir(Routes())
-            if not callable(getattr(Routes(), attr))
+            attr for attr in dir(DownloadRoutes())
+            if not callable(getattr(DownloadRoutes(), attr))
             and not attr.startswith("__")
         ]
 

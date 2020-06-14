@@ -61,21 +61,21 @@ class Upload:
 
         get_upload = await self._cached_upload()
 
-        file_content = await read_file(file_pathway)
+        data, bytes, sha1 = await read_file(file_pathway)
         kwargs = format_keys(kwargs)
         headers = {
             "Authorization": get_upload.authorization_token,
             "X-Bz-File-Name": file_name,
             "Content-Type": content_type,
-            "Content-Length": file_content["bytes"],
-            "X-Bz-Content-Sha1": file_content["sha1"],
+            "Content-Length": bytes,
+            "X-Bz-Content-Sha1": sha1,
             **kwargs,
         }
 
         data = await AWR(
             get_upload.upload_url,
             headers=headers,
-            data=file_content["data"],
+            data=data,
         ).post()
 
         return FileModel(data), File(data["fileId"])

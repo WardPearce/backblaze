@@ -27,18 +27,16 @@ async def read_file(file_pathway):
         sha1 = hashlib.sha1()
         sha1_update = sha1.update
 
-        contents = {
-            "data": b"",
-            "bytes": str(os.path.getsize(file_pathway)),
-        }
+        data = b""
+        bytes = str(os.path.getsize(file_pathway))
 
         async with aiofiles.open(file_pathway, mode="rb") as f:
             async for line in f:
                 sha1_update(line)
-                contents["data"] += line
+                data += line
 
-        contents["sha1"] = sha1.hexdigest()
+        sha1 = sha1.hexdigest()
 
-        return contents
+        return data, bytes, sha1
 
     raise NoSuchFile()

@@ -4,12 +4,12 @@ on: [push]
 
 jobs:
   build:
+    paths-ignore:
+      - 'docs/**'
 
     runs-on: ubuntu-latest
 
     steps:
-      paths-ignore:
-        - 'docs/**'
       - uses: actions/checkout@v1
       - name: Set up Python 3.7
         uses: actions/setup-python@v1

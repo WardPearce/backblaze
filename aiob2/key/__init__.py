@@ -8,6 +8,14 @@ from ..bucket import Bucket
 
 
 class Key:
+    """ Contains all key related calls.
+
+        Returns
+        -------
+        Key:
+            Object what interacts with keys.
+    """
+
     async def create(self, capabilities, key_name, **kwargs):
         """ Creates a new key.
 

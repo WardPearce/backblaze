@@ -1,5 +1,15 @@
 # Index
 - [Exceptions](#Exceptions)
+    - [InvalidAuthorization](#aiob2exceptionsinvalidauthorization)
+    - [NoSuchFile](#aiob2exceptionsnosuchfile)
+    - [InvalidPartNumber](#aiob2exceptionsinvalidpartnumber)
+    - [BadRequest](#aiob2exceptionsbadrequest)
+    - [Forbidden](#aiob2exceptionsforbidden)
+    - [RequestTimeout](#aiob2exceptionsrequesttimeout)
+    - [TooManyRequests](#aiob2exceptionstoomanyrequests)
+    - [InternalError](#aiob2exceptionsinternalerror)
+    - [ServiceUnavailable](#aiob2exceptionsserviceunavailable)
+    - [UndefinedError](#aiob2exceptionsundefinederror)
 
 ### Exceptions
 ___

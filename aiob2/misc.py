@@ -5,8 +5,24 @@ from .wrapped_requests import AWR
 from .routes import ROUTES, DL_ROUTES
 from .resources import CONFIG
 
+from .key.models import KeyModel
+
 
 class Misc:
+    async def keys(self, **kwargs):
+        """ https://www.backblaze.com/b2/docs/b2_list_keys.html """
+
+        data = await AWR(
+            ROUTES.list_keys,
+            json={
+                "accountId": CONFIG.account_id,
+                **kwargs,
+            }
+        ).post()
+
+        for key in data["keys"]:
+            yield KeyModel(key), Bucket(key["bucketId"])
+
     async def buckets(self, **kwargs):
         """ https://www.backblaze.com/b2/docs/b2_list_buckets.html """
 

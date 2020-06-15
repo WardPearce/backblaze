@@ -17,13 +17,26 @@ __version__ = "1.0.1"
 
 
 class client(Misc):
-    """ B2 API Interface. """
+    """ B2 API Interface.
+
+        Parameters
+        ----------
+        key_id: str
+            API Key ID
+        application_key: str
+            API App Key
+        max_cache: int
+            Max amount of upload urls allowed to be cached
+            at a given time.
+        chunk_size: int
+            How many chunks should we read each loop.
+    """
 
     AUTH_URL = "https://api.backblazeb2.com/b2api/v2/b2_authorize_account"
 
-    def __init__(self, key_id, application_key,  max_cache=100, chunk_size=25):
-        """ max_cache, how many cached upload urls do we allow. """
+    key = Key()
 
+    def __init__(self, key_id, application_key,  max_cache=100, chunk_size=25):
         self.key_id = key_id
         self.application_key = application_key
 
@@ -31,7 +44,19 @@ class client(Misc):
         CONFIG.max_cache = max_cache
 
     async def connect(self, session: aiohttp.ClientSession = None):
-        """ Gets authorization details to send requests.
+        """ Gets authorization details needed to send requests.
+
+            Parameters
+            ----------
+            session: object
+
+            Raises
+            ------
+            InvalidAuthorization
+                Bad account details were passed.
+
+            References
+            ----------
             https://www.backblaze.com/b2/docs/b2_authorize_account.html
         """
 
@@ -63,44 +88,60 @@ class client(Misc):
 
                 ROUTES.format_routes()
                 DL_ROUTES.format_routes()
+
             else:
                 raise InvalidAuthorization()
 
     async def close(self):
-        """ Closes sessions """
+        """ Closes all sessions.
+        """
 
         await SESSIONS.AIOHTTP.close()
 
-    def key(self, capabilities=None, key_name=None, **kwargs):
-        """ Key Object
-                - capabilities, optional.
-                - key_name, optional.
-
-        """
-
-        return Key(
-            capabilities=capabilities,
-            key_name=key_name,
-            **kwargs
-        )
-
     def bucket(self, bucket_id=None):
-        """ Bucket Object
-                - bucket_id, optional.
+        """ Contains all bucket related calls.
+
+            Parameters
+            ----------
+            bucket_id: str
+                Unique bucket ID.
+
+            Returns
+            -------
+            Bucket:
+                Object what interacts with buckets.
         """
 
         return Bucket(bucket_id=bucket_id)
 
     def source_file(self, source_file_id):
-        """ Source File Object
-                - source_file_id, required.
+        """ Contains source file related calls.
+
+            Parameters
+            ----------
+            source_file_id: str
+                Unique source file ID.
+
+            Returns
+            -------
+            SourceFile:
+                Object for interacting with source files.
         """
 
         return SourceFile(source_file_id=source_file_id)
 
     def file(self, file_id):
-        """ File Object.
-                - file_id, required.
+        """ Contains all file related calls.
+
+            Parameters
+            ----------
+            file_id: str
+                Unique file ID.
+
+            Returns
+            -------
+            File:
+                Object for interacting with files.
         """
 
         return File(file_id=file_id)

@@ -40,7 +40,24 @@ class Upload:
         return upload_url
 
     async def get(self):
-        """ https://www.backblaze.com/b2/docs/b2_get_upload_url.html """
+        """ Gets a new upload url.
+
+            Parameters
+            ----------
+            None
+
+            Returns
+            -------
+            None
+
+            Raises
+            ------
+            None
+
+            References
+            ----------
+            https://www.backblaze.com/b2/docs/b2_get_upload_url.html
+        """
 
         data = await AWR(
             ROUTES.get_upload_url,
@@ -51,17 +68,34 @@ class Upload:
 
         return GetUploadUrlModel(data)
 
-    async def file(self, file_name, file_pathway,
+    async def file(self, file_name, pathway,
                    content_type="b2/x-auto", **kwargs):
-        """ https://www.backblaze.com/b2/docs/b2_upload_file.html
-                file_name, name to save it under on the bucket.
-                file_pathway, pathway to the file.
-                content_type, content type to post with, defaults to b2/x-auto.
+        """ Closes all sessions.
+
+            Parameters
+            ----------
+            file_name: str
+                Name to save it under on the bucket.
+            pathway: str
+                Pathway to the local file.
+            content_type: str
+                content type to post with, defaults to b2/x-auto.
+
+            Returns
+            -------
+            FileModel:
+                Contains file details.
+            File:
+                Object for file interactions.
+
+            References
+            ----------
+            https://www.backblaze.com/b2/docs/b2_upload_file.html
         """
 
         get_upload = await self._cached_upload()
 
-        data, bytes, sha1 = await read_file(file_pathway)
+        data, bytes, sha1 = await read_file(pathway)
         kwargs = format_keys(kwargs)
         headers = {
             "Authorization": get_upload.authorization_token,
@@ -81,10 +115,27 @@ class Upload:
         return FileModel(data), File(data["fileId"])
 
     async def data(self, data, file_name, content_type="b2/x-auto", **kwargs):
-        """ https://www.backblaze.com/b2/docs/b2_upload_file.html
-                data, data to upload.
-                file_name, name to save it under on the bucket.
-                content_type, content type to post with, defaults to b2/x-auto.
+        """ Closes all sessions.
+
+            Parameters
+            ----------
+            data: bytes
+                Raw bytes to upload.
+            file_name: str
+                Name to save it under on the bucket.
+            content_type: str
+                content type to post with, defaults to b2/x-auto.
+
+            Returns
+            -------
+            FileModel:
+                Contains file details.
+            File:
+                Object for file interactions.
+
+            References
+            ----------
+            https://www.backblaze.com/b2/docs/b2_upload_file.html
         """
 
         get_upload = await self._cached_upload()

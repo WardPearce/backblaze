@@ -45,9 +45,9 @@ Uploads a local file onto B2.
 **Parameters**
 
 - file_name: str
-    Name to save the file under.
+    - Name to save the file under.
 - pathway: str
-    Pathway to local file.
+    - Pathway to local file.
 - content_type="b2/x-auto"
 - **kwargs
 
@@ -86,9 +86,9 @@ Uploads raw bytes onto B2.
 **Parameters**
 
 - data: bytes
-    Data to upload.
+    - Data to upload.
 - file_name: str
-    Name to save the file under.
+    - Name to save the file under.
 - content_type="b2/x-auto"
 - **kwargs
 
@@ -111,7 +111,7 @@ async def example():
 
     data, file = await bucket.upload.data(
         data=b"wow",
-        file_name="hentai/foobar.png"
+        file_name="school_work/foobar.png"
     )
 ```
 

@@ -13,9 +13,9 @@ Creates a bucket and sets the initialized bucket object's ID to the created buck
 **Parameters**
 
 - name: str
-    Unique name of bucket.
+    - Unique name of bucket.
 - type: BucketTypes
-    BucketTypes object.
+    - BucketTypes object.
 - **kwargs
 
 **Response**

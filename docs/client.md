@@ -19,13 +19,13 @@ Used to communicate to Backblaze's B2 API.
 **Parameters**
 
 - key_id: str
-    API Key ID.
+    - API Key ID.
 - application_key: str
-    API App Key.
+    - API App Key.
 - max_cache: int
-    Max amount of upload urls allowed to be cached at a given time.
+    - Max amount of upload urls allowed to be cached at a given time.
 - chunk_size: int
-    How many chunks should we read each loop.
+    - How many chunks should we read each loop.
 
 **Response**
 
@@ -57,7 +57,7 @@ Gets authorization details needed to send requests.
 **Parameters**
 
 - session: aiohttp.ClientSession
-    Optionally pass your own aiohttp.ClientSession.
+    - Optionally pass your own aiohttp.ClientSession.
 
 **Response**
 
@@ -66,7 +66,7 @@ None
 **Raises**
 
 - InvalidAuthorization
-    Given Key ID & App Key wasn't valid.
+    - Given Key ID & App Key wasn't valid.
 
 **Example**
 

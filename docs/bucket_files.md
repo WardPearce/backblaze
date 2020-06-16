@@ -13,7 +13,7 @@ Hides a file.
 **Parameters**
 
 - file_name: str
-    Name of file.
+    - Name of file.
 
 **Response**
 

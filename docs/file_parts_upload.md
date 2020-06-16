@@ -1,5 +1,7 @@
 # Index
-
+- [aiob2.file.parts.upload.get](#async-aiob2filepartsuploadget)
+- [aiob2.file.parts.upload.data](#async-aiob2filepartsuploaddata)
+- [aiob2.file.parts.upload.cancel](#async-aiob2filepartsuploadcancel)
 
 ##### async aiob2.file.parts.upload.get
 

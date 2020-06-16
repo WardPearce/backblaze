@@ -1,4 +1,10 @@
 # Index
+- [aiob2.file.delete](#async-aiob2filedelete)
+- [aiob2.file.info](#async-aiob2fileinfo)
+- [aiob2.file.save](#async-aiob2filesave)
+- [aiob2.file.download](#async-aiob2filedownload)
+- [aiob2.file.download_iterate](#async-aiob2filedownload_iterate)
+- [aiob2.client.file.parts](#aiob2clientfileparts)
 
 ### File
 ___

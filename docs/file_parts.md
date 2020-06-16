@@ -1,4 +1,7 @@
 # Index
+- [aiob2.file.parts.finish](#async-aiob2filepartsfinish)
+- [aiob2.file.parts.list](#async-aiob2filepartslist)
+- [aiob2.client.file.parts.upload](#aiob2clientfilepartsupload)
 
 ##### async aiob2.file.parts.finish
 
@@ -28,7 +31,7 @@ async def example():
         file_id="..."
     )
 
-    data, bucket = await file.finish(
+    data, bucket = await file.parts.finish(
         part_sha1_array="..."
     )
 ```

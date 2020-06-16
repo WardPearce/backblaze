@@ -118,11 +118,21 @@ ___
 
 ##### aiob2.client.source_file
 
+**Parameters**
+
+- source_file_id
+    - Unique source file ID.
+
 [Source file documentation](/docs/source_file.md)
 
 ___
 
 ##### aiob2.client.file
+
+**Parameters**
+
+- file_id
+    - Unique file ID.
 
 [File documentation](/docs/file.md)
 

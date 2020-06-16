@@ -39,19 +39,6 @@ class File:
 
         return FileModel(data), bucket.Bucket(data["bucketId"])
 
-    async def finish(self, part_sha1_array):
-        """ https://www.backblaze.com/b2/docs/b2_finish_large_file.html """
-
-        data = await AWR(
-            ROUTES.finish_large_file,
-            json={
-                "fileId": self.file_id,
-                "partSha1Array": part_sha1_array,
-            }
-        ).post()
-
-        return FileModel(data), bucket.Bucket(data["bucketId"])
-
     async def save(self, pathway):
         """
         Save's file to given pathway.

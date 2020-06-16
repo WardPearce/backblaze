@@ -107,18 +107,18 @@ ___
 
 ##### aiob2.client.bucket
 
-[Bucket documentation](/bucket.md)
+[Bucket documentation](/docs/bucket.md)
 
 ___
 
 ##### aiob2.client.source_file
 
-[Source file documentation](/source_file.md)
+[Source file documentation](/docs/source_file.md)
 
 ___
 
 ##### aiob2.client.file
 
-[File documentation](/file.md)
+[File documentation](/docs/file.md)
 
 ___

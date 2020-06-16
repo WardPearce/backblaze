@@ -1,4 +1,8 @@
 # Index
+- [aiob2.bucket.create](#async-aiob2bucketcreate)
+- [aiob2.bucket.delete](#async-aiob2bucketdelete)
+- [aiob2.bucket.upload](#aiob2bucketupload)
+- [aiob2.bucket.files](#aiob2bucketfiles)
 
 ### Bucket
 ___

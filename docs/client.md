@@ -107,6 +107,11 @@ ___
 
 ##### aiob2.client.bucket
 
+**Parameters**
+
+- bucket_id
+    - Unique bucket ID.
+
 [Bucket documentation](/docs/bucket.md)
 
 ___

@@ -1,4 +1,9 @@
 # Index
+- [aiob2.bucket.files.hide](#async-aiob2bucketfileshide)
+- [aiob2.bucket.files.versions](#async-aiob2bucketfilesversions)
+- [aiob2.bucket.files.names](#async-aiob2bucketfilesnames)
+- [aiob2.bucket.files.unfinished_large_files](#async-aiob2bucketfilesunfinished_large_files)
+- [aiob2.bucket.files.download_authorization](#async-aiob2bucketfilesdownload_authorization)
 
 ### Bucket Files
 ___

@@ -127,3 +127,9 @@ ___
 [File documentation](/docs/file.md)
 
 ___
+
+##### aiob2.client.key
+
+[Key documentation](/docs/key.md)
+
+___

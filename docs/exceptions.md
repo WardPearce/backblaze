@@ -15,7 +15,7 @@ ___
 
 ##### aiob2.exceptions.InvalidAuthorization
 
-***Parameters**
+**Parameters**
 
 None
 
@@ -31,7 +31,7 @@ None
 
 - InvalidAuthorization
 
-***Example**
+**Example**
 
 ```python
 import aiob2
@@ -46,7 +46,7 @@ ___
 
 ##### aiob2.exceptions.NoSuchFile
 
-***Parameters**
+**Parameters**
 
 None
 
@@ -62,7 +62,7 @@ None
 
 - NoSuchFile
 
-***Example**
+**Example**
 
 ```python
 import aiob2
@@ -77,7 +77,7 @@ ___
 
 ##### aiob2.exceptions.InvalidPartNumber
 
-***Parameters**
+**Parameters**
 
 None
 
@@ -93,7 +93,7 @@ None
 
 - InvalidPartNumber
 
-***Example**
+**Example**
 
 ```python
 import aiob2
@@ -108,7 +108,7 @@ ___
 
 ##### aiob2.exceptions.BadRequest
 
-***Parameters**
+**Parameters**
 
 None
 
@@ -124,7 +124,7 @@ None
 
 - BadRequest
 
-***Example**
+**Example**
 
 ```python
 import aiob2
@@ -139,7 +139,7 @@ ___
 
 ##### aiob2.exceptions.Forbidden
 
-***Parameters**
+**Parameters**
 
 None
 
@@ -155,7 +155,7 @@ None
 
 - Forbidden
 
-***Example**
+**Example**
 
 ```python
 import aiob2
@@ -171,7 +171,7 @@ ___
 
 ##### aiob2.exceptions.RequestTimeout
 
-***Parameters**
+**Parameters**
 
 None
 
@@ -187,7 +187,7 @@ None
 
 - RequestTimeout
 
-***Example**
+**Example**
 
 ```python
 import aiob2
@@ -203,7 +203,7 @@ ___
 
 ##### aiob2.exceptions.TooManyRequests
 
-***Parameters**
+**Parameters**
 
 None
 
@@ -219,7 +219,7 @@ None
 
 - TooManyRequests
 
-***Example**
+**Example**
 
 ```python
 import aiob2
@@ -235,7 +235,7 @@ ___
 
 ##### aiob2.exceptions.InternalError
 
-***Parameters**
+**Parameters**
 
 None
 
@@ -251,7 +251,7 @@ None
 
 - InternalError
 
-***Example**
+**Example**
 
 ```python
 import aiob2
@@ -267,7 +267,7 @@ ___
 
 ##### aiob2.exceptions.ServiceUnavailable
 
-***Parameters**
+**Parameters**
 
 None
 
@@ -283,7 +283,7 @@ None
 
 - ServiceUnavailable
 
-***Example**
+**Example**
 
 ```python
 import aiob2
@@ -299,7 +299,7 @@ ___
 
 ##### aiob2.exceptions.UndefinedError
 
-***Parameters**
+**Parameters**
 
 None
 
@@ -315,7 +315,7 @@ None
 
 - UndefinedError
 
-***Example**
+**Example**
 
 ```python
 import aiob2

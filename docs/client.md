@@ -10,7 +10,7 @@ ___
 Used to communicate to Backblaze's B2 API.
 
 
-***Parameters**
+**Parameters**
 
 - key_id: str
     API Key ID.
@@ -29,7 +29,7 @@ None
 
 None
 
-***Example**
+**Example**
 
 ```python
 import aiob2
@@ -48,7 +48,7 @@ ___
 Gets authorization details needed to send requests.
 
 
-***Parameters**
+**Parameters**
 
 - session: aiohttp.ClientSession
     Optionally pass your own aiohttp.ClientSession.
@@ -62,11 +62,9 @@ None
 - InvalidAuthorization
     Given Key ID & App Key wasn't valid.
 
-***Example**
+**Example**
 
 ```python
-import aiob2
-
 async def startup():
     await B2.connect()
 ```
@@ -80,7 +78,7 @@ ___
 Closes the aiohttp.ClientSession.
 
 
-***Parameters**
+**Parameters**
 
 None
 
@@ -92,11 +90,9 @@ None
 
 None
 
-***Example**
+**Example**
 
 ```python
-import aiob2
-
 async def shutdown():
     await B2.close()
 ```

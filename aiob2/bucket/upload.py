@@ -70,7 +70,7 @@ class Upload:
 
     async def file(self, file_name, pathway,
                    content_type="b2/x-auto", **kwargs):
-        """ Closes all sessions.
+        """ Uploads a local file.
 
             Parameters
             ----------
@@ -115,7 +115,7 @@ class Upload:
         return FileModel(data), File(data["fileId"])
 
     async def data(self, data, file_name, content_type="b2/x-auto", **kwargs):
-        """ Closes all sessions.
+        """ Uploads data.
 
             Parameters
             ----------

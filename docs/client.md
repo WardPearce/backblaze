@@ -1,4 +1,10 @@
 # Index
+- [aiob2.client](#aiob2client)
+- [aiob2.client.connect](#async-aiob2clientconnect)
+- [aiob2.client.close](#async-aiob2clientclose)
+- [aiob2.client.bucket](#aiob2clientbucket)
+- [aiob2.client.source_file](#aiob2clientsource_file)
+- [aiob2.client.file](#aiob2clientfile)
 
 ### Client
 ___

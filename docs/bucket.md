@@ -74,10 +74,10 @@ ___
 
 ##### aiob2.bucket.upload
 
-[Bucket upload documentation](/bucket_upload.md)
+[Bucket upload documentation](/docs/bucket_upload.md)
 ___
 
 ##### aiob2.bucket.files
 
-[Bucket files documentation](/bucket_files.md)
+[Bucket files documentation](/docs/bucket_files.md)
 ___

@@ -106,6 +106,132 @@ async def shutdown():
 
 ___
 
+##### async aiob2.client.keys
+
+**Functionality**
+
+Lists all keys.
+
+
+**Parameters**
+
+- **kwargs
+
+**Response**
+
+- KeyModel
+- Bucket
+
+**Raises**
+
+- Can raise any request related exception. 
+
+**Example**
+
+```python
+async def example():
+    
+    async for data, bucket in B2.keys():
+        pass
+```
+
+___
+
+##### async aiob2.client.buckets
+
+**Functionality**
+
+Lists all buckets.
+
+
+**Parameters**
+
+- **kwargs
+
+**Response**
+
+- BucketModel
+- Bucket
+
+**Raises**
+
+- Can raise any request related exception. 
+
+**Example**
+
+```python
+async def example():
+    
+    async for data, bucket in B2.buckets():
+        pass
+```
+
+___
+
+##### async aiob2.client.download_from_name
+
+**Functionality**
+
+Downloads the whole file into memory from name.
+
+
+**Parameters**
+
+- bucket_name: str
+- file_name: str
+
+**Response**
+
+- Bytes
+
+**Raises**
+
+- Can raise any request related exception. 
+
+**Example**
+
+```python
+async def example():
+    
+    data = await B2.download_from_name(
+        bucket_name="...",
+        file_name="..."
+    )
+```
+
+___
+
+##### async aiob2.client.download_from_name_iterate
+
+**Functionality**
+
+Loops over the downloaded file.
+
+
+**Parameters**
+
+- bucket_name: str
+- file_name: str
+
+**Response**
+
+- Bytes
+
+**Raises**
+
+- Can raise any request related exception. 
+
+**Example**
+
+```python
+async def example():
+
+    async for data in B2.download_from_name_iterate(bucket_name="...", file_name="..."):
+        pass
+```
+
+___
+
 ##### aiob2.client.bucket
 
 **Parameters**

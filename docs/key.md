@@ -1,5 +1,6 @@
 # Index
-
+- [aiob2.key.create](#async-aiob2keycreate)
+- [aiob2.key.delete](#async-aiob2keydelete)
 
 ##### async aiob2.key.create
 

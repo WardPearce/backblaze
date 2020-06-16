@@ -5,6 +5,7 @@
 - [aiob2.client.bucket](#aiob2clientbucket)
 - [aiob2.client.source_file](#aiob2clientsource_file)
 - [aiob2.client.file](#aiob2clientfile)
+- [aiob2.client.key](#aiob2clientkey)
 
 ### Client
 ___

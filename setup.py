@@ -32,7 +32,7 @@ setup(
     author='WardPearce',
     author_email="wardpearce@protonmail.com",
     install_requires=get_requirements(),
-    license='Apache License 2.0',
+    license='GPL v3',
     packages=[
         'aiob2',
         'aiob2.bucket',

@@ -6,7 +6,7 @@
 - [About](#about)
 - [Install](#install)
 - [Example](#example)
-- [Documentation](/DOCUMENTATION.md)
+- [Documentation](/docs/README.md)
 
 # About
 ``aiob2`` is a powerful & simple asynchronous wrapper for Backblaze's b2 API. Version 1.0.0 is considered a rewrite and as a result everything below that version is incompatible. 

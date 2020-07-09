@@ -13,7 +13,7 @@ from .exceptions import InvalidAuthorization
 import base64
 import aiohttp
 
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 
 
 class client(Misc):

@@ -38,6 +38,7 @@ setup(
         'aiob2.bucket',
         'aiob2.file',
         'aiob2.file.parts',
+        'aiob2.key',
         'aiob2.source_file'
     ],
     python_requires='>=3.6',

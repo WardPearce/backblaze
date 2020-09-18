@@ -1,7 +1,6 @@
 from httpx import AsyncClient, Client
 
 from .base import Base
-from .routes import Auth
 
 from .models.auth import AuthModel
 
@@ -39,10 +38,7 @@ class Awaiting(Base, AwaitingHTTP):
             Holds data on account auth.
         """
 
-        AUTH = Auth(self.auth_url)
-        AUTH.format()
-
-        data = AuthModel(await self._get(url=AUTH.get))
+        data = AuthModel(await self._get(url=self._auth_url))
 
         self.format_routes(
             data.api_url,
@@ -73,10 +69,7 @@ class Blocking(Base, BlockingHTTP):
             Holds data on account auth.
         """
 
-        AUTH = Auth(self.auth_url)
-        AUTH.format()
-
-        data = AuthModel(self._get(url=AUTH.get))
+        data = AuthModel(self._get(url=self._auth_url))
 
         self.format_routes(
             data.api_url,

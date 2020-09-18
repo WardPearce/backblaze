@@ -1,5 +1,7 @@
 from httpx import BasicAuth
 
+from .routes import Auth
+
 
 class Base:
     def __init__(self, key_id: str, key: str,
@@ -24,3 +26,10 @@ class Base:
 
     def format_routes(self, api_url: str, download_url: str) -> None:
         pass
+
+    @property
+    def _auth_url(self) -> str:
+        auth = Auth(self.auth_url)
+        auth.format()
+
+        return auth.get

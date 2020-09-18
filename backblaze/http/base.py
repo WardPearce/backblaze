@@ -14,7 +14,6 @@ class BaseHTTP:
 
         resp.raise_for_status()
 
-
         if json:
             return resp.json()
         elif read:

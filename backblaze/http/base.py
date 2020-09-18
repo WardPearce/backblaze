@@ -21,6 +21,3 @@ class BaseHTTP:
             return resp.read()
         else:
             return True
-
-    def format_routes(self, api_url: str, download_url: str) -> None:
-        pass

@@ -21,3 +21,6 @@ class Base:
         )
 
         self.auth_url = auth_url
+
+    def format_routes(self, api_url: str, download_url: str) -> None:
+        pass

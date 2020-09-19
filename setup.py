@@ -39,6 +39,7 @@ setup(
         "backblaze.tests",
         "backblaze.bucket",
         "backblaze.bucket.awaiting",
+        "backblaze.bucket.blocking",
     ],
     python_requires=">=3.6",
     include_package_data=True,

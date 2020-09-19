@@ -1,12 +1,19 @@
 from httpx import BasicAuth
 
-from .routes import Auth
+from .routes import BucketRoute, Route
+from .utils import format_route_name
+
+
+class Routes:
+    bucket: Route
 
 
 class Base:
-    def __init__(self, key_id: str, key: str,
-                 auth_url: str = "https://api.backblazeb2.com/b2api/v2/"
-                 ) -> None:
+    _routes = Routes()
+    _auth_url = "https://api.backblazeb2.com/b2api/v2/b2_authorize_account"
+    _refresh_seconds = 84600
+
+    def __init__(self, key_id: str, key: str) -> None:
         """Used to interact with B2 account.
 
         Parameters
@@ -22,14 +29,13 @@ class Base:
             key
         )
 
-        self.auth_url = auth_url
+    def _format_routes(self, api_url: str, download_url: str) -> None:
+        for route in [BucketRoute]:
+            route_obj = route(api_url)
+            route_obj.format()
 
-    def format_routes(self, api_url: str, download_url: str) -> None:
-        pass
-
-    @property
-    def _auth_url(self) -> str:
-        auth = Auth(self.auth_url)
-        auth.format()
-
-        return auth.get
+            setattr(
+                self._routes,
+                format_route_name(type(route_obj).__name__),
+                route_obj
+            )

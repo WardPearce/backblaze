@@ -2,6 +2,9 @@ class Route:
     _prefix = None
 
     def __init__(self, route: str) -> None:
+        if route[-1:] == "/":
+            route = route[:-1]
+
         self.route = route
 
     def format(self) -> None:
@@ -35,5 +38,7 @@ class Route:
             )
 
 
-class Auth(Route):
-    get = "b2_authorize_account"
+class BucketRoute(Route):
+    _prefix = "b2api/v2"
+
+    create = "b2_create_bucket"

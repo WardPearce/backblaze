@@ -34,6 +34,11 @@ setup(
     license=get_variable("__license__"),
     packages=[
         "backblaze",
+        "backblaze.http",
+        "backblaze.models",
+        "backblaze.tests",
+        "backblaze.bucket",
+        "backblaze.bucket.awaiting",
     ],
     python_requires=">=3.6",
     include_package_data=True,

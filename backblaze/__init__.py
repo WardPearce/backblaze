@@ -86,8 +86,12 @@ class Awaiting(Base, AwaitingHTTP):
         """Used to refresh auth tokens every 23.5 hours.
         """
 
+        self._running_task = True
+
         await asyncio.sleep(self._refresh_seconds)
         await self.authorize()
+
+        self._running_task = False
 
     async def authorize(self) -> AuthModel:
         """Used to authorize B2 account.
@@ -98,23 +102,27 @@ class Awaiting(Base, AwaitingHTTP):
             Holds data on account auth.
         """
 
-        data = AuthModel(await self._get(
-            url=self._auth_url,
+        async with self._client.get(
+            self._auth_url,
             auth=self._auth
-        ))
+        ) as resp:
+            resp.raise_for_status()
 
-        self.account_id = data.account_id
+            data = AuthModel(resp.json())
 
-        self._format_routes(
-            data.api_url,
-            data.download_url
-        )
+            self.account_id = data.account_id
 
-        self._client.headers["Authorization"] = data.auth_token
+            self._format_routes(
+                data.api_url,
+                data.download_url
+            )
 
-        asyncio.create_task(self.__authorize_background())
+            self._client.headers["Authorization"] = data.auth_token
 
-        return data
+            if not self._running_task:
+                asyncio.create_task(self.__authorize_background())
+
+            return data
 
 
 class Blocking(Base, BlockingHTTP):
@@ -173,8 +181,12 @@ class Blocking(Base, BlockingHTTP):
         """Used to refresh auth tokens every 23.5 hours.
         """
 
+        self._running_task = True
+
         time.sleep(self._refresh_seconds)
         self.authorize()
+
+        self._running_task = False
 
     def authorize(self) -> AuthModel:
         """Used to authorize B2 account.
@@ -185,10 +197,10 @@ class Blocking(Base, BlockingHTTP):
             Holds data on account auth.
         """
 
-        data = AuthModel(self._get(
-            url=self._auth_url,
-            auth=self._auth
-        ))
+        resp = self._client.get(self._auth_url, auth=self._auth)
+        resp.raise_for_status()
+
+        data = AuthModel(resp.json())
 
         self.account_id = data.account_id
 
@@ -199,6 +211,7 @@ class Blocking(Base, BlockingHTTP):
 
         self._client.headers["Authorization"] = data.auth_token
 
-        threading.Thread(target=self.__authorize_background)
+        if not self._running_task:
+            threading.Thread(target=self.__authorize_background)
 
         return data

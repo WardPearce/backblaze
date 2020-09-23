@@ -12,6 +12,7 @@ class Base:
     _routes = Routes()
     _auth_url = "https://api.backblazeb2.com/b2api/v2/b2_authorize_account"
     _refresh_seconds = 84600
+    _running_task = False
 
     def __init__(self, key_id: str, key: str) -> None:
         """Used to interact with B2 account.

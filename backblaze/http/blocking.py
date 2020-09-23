@@ -6,12 +6,15 @@ from .base import BaseHTTP
 class BlockingHTTP(BaseHTTP):
     def __handle(self, request, resp_json: bool = True,
                  *args, **kwargs) -> Any:
-        resp = request(*args, **kwargs)
-
-        return self.handle_resp(
-            resp,
-            resp_json,
-        )
+        for _ in range(0, 2):
+            resp = request(*args, **kwargs)
+            if resp.status_code == 401:
+                self.authorize()
+            else:
+                return self.handle_resp(
+                    resp,
+                    resp_json,
+                )
 
     def _get(self, resp_json: bool = True, *args, **kwargs) -> Any:
         return self.__handle(

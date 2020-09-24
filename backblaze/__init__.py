@@ -67,13 +67,13 @@ class Awaiting(Base, AwaitingHTTP):
 
         return data, self.bucket(data.bucket_id)
 
-    async def buckets(self, type: list = ["all"]
+    async def buckets(self, types: list = ["all"]
                       ) -> typing.AsyncGenerator[BucketModel, AwaitingBucket]:
         """Lists buckets.
 
         Parameters
         ----------
-        type : list, optional
+        types : list, optional
             Used to filter bucket types, by default ["all"]
 
         Yields
@@ -86,7 +86,7 @@ class Awaiting(Base, AwaitingHTTP):
 
         data = await self._post(
             url=self._routes.bucket.list,
-            json={"bucketTypes": type}
+            json={"bucketTypes": types}
         )
 
         for bucket in data["buckets"]:
@@ -183,13 +183,13 @@ class Blocking(Base, BlockingHTTP):
 
         return data, self.bucket(data.bucket_id)
 
-    def buckets(self, type: list = ["all"]
+    def buckets(self, types: list = ["all"]
                 ) -> typing.Generator[BucketModel, BlockingBucket, None]:
         """Lists buckets.
 
         Parameters
         ----------
-        type : list, optional
+        types : list, optional
             Used to filter bucket types, by default ["all"]
 
         Yields
@@ -202,7 +202,7 @@ class Blocking(Base, BlockingHTTP):
 
         data = self._post(
             url=self._routes.bucket.list,
-            json={"bucketTypes": type}
+            json={"bucketTypes": types}
         )
 
         for bucket in data["buckets"]:

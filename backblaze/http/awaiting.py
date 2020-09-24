@@ -6,6 +6,9 @@ from .base import BaseHTTP
 class AwaitingHTTP(BaseHTTP):
     async def __handle(self, request, resp_json: bool = True,
                        *args, **kwargs) -> Any:
+        if not kwargs:
+            kwargs = {}
+
         if "json" in kwargs:
             kwargs["json"]["accountId"] = self.account_id
         else:

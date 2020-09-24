@@ -1,11 +1,11 @@
 from httpx import BasicAuth
 
-from .routes import BucketRoute, Route
+from .routes import BucketRoute
 from .utils import format_route_name
 
 
 class Routes:
-    bucket: Route
+    bucket: BucketRoute
 
 
 class Base:

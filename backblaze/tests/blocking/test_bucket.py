@@ -16,9 +16,13 @@ class TestBucketBlocking(unittest.TestCase):
             "test-bucket-{}".format(uuid4())
         ))
 
-        self.assertTrue(
-            type(data) == BucketModel
+        self.assertIsInstance(
+            data, BucketModel
         )
         self.assertTrue(
             type(bucket) == BlockingBucket
+        )
+
+        self.assertIsInstance(
+            bucket.delete(), BucketModel
         )

@@ -14,6 +14,8 @@ class Base:
     _refresh_seconds = 84600
     _running_task = False
 
+    account_id = None
+
     def __init__(self, key_id: str, key: str) -> None:
         """Used to interact with B2 account.
 

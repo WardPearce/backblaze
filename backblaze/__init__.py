@@ -59,7 +59,6 @@ class Awaiting(Base, AwaitingHTTP):
             Used to interact with a bucket.
         """
 
-        settings.payload["accountId"] = self.account_id
         data = BucketModel(await self._post(
             url=self._routes.bucket.create,
             json=settings.payload
@@ -154,7 +153,6 @@ class Blocking(Base, BlockingHTTP):
             Used to interact with a bucket.
         """
 
-        settings.payload["accountId"] = self.account_id
         data = BucketModel(self._post(
             url=self._routes.bucket.create,
             json=settings.payload,

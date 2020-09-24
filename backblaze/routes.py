@@ -42,3 +42,4 @@ class BucketRoute(Route):
     _prefix = "b2api/v2"
 
     create = "b2_create_bucket"
+    delete = "b2_delete_bucket"

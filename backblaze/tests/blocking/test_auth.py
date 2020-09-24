@@ -1,6 +1,6 @@
 import unittest
 
-from .shared_vars import CLIENT
+from .client import CLIENT
 
 from ...models.auth import AuthModel
 

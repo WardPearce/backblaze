@@ -15,14 +15,14 @@ class AwaitingHTTP(BaseHTTP):
             kwargs["json"] = {"accountId": self.account_id}
 
         for _ in range(0, 2):
-            async with request(*args, **kwargs) as resp:
-                if resp.status_code == 401:
-                    await self.authorize()
-                else:
-                    return self.handle_resp(
-                        resp,
-                        resp_json,
-                    )
+            resp = await request(*args, **kwargs)
+            if resp.status_code == 401:
+                await self.authorize()
+            else:
+                return self.handle_resp(
+                    resp,
+                    resp_json,
+                )
 
     async def _get(self, resp_json: bool = True, *args, **kwargs) -> Any:
         return await self.__handle(

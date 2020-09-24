@@ -28,3 +28,13 @@ class TestBucketAwaiting(asynctest.TestCase):
         self.assertIsInstance(
             await bucket.delete(), BucketModel
         )
+
+    async def test_list_buckets(self):
+        async for data, bucket in CLIENT.buckets():
+            self.assertIsInstance(
+                data, BucketModel
+            )
+
+            self.assertIsInstance(
+                bucket, AwaitingBucket
+            )

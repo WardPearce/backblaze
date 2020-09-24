@@ -26,3 +26,13 @@ class TestBucketBlocking(unittest.TestCase):
         self.assertIsInstance(
             bucket.delete(), BucketModel
         )
+
+    def test_list_buckets(self):
+        for data, bucket in CLIENT.buckets():
+            self.assertIsInstance(
+                data, BucketModel
+            )
+
+            self.assertIsInstance(
+                bucket, BlockingBucket
+            )

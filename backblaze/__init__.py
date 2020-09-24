@@ -2,6 +2,7 @@ import sys
 import asyncio
 import threading
 import time
+import typing
 
 from httpx import AsyncClient, Client
 
@@ -66,6 +67,31 @@ class Awaiting(Base, AwaitingHTTP):
 
         return data, self.bucket(data.bucket_id)
 
+    async def buckets(self, type: list = ["all"]
+                      ) -> typing.AsyncGenerator[BucketModel, AwaitingBucket]:
+        """Lists buckets.
+
+        Parameters
+        ----------
+        type : list, optional
+            Used to filter bucket types, by default ["all"]
+
+        Yields
+        -------
+        BucketModel
+            Holds details on bucket.
+        AwaitingBucket
+            Used for interacting with bucket.
+        """
+
+        data = await self._post(
+            url=self._routes.bucket.list,
+            json={"bucketTypes": type}
+        )
+
+        for bucket in data["buckets"]:
+            yield BucketModel(bucket), self.bucket(bucket["bucketId"])
+
     def bucket(self, bucket_id: str) -> AwaitingBucket:
         """Used to interact with a bucket.
 
@@ -102,7 +128,6 @@ class Awaiting(Base, AwaitingHTTP):
         """
 
         resp = await self._client.get(url=self._auth_url, auth=self._auth)
-
         resp.raise_for_status()
 
         data = AuthModel(resp.json())
@@ -157,6 +182,31 @@ class Blocking(Base, BlockingHTTP):
         ))
 
         return data, self.bucket(data.bucket_id)
+
+    def buckets(self, type: list = ["all"]
+                ) -> typing.Generator[BucketModel, BlockingBucket, None]:
+        """Lists buckets.
+
+        Parameters
+        ----------
+        type : list, optional
+            Used to filter bucket types, by default ["all"]
+
+        Yields
+        -------
+        BucketModel
+            Holds details on bucket.
+        BlockingBucket
+            Used for interacting with bucket.
+        """
+
+        data = self._post(
+            url=self._routes.bucket.list,
+            json={"bucketTypes": type}
+        )
+
+        for bucket in data["buckets"]:
+            yield BucketModel(bucket), self.bucket(bucket["bucketId"])
 
     def bucket(self, bucket_id: str) -> BlockingBucket:
         """Used to interact with a bucket.

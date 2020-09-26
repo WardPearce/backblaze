@@ -33,8 +33,8 @@ class Base:
             Application Key ID.
         key : str
             Application Key
-        timeout : int
-            Max time a request can take.
+        timeout : int, optional
+            Max time a request can take, by default 30
 
         Notes
         -----

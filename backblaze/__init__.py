@@ -39,7 +39,7 @@ class Awaiting(Base, AwaitingHTTP):
 
         super().__init__(*args, **kwargs)
 
-        self._client = AsyncClient(timeout=30)
+        self._client = AsyncClient(timeout=self._timeout)
 
     async def close(self) -> None:
         """Closes any underlying TCP sessions.
@@ -222,7 +222,7 @@ class Blocking(Base, BlockingHTTP):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
-        self._client = Client(timeout=30)
+        self._client = Client(timeout=self._timeout)
 
     def close(self) -> None:
         """Closes any underlying TCP sessions.

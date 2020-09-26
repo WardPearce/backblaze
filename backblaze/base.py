@@ -24,7 +24,7 @@ class Base:
         FileRoute
     ]
 
-    def __init__(self, key_id: str, key: str) -> None:
+    def __init__(self, key_id: str, key: str, timeout: int = 30) -> None:
         """Used to interact with B2 account.
 
         Parameters
@@ -33,12 +33,25 @@ class Base:
             Application Key ID.
         key : str
             Application Key
+        timeout : int
+            Max time a request can take.
+
+        Notes
+        -----
+        In theory timeout could be 3 times longer then you set.
+        If a request takes X amount of seconds and then gets 401d
+        the authorize function will be called again and the request reissued.
+
+        The authorize could take another X amount of seconds and then the
+        reissued request could take another X amount of seconds.
         """
 
         self._auth = BasicAuth(
             key_id,
             key
         )
+
+        self._timeout = timeout
 
     def _format_routes(self, api_url: str, download_url: str) -> None:
         for route in self.__routes:

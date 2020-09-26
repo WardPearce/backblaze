@@ -1,11 +1,12 @@
 from httpx import BasicAuth
 
-from .routes import BucketRoute
+from .routes import BucketRoute, KeyRoute
 from .utils import format_route_name
 
 
 class Routes:
     bucket: BucketRoute
+    key: KeyRoute
 
 
 class Base:
@@ -33,7 +34,7 @@ class Base:
         )
 
     def _format_routes(self, api_url: str, download_url: str) -> None:
-        for route in [BucketRoute]:
+        for route in [BucketRoute, KeyRoute]:
             route_obj = route(api_url)
             route_obj.format()
 

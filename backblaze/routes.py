@@ -44,3 +44,11 @@ class BucketRoute(Route):
     create = "b2_create_bucket"
     delete = "b2_delete_bucket"
     list = "b2_list_buckets"
+
+
+class KeyRoute(Route):
+    _prefix = "b2api/v2"
+
+    create = "b2_create_key"
+    delete = "b2_delete_key"
+    list = "b2_list_keys"

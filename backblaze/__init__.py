@@ -10,6 +10,7 @@ from .base import Base
 
 from .models.auth import AuthModel
 from .models.bucket import BucketModel
+from .models.key import KeyModel
 
 from .http.awaiting import AwaitingHTTP
 from .http.blocking import BlockingHTTP
@@ -17,7 +18,10 @@ from .http.blocking import BlockingHTTP
 from .bucket.awaiting import AwaitingBucket
 from .bucket.blocking import BlockingBucket
 
-from .settings import BucketSettings
+from .key.blocking import BlockingKey
+from .key.awaiting import AwaitingKey
+
+from .settings import BucketSettings, KeySettings
 
 
 __version__ = "0.0.1"
@@ -42,6 +46,71 @@ class Awaiting(Base, AwaitingHTTP):
         """
 
         await self._client.aclose()
+
+    async def create_key(self, settings: KeySettings
+                         ) -> (KeyModel, AwaitingKey):
+        """Used to create a key.
+
+        Parameters
+        ----------
+        settings: KeySettings
+            Used to hold details on a key.
+
+        Returns
+        -------
+        KeyModel
+            Holds details on key.
+        AwaitingKey
+        """
+
+        data = await self._post(
+            json=settings.payload,
+            url=self._routes.key.create
+        )
+
+        return KeyModel(data), self.key(data["applicationKeyId"])
+
+    async def keys(self, limit: int = 100,
+                   start_key_id: str = None
+                   ) -> typing.AsyncGenerator[KeyModel, AwaitingKey]:
+        """Used to list keys.
+
+        Parameters
+        ----------
+        limit : int, optional
+            Used to limit the listing, by default 100
+        start_key_id : str, optional
+            Key to start listing from, by default None
+
+        Yields
+        -------
+        KeyModel
+            Holds details on key.
+        AwaitingKey
+        """
+
+        data = await self._post(
+            url=self._routes.key.list,
+            json={"maxKeyCount": limit, "startApplicationKeyId": start_key_id}
+        )
+
+        for key in data["keys"]:
+            yield KeyModel(key), self.key(key["applicationKeyId"])
+
+    def key(self, key_id: str) -> AwaitingKey:
+        """Used to interact with key.
+
+        Parameters
+        ----------
+        key_id : str
+            ID of key.
+
+        Returns
+        -------
+        AwaitingKey
+        """
+
+        return AwaitingKey(self, key_id)
 
     async def create_bucket(self, settings: BucketSettings
                             ) -> (BucketModel, AwaitingBucket):
@@ -112,11 +181,10 @@ class Awaiting(Base, AwaitingHTTP):
         """
 
         self._running_task = True
-
         await asyncio.sleep(self._refresh_seconds)
-        await self.authorize()
-
         self._running_task = False
+
+        await self.authorize()
 
     async def authorize(self) -> AuthModel:
         """Used to authorize B2 account.
@@ -158,6 +226,71 @@ class Blocking(Base, BlockingHTTP):
         """
 
         self._client.close()
+
+    def create_key(self, settings: KeySettings
+                   ) -> (KeyModel, BlockingKey):
+        """Used to create a key.
+
+        Parameters
+        ----------
+        settings: KeySettings
+            Used to hold details on a key.
+
+        Returns
+        -------
+        KeyModel
+            Holds details on key.
+        BlockingKey
+        """
+
+        data = self._post(
+            json=settings.payload,
+            url=self._routes.key.create
+        )
+
+        return KeyModel(data), self.key(data["applicationKeyId"])
+
+    def keys(self, limit: int = 100,
+             start_key_id: str = None
+             ) -> typing.AsyncGenerator[KeyModel, AwaitingKey]:
+        """Used to list keys.
+
+        Parameters
+        ----------
+        limit : int, optional
+            Used to limit the listing, by default 100
+        start_key_id : str, optional
+            Key to start listing from, by default None
+
+        Yields
+        -------
+        KeyModel
+            Holds details on key.
+        AwaitingKey
+        """
+
+        data = self._post(
+            url=self._routes.key.list,
+            json={"maxKeyCount": limit, "startApplicationKeyId": start_key_id}
+        )
+
+        for key in data["keys"]:
+            yield KeyModel(key), self.key(key["applicationKeyId"])
+
+    def key(self, key_id: str) -> BlockingKey:
+        """Used to interact with key.
+
+        Parameters
+        ----------
+        key_id : str
+            ID of key.
+
+        Returns
+        -------
+        BlockingKey
+        """
+
+        return BlockingKey(self, key_id)
 
     def create_bucket(self, settings: BucketSettings
                       ) -> (BucketModel, BlockingBucket):
@@ -228,11 +361,10 @@ class Blocking(Base, BlockingHTTP):
         """
 
         self._running_task = True
-
         time.sleep(self._refresh_seconds)
-        self.authorize()
-
         self._running_task = False
+
+        self.authorize()
 
     def authorize(self) -> AuthModel:
         """Used to authorize B2 account.

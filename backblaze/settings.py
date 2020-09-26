@@ -48,3 +48,23 @@ class BucketSettings:
 
             for cor in cors:
                 cors_append(cor.payload)
+
+
+class KeySettings:
+    payload = {}
+
+    def __init__(self, capabilities: list, name: str,
+                 duration: int = None, bucket_id: str = None,
+                 prefix: str = None) -> None:
+
+        self.payload["capabilities"] = capabilities
+        self.payload["keyName"] = name.replace(" ", "-")
+
+        if duration:
+            self.payload["validDurationInSeconds"] = duration
+
+        if bucket_id:
+            self.payload["bucketId"] = bucket_id
+
+        if prefix:
+            self.payload["namePrefix"] = prefix

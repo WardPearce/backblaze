@@ -39,7 +39,7 @@ class Awaiting(Base, AwaitingHTTP):
 
         super().__init__(*args, **kwargs)
 
-        self._client = AsyncClient()
+        self._client = AsyncClient(timeout=30)
 
     async def close(self) -> None:
         """Closes any underlying TCP sessions.
@@ -72,7 +72,7 @@ class Awaiting(Base, AwaitingHTTP):
 
     async def keys(self, limit: int = 100,
                    start_key_id: str = None
-                   ) -> typing.AsyncGenerator[KeyModel, AwaitingKey]:
+                   ) -> typing.AsyncGenerator[typing.Any, None]:
         """Used to list keys.
 
         Parameters
@@ -87,6 +87,8 @@ class Awaiting(Base, AwaitingHTTP):
         KeyModel
             Holds details on key.
         AwaitingKey
+        str
+            Next application key ID.
         """
 
         data = await self._post(
@@ -95,7 +97,8 @@ class Awaiting(Base, AwaitingHTTP):
         )
 
         for key in data["keys"]:
-            yield KeyModel(key), self.key(key["applicationKeyId"])
+            yield KeyModel(key), self.key(key["applicationKeyId"]), \
+                data["nextApplicationKeyId"]
 
     def key(self, key_id: str) -> AwaitingKey:
         """Used to interact with key.
@@ -219,7 +222,7 @@ class Blocking(Base, BlockingHTTP):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
-        self._client = Client()
+        self._client = Client(timeout=30)
 
     def close(self) -> None:
         """Closes any underlying TCP sessions.

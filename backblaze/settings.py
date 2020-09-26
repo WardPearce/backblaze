@@ -7,7 +7,7 @@ class CorSettings:
     def __init__(self, name: str, origins: list, allowed_headers: list,
                  operations: list, expose_headers: list, max_age: int) -> None:
 
-        self.payload["corsRuleName"] = name
+        self.payload["corsRuleName"] = name.replace(" ", "-")
         self.payload["allowedOrigins"] = origins
         self.payload["allowedHeaders"] = allowed_headers
         self.payload["allowedOperations"] = operations
@@ -33,7 +33,7 @@ class BucketSettings:
                  info: str = None, cors: List[CorSettings] = None,
                  lifecycle: LifecycleSettings = None) -> None:
 
-        self.payload["bucketName"] = name
+        self.payload["bucketName"] = name.replace(" ", "-")
         self.payload["bucketType"] = "allPrivate" if private else "allPublic"
 
         if info:
@@ -68,3 +68,23 @@ class KeySettings:
 
         if prefix:
             self.payload["namePrefix"] = prefix
+
+
+class FileSettings:
+    payload = {}
+
+    def __init__(self, start_file_name: str = None,
+                 limit: int = 100, prefix: str = "",
+                 delimiter: str = None) -> None:
+
+        if start_file_name:
+            self.payload["startFileName"] = start_file_name
+
+        if limit:
+            self.payload["maxFileCount"] = limit
+
+        if prefix:
+            self.payload["prefix"] = prefix
+
+        if delimiter:
+            self.payload["delimiter"] = delimiter

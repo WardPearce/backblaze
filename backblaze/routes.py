@@ -52,3 +52,10 @@ class KeyRoute(Route):
     create = "b2_create_key"
     delete = "b2_delete_key"
     list = "b2_list_keys"
+
+
+class FileRoute(Route):
+    _prefix = "b2api/v2"
+
+    names = "b2_list_file_names"
+    versions = "b2_list_file_versions"

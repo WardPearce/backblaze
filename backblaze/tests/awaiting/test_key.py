@@ -26,7 +26,7 @@ class TestKeyAwaiting(asynctest.TestCase):
             created_key, AwaitingKey
         )
 
-        async for data, key in CLIENT.keys():
+        async for data, key, _ in CLIENT.keys():
             self.assertIsInstance(
                 data, KeyModel
             )

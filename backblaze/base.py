@@ -1,12 +1,13 @@
 from httpx import BasicAuth
 
-from .routes import BucketRoute, KeyRoute
+from .routes import BucketRoute, KeyRoute, FileRoute
 from .utils import format_route_name
 
 
 class Routes:
     bucket: BucketRoute
     key: KeyRoute
+    file: FileRoute
 
 
 class Base:
@@ -16,6 +17,12 @@ class Base:
     _running_task = False
 
     account_id = None
+
+    __routes = [
+        BucketRoute,
+        KeyRoute,
+        FileRoute
+    ]
 
     def __init__(self, key_id: str, key: str) -> None:
         """Used to interact with B2 account.
@@ -34,7 +41,7 @@ class Base:
         )
 
     def _format_routes(self, api_url: str, download_url: str) -> None:
-        for route in [BucketRoute, KeyRoute]:
+        for route in self.__routes:
             route_obj = route(api_url)
             route_obj.format()
 

@@ -40,6 +40,7 @@ setup(
         "backblaze.bucket",
         "backblaze.bucket.awaiting",
         "backblaze.bucket.blocking",
+        "backblaze.key",
     ],
     python_requires=">=3.6",
     include_package_data=True,

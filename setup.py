@@ -37,6 +37,8 @@ setup(
         "backblaze.http",
         "backblaze.models",
         "backblaze.tests",
+        "backblaze.tests.awaiting",
+        "backblaze.tests.blocking",
         "backblaze.bucket",
         "backblaze.bucket.awaiting",
         "backblaze.bucket.blocking",

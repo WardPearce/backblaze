@@ -2,7 +2,7 @@ from datetime import datetime
 
 
 class KeyModel:
-    def __init__(self, data):
+    def __init__(self, data) -> None:
         self.key_name = data["keyName"]
         self.application_key_id = data["applicationKeyId"]
         self.capabilities = data["capabilities"]

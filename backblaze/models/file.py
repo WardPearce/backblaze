@@ -2,7 +2,7 @@ from datetime import datetime
 
 
 class FileModel:
-    def __init__(self, data):
+    def __init__(self, data) -> None:
         self.account_id = data["accountId"]
         self.action = data["action"]
         self.bucket_id = data["bucketId"]
@@ -19,13 +19,13 @@ class FileModel:
 
 
 class FileDeleteModel:
-    def __init__(self, data):
+    def __init__(self, data) -> None:
         self.file_id = data["fileId"]
         self.file_name = data["fileName"]
 
 
 class PartModel:
-    def __init__(self, data):
+    def __init__(self, data) -> None:
         self.file_id = data["fileId"]
         self.part_number = data["partNumber"]
         self.content_length = data["contentLength"]
@@ -37,7 +37,7 @@ class PartModel:
 
 
 class UploadUrlModel:
-    def __init__(self, data):
+    def __init__(self, data) -> None:
         self.authorization_token = data["authorizationToken"]
         self.upload_url = data["uploadUrl"]
         self.file_id = data["fileId"] if "fileId" in data else None
@@ -45,7 +45,7 @@ class UploadUrlModel:
 
 
 class PartDeleteModel:
-    def __init__(self, data):
+    def __init__(self, data) -> None:
         self.file_id = data["fileId"]
         self.account_id = data["accountId"]
         self.bucket_id = data["bucketId"]

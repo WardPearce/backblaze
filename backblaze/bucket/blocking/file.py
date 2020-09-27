@@ -1,6 +1,6 @@
 from ..base import BaseFile
 
-from ...models.file import FileModel, UploadUrlModel
+from ...models.file import FileModel, UploadUrlModel, FileDeleteModel
 
 from ...settings import DownloadSettings
 
@@ -23,6 +23,28 @@ class BlockingFile(BaseFile):
             self.context._post(
                 url=self.context._routes.file.get,
                 json={"fileId": self.file_id},
+                include_account=False
+            )
+        )
+
+    def delete(self, name: str) -> FileDeleteModel:
+        """Deletes give file.
+
+        Parameters
+        ----------
+        name : str
+            Name of file.
+
+        Returns
+        -------
+        FileDeleteModel
+            Holds details on delete file.
+        """
+
+        return FileDeleteModel(
+            self.context._post(
+                url=self.context._routes.file.delete,
+                json={"fileName": name, "fileId": self.file_id},
                 include_account=False
             )
         )
@@ -81,7 +103,7 @@ class BlockingFile(BaseFile):
             )
         )
 
-    def download(self, settings: DownloadSettings) -> bytes:
+    def download(self, settings: DownloadSettings = None) -> bytes:
         """Used to download file into memory.
 
         Parameters
@@ -93,10 +115,17 @@ class BlockingFile(BaseFile):
         bytes
         """
 
+        if not settings:
+            params = {"fileId": self.file_id}
+            headers = None
+        else:
+            params = {"fileId": self.file_id, **settings.parameters}
+            headers = settings.headers
+
         return self.context._get(
             url=self.context._routes.file.download_by_id,
-            headers=settings.headers,
-            params={"fileId": self.file_id, **settings.parameters},
+            headers=headers,
+            params=params,
             resp_json=False,
             include_account=False,
         )

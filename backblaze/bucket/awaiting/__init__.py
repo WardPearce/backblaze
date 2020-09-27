@@ -111,14 +111,18 @@ class AwaitingBucket(BaseBucket):
             Used to interact with the file.
         """
 
+        upload = await self.upload_url()
+
         file = FileModel(await self.context._post(
-            url=await self.upload_url().upload_url,
+            url=upload.upload_url,
             headers={
-                "Content-Length": len(data),
-                "X-Bz-Content-Sha1": sha1(data),
+                "Content-Length": str(len(data)),
+                "X-Bz-Content-Sha1": sha1(data).hexdigest(),
+                "Authorization": upload.authorization_token,
                 **settings.headers
             },
-            data=data
+            data=data,
+            include_account=False
         ))
 
         return file, self.file(file.file_id)
@@ -144,8 +148,9 @@ class AwaitingBucket(BaseBucket):
 
         return cache.save(UploadUrlModel(
             await self.context._post(
-                url=self.content._routes.upload.upload,
-                json={"bucketId": self.bucket_id}
+                url=self.context._routes.upload.upload,
+                json={"bucketId": self.bucket_id},
+                include_account=False
             )
         ))
 

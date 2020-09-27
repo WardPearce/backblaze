@@ -3,7 +3,7 @@ import aiofiles
 
 from ..base import BaseFile
 
-from ...models.file import FileModel, UploadUrlModel
+from ...models.file import FileModel, UploadUrlModel, FileDeleteModel
 
 from ...settings import DownloadSettings
 
@@ -24,6 +24,28 @@ class AwaitingFile(BaseFile):
             await self.context._post(
                 url=self.context._routes.file.get,
                 json={"fileId": self.file_id},
+                include_account=False
+            )
+        )
+
+    async def delete(self, name: str) -> FileDeleteModel:
+        """Deletes give file.
+
+        Parameters
+        ----------
+        name : str
+            Name of file.
+
+        Returns
+        -------
+        FileDeleteModel
+            Holds details on delete file.
+        """
+
+        return FileDeleteModel(
+            await self.context._post(
+                url=self.context._routes.file.delete,
+                json={"fileName": name, "fileId": self.file_id},
                 include_account=False
             )
         )
@@ -82,7 +104,7 @@ class AwaitingFile(BaseFile):
             )
         )
 
-    async def download(self, settings: DownloadSettings) -> bytes:
+    async def download(self, settings: DownloadSettings = None) -> bytes:
         """Used to download file into memory.
 
         Parameters
@@ -94,15 +116,22 @@ class AwaitingFile(BaseFile):
         bytes
         """
 
+        if not settings:
+            params = {"fileId": self.file_id}
+            headers = None
+        else:
+            params = {"fileId": self.file_id, **settings.parameters}
+            headers = settings.headers
+
         return await self.context._get(
             url=self.context._routes.file.download_by_id,
-            headers=settings.headers,
-            params={"fileId": self.file_id, **settings.parameters},
+            headers=headers,
+            params=params,
             resp_json=False,
             include_account=False,
         )
 
-    async def download_iterate(self, settings: DownloadSettings
+    async def download_iterate(self, settings: DownloadSettings = None
                                ) -> typing.AsyncGenerator[bytes, None]:
         """Used to iterate over the download.
 
@@ -120,10 +149,17 @@ class AwaitingFile(BaseFile):
         memory efficient.
         """
 
+        if not settings:
+            params = {"fileId": self.file_id}
+            headers = None
+        else:
+            params = {"fileId": self.file_id, **settings.parameters}
+            headers = settings.headers
+
         async for chunk in self.context._stream(
             url=self.context._routes.file.download_by_id,
-            headers=settings.headers,
-            params={"fileId": self.file_id, **settings.parameters},
+            headers=headers,
+            params=params,
         ):
             yield chunk
 

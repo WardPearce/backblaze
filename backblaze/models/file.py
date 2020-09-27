@@ -39,8 +39,9 @@ class PartModel:
 class UploadUrlModel:
     def __init__(self, data):
         self.authorization_token = data["authorizationToken"]
-        self.file_id = data["fileId"]
         self.upload_url = data["uploadUrl"]
+        self.file_id = data["fileId"] if "fileId" in data else None
+        self.bucket_id = data["bucketId"] if "bucketId" in data else None
 
 
 class PartDeleteModel:

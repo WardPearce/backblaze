@@ -1,5 +1,9 @@
 from typing import List, Dict
 from datetime import datetime
+from urllib import parse
+
+
+ENCODING = "utf-8"
 
 
 class CorSettings:
@@ -131,7 +135,7 @@ class UploadSettings:
                  cache_control: str = None, encoding: str = None,
                  custom_headers: Dict[str, str] = None) -> None:
 
-        self.headers["X-Bz-File-Name"] = name
+        self.headers["X-Bz-File-Name"] = parse.quote(name.encode(ENCODING))
         self.headers["Content-Type"] = content_type
 
         if last_modified:

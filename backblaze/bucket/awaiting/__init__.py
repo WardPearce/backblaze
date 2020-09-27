@@ -117,7 +117,8 @@ class AwaitingBucket(BaseBucket):
                 "Content-Length": len(data),
                 "X-Bz-Content-Sha1": sha1(data),
                 **settings.headers
-            }
+            },
+            data=data
         )
 
         return FileModel(data), self.file(data["fileId"])

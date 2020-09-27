@@ -1,5 +1,7 @@
 import typing
 
+from hashlib import sha1
+
 from ..base import BaseBucket
 
 from ...models.bucket import BucketModel
@@ -7,7 +9,7 @@ from ...models.file import FileModel, UploadUrlModel
 
 from .file import AwaitingFile
 
-from ...settings import FileSettings
+from ...settings import FileSettings, UploadSettings
 
 from ...utils import UploadUrlCache
 
@@ -90,6 +92,35 @@ class AwaitingBucket(BaseBucket):
         for file in data["files"]:
             yield FileModel(file), self.file(file["fileId"]), \
                 file["nextFileName"]
+
+    async def upload(self, settings: UploadSettings, data: bytes
+                     ) -> (FileModel, AwaitingFile):
+        """Used to upload a file to b2.
+
+        Parameters
+        ----------
+        settings : UploadSettings
+        data : bytes
+            Bytes to upload.
+
+        Returns
+        -------
+        FileModel
+            Holds details on the uploaded file.
+        AwaitingFile
+            Used to interact with the file.
+        """
+
+        data = await self.context._post(
+            url=await self.upload_url().upload_url,
+            headers={
+                "Content-Length": len(data),
+                "X-Bz-Content-Sha1": sha1(data),
+                **settings.headers
+            }
+        )
+
+        return FileModel(data), self.file(data["fileId"])
 
     async def upload_url(self) -> UploadUrlModel:
         """Used to get a upload URL.

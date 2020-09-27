@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 from datetime import datetime
 
 
@@ -120,3 +120,39 @@ class DownloadSettings:
 
         if content_type:
             self.parameters["b2ContentType"] = content_type
+
+
+class UploadSettings:
+    headers = {}
+
+    def __init__(self, name: str, content_type: str = "b2/x-auto",
+                 last_modified: datetime = None, disposition: str = None,
+                 language: str = None, expires: datetime = None,
+                 cache_control: str = None, encoding: str = None,
+                 custom_headers: Dict[str, str] = None) -> None:
+
+        self.headers["X-Bz-File-Name"] = name
+        self.headers["Content-Type"] = content_type
+
+        if last_modified:
+            self.headers["X-Bz-Info-src_last_modified_millis"
+                         ] = last_modified.timestamp() * 1000
+
+        if disposition:
+            self.headers["X-Bz-Info-b2-content-disposition"] = disposition
+
+        if language:
+            self.headers["X-Bz-Info-b2-content-language"] = language
+
+        if expires:
+            self.headers["X-Bz-Info-b2-expires"] = expires.timestamp() * 1000
+
+        if cache_control:
+            self.headers["X-Bz-Info-b2-cache-control"] = cache_control
+
+        if encoding:
+            self.headers["X-Bz-Info-b2-content-encoding"] = encoding
+
+        if custom_headers:
+            for header, value in custom_headers.items():
+                self.headers["X-Bz-Info-{}".format(header)] = value

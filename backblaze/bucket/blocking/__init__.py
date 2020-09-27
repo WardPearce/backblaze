@@ -111,7 +111,7 @@ class BlockingBucket(BaseBucket):
             Used to interact with the file.
         """
 
-        data = self.context._post(
+        file = FileModel(self.context._post(
             url=self.upload_url().upload_url,
             headers={
                 "Content-Length": len(data),
@@ -119,9 +119,9 @@ class BlockingBucket(BaseBucket):
                 **settings.headers
             },
             data=data
-        )
+        ))
 
-        return FileModel(data), self.file(data["fileId"])
+        return file, self.file(file.file_id)
 
     def upload_url(self) -> UploadUrlModel:
         """Used to get a upload URL.

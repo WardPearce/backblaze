@@ -111,7 +111,7 @@ class AwaitingBucket(BaseBucket):
             Used to interact with the file.
         """
 
-        data = await self.context._post(
+        file = FileModel(await self.context._post(
             url=await self.upload_url().upload_url,
             headers={
                 "Content-Length": len(data),
@@ -119,9 +119,9 @@ class AwaitingBucket(BaseBucket):
                 **settings.headers
             },
             data=data
-        )
+        ))
 
-        return FileModel(data), self.file(data["fileId"])
+        return file, self.file(file.file_id)
 
     async def upload_url(self) -> UploadUrlModel:
         """Used to get a upload URL.

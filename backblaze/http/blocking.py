@@ -9,9 +9,6 @@ class BlockingHTTP(BaseHTTP):
                  *args, **kwargs) -> Any:
 
         if include_account:
-            if not kwargs:
-                kwargs = {}
-
             if "json" in kwargs:
                 kwargs["json"]["accountId"] = self.account_id
             else:

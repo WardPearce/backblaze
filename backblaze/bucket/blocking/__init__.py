@@ -3,11 +3,13 @@ import typing
 from ..base import BaseBucket
 
 from ...models.bucket import BucketModel
-from ...models.file import FileModel
+from ...models.file import FileModel, UploadUrlModel
 
 from .file import BlockingFile
 
 from ...settings import FileSettings
+
+from ...utils import UploadUrlCache
 
 
 class BlockingBucket(BaseBucket):
@@ -89,6 +91,32 @@ class BlockingBucket(BaseBucket):
             yield FileModel(file), self.file(file["fileId"]), \
                 file["nextFileName"]
 
+    def upload_url(self) -> UploadUrlModel:
+        """Used to get a upload URL.
+
+        Returns
+        -------
+        UploadUrlModel
+            Holds details on the upload URL.
+
+        Notes
+        -----
+        Caching is used.
+        """
+
+        cache = UploadUrlCache(self.bucket_id)
+
+        upload_url = cache.find()
+        if upload_url:
+            return upload_url
+
+        return cache.save(UploadUrlModel(
+            self.context._post(
+                url=self.content._routes.upload.upload,
+                json={"bucketId": self.bucket_id}
+            )
+        ))
+
     def file(self, file_id: str) -> BlockingFile:
         """Used to interact with a file.
 
@@ -102,7 +130,7 @@ class BlockingBucket(BaseBucket):
         BlockingFile
         """
 
-        return BlockingFile(self.context, self.bucket_id, file_id)
+        return BlockingFile(file_id, self.context, self.bucket_id)
 
     def delete(self) -> BucketModel:
         """Used to delete a bucket.

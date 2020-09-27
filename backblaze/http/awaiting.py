@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, AsyncGenerator
 
 from .base import BaseHTTP
 
@@ -9,9 +9,6 @@ class AwaitingHTTP(BaseHTTP):
                        *args, **kwargs) -> Any:
 
         if include_account:
-            if not kwargs:
-                kwargs = {}
-
             if "json" in kwargs:
                 kwargs["json"]["accountId"] = self.account_id
             else:
@@ -48,3 +45,10 @@ class AwaitingHTTP(BaseHTTP):
             *args,
             **kwargs
         )
+
+    async def _stream(self, *args, **kwargs) -> AsyncGenerator[bytes, None]:
+        async with self._client.stream("GET", *args, **kwargs) as resp:
+            resp.raise_for_status()
+
+            async for chunk in resp.aiter_bytes():
+                yield chunk

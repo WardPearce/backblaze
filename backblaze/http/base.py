@@ -2,8 +2,7 @@ from httpx import Response
 
 
 class BaseHTTP:
-    def handle_resp(self, resp: Response, json: bool = True,
-                    read: bool = True) -> None:
+    def handle_resp(self, resp: Response, json: bool = True) -> None:
         """Handles resp response.
 
         Parameters
@@ -16,7 +15,5 @@ class BaseHTTP:
 
         if json:
             return resp.json()
-        elif read:
-            return resp.read()
         else:
-            return True
+            return resp.read()

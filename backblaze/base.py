@@ -1,6 +1,6 @@
 from httpx import BasicAuth
 
-from .routes import BucketRoute, KeyRoute, FileRoute
+from .routes import BucketRoute, KeyRoute, FileRoute, UploadRoute
 from .utils import format_route_name
 
 
@@ -8,6 +8,7 @@ class Routes:
     bucket: BucketRoute
     key: KeyRoute
     file: FileRoute
+    upload: UploadRoute
 
 
 class Base:
@@ -21,7 +22,8 @@ class Base:
     __routes = [
         BucketRoute,
         KeyRoute,
-        FileRoute
+        FileRoute,
+        UploadRoute
     ]
 
     def __init__(self, key_id: str, key: str, timeout: int = 30) -> None:

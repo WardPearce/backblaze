@@ -36,7 +36,7 @@ class PartModel:
         )
 
 
-class GetUploadUrlModel:
+class UploadUrlModel:
     def __init__(self, data):
         self.authorization_token = data["authorizationToken"]
         self.file_id = data["fileId"]

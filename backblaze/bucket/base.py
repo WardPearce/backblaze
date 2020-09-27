@@ -5,7 +5,7 @@ class BaseBucket:
 
 
 class BaseFile(BaseBucket):
-    def __init__(self, context: object, bucket_id: str, file_id: str):
-        super().__init__(context, bucket_id)
+    def __init__(self, file_id: str, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
         self.file_id = file_id

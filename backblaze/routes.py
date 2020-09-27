@@ -59,3 +59,14 @@ class FileRoute(Route):
 
     names = "b2_list_file_names"
     versions = "b2_list_file_versions"
+    get = "b2_get_file_info"
+    finish_large = "b2_finish_large_file"
+    download_by_id = "b2_download_file_by_id"
+    download_by_name = "b2_download_file_by_name"
+
+
+class UploadRoute(Route):
+    _prefix = "b2api/v2"
+
+    upload = "b2_get_upload_url"
+    upload_part = "b2_get_upload_part_url"

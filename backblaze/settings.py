@@ -1,4 +1,5 @@
 from typing import List
+from datetime import datetime
 
 
 class CorSettings:
@@ -88,3 +89,34 @@ class FileSettings:
 
         if delimiter:
             self.payload["delimiter"] = delimiter
+
+
+class DownloadSettings:
+    headers = {}
+    parameters = {}
+
+    def __init__(self, range: int = None, disposition: str = None,
+                 language: str = None, expires: datetime = None,
+                 cache_control: str = None, encoding: str = None,
+                 content_type: str = None) -> None:
+
+        if range:
+            self.headers["Range"] = range
+
+        if disposition:
+            self.parameters["b2ContentDisposition"] = disposition
+
+        if language:
+            self.parameters["b2ContentLanguage"] = language
+
+        if expires:
+            self.parameters["b2Expires"] = expires.timestamp() * 1000
+
+        if cache_control:
+            self.parameters["b2CacheControl"] = cache_control
+
+        if encoding:
+            self.parameters["b2ContentEncoding"] = encoding
+
+        if content_type:
+            self.parameters["b2ContentType"] = content_type

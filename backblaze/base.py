@@ -1,6 +1,13 @@
+import typing
 from httpx import BasicAuth
 
-from .routes import BucketRoute, KeyRoute, FileRoute, UploadRoute
+from .routes import (
+    BucketRoute,
+    KeyRoute,
+    FileRoute,
+    UploadRoute,
+    DownloadRoute
+)
 from .utils import format_route_name
 
 
@@ -9,6 +16,7 @@ class Routes:
     key: KeyRoute
     file: FileRoute
     upload: UploadRoute
+    download: DownloadRoute
 
 
 class Base:
@@ -19,11 +27,15 @@ class Base:
 
     account_id = None
 
-    __routes = [
+    __api_routes = [
         BucketRoute,
         KeyRoute,
         FileRoute,
         UploadRoute
+    ]
+
+    __download_routes = [
+        DownloadRoute
     ]
 
     def __init__(self, key_id: str, key: str, timeout: int = 30) -> None:
@@ -55,9 +67,9 @@ class Base:
 
         self._timeout = timeout
 
-    def _format_routes(self, api_url: str, download_url: str) -> None:
-        for route in self.__routes:
-            route_obj = route(api_url)
+    def __format_route(self, url, routes) -> None:
+        for route in routes:
+            route_obj = route(url)
             route_obj.format()
 
             setattr(
@@ -65,3 +77,10 @@ class Base:
                 format_route_name(type(route_obj).__name__),
                 route_obj
             )
+
+    def _format_routes(self, api_url: str, download_url: str) -> None:
+        for route in self.__api_routes:
+            self.__format_route(api_url, route)
+
+        for route in self.__download_routes:
+            self.__format_route(download_url, route)

@@ -1,6 +1,13 @@
 from ..base import BaseFile
 
-from ...models.file import FileModel, UploadUrlModel, FileDeleteModel
+from .part import BlockingPart
+
+from ...models.file import (
+    FileModel,
+    UploadUrlModel,
+    FileDeleteModel,
+    PartCancelModel
+)
 
 from ...settings import DownloadSettings
 
@@ -10,6 +17,42 @@ from ...utils import UploadUrlCache
 
 
 class BlockingFile(BaseFile):
+    def part(self, part_number: int = 0) -> BlockingPart:
+        """Used to upload a part.
+
+        Parameters
+        ----------
+        part_number : int, optional
+            by default 0
+
+        Returns
+        -------
+        BlockingPart
+        """
+
+        return BlockingPart(
+            self,
+            self.context,
+            part_number
+        )
+
+    def cancel(self) -> PartCancelModel:
+        """Used for cancelling a uncompleted file.
+
+        Returns
+        -------
+        PartCancelModel
+            Holds details on canceled file.
+        """
+
+        return PartCancelModel(
+            self.context._post(
+                url=self.context._routes.file.cancel_large,
+                json={"fileId": self.file_id},
+                include_account=False
+            )
+        )
+
     def get(self) -> FileModel:
         """Used to get details on a file.
 
@@ -77,31 +120,6 @@ class BlockingFile(BaseFile):
                 }
             )
         ))
-
-    def finish_large_file(self, sha1s: list) -> FileModel:
-        """Used to complete a large upload.
-
-        Parameters
-        ----------
-        sha1s : list
-            List of sha1s
-
-        Returns
-        -------
-        FileModel
-            Holds details on uploaded file.
-        """
-
-        return FileModel(
-            self.context._post(
-                url=self.context._routes.file.finish_large,
-                json={
-                    "fileId": self.file_id,
-                    "partSha1Array": sha1s
-                },
-                include_account=False
-            )
-        )
 
     def download(self, settings: DownloadSettings = None) -> bytes:
         """Used to download file into memory.

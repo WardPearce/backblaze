@@ -3,7 +3,14 @@ import aiofiles
 
 from ..base import BaseFile
 
-from ...models.file import FileModel, UploadUrlModel, FileDeleteModel
+from .part import AwaitingPart
+
+from ...models.file import (
+    FileModel,
+    UploadUrlModel,
+    FileDeleteModel,
+    PartCancelModel
+)
 
 from ...settings import DownloadSettings
 
@@ -11,6 +18,42 @@ from ...utils import UploadUrlCache
 
 
 class AwaitingFile(BaseFile):
+    def part(self, part_number: int = 0) -> AwaitingPart:
+        """Used to upload a part.
+
+        Parameters
+        ----------
+        part_number : int, optional
+            by default 0
+
+        Returns
+        -------
+        AwaitingPart
+        """
+
+        return AwaitingPart(
+            self,
+            self.context,
+            part_number
+        )
+
+    async def cancel(self) -> PartCancelModel:
+        """Used for cancelling a uncompleted file.
+
+        Returns
+        -------
+        PartCancelModel
+            Holds details on canceled file.
+        """
+
+        return PartCancelModel(
+            await self.context._post(
+                url=self.context._routes.file.cancel_large,
+                json={"fileId": self.file_id},
+                include_account=False
+            )
+        )
+
     async def get(self) -> FileModel:
         """Used to get details on a file.
 
@@ -78,31 +121,6 @@ class AwaitingFile(BaseFile):
                 }
             )
         ))
-
-    async def finish_large_file(self, sha1s: list) -> FileModel:
-        """Used to complete a large upload.
-
-        Parameters
-        ----------
-        sha1s : list
-            List of sha1s
-
-        Returns
-        -------
-        FileModel
-            Holds details on uploaded file.
-        """
-
-        return FileModel(
-            await self.context._post(
-                url=self.context._routes.file.finish_large,
-                json={
-                    "fileId": self.file_id,
-                    "partSha1Array": sha1s
-                },
-                include_account=False
-            )
-        )
 
     async def download(self, settings: DownloadSettings = None) -> bytes:
         """Used to download file into memory.

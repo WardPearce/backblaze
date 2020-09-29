@@ -94,7 +94,7 @@ class AwaitingBucket(BaseBucket):
                 file["nextFileName"]
 
     async def upload(self, settings: UploadSettings, data: bytes
-                     ) -> (FileModel, AwaitingFile):
+                     ) -> typing.Tuple[FileModel, AwaitingFile]:
         """Used to upload a file to b2.
 
         Parameters

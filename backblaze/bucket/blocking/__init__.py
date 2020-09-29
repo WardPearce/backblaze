@@ -94,7 +94,7 @@ class BlockingBucket(BaseBucket):
                 file["nextFileName"]
 
     def upload(self, settings: UploadSettings, data: bytes
-               ) -> (FileModel, BlockingFile):
+               ) -> typing.Tuple[FileModel, BlockingFile]:
         """Used to upload a file to b2.
 
         Parameters

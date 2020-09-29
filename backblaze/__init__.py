@@ -21,7 +21,7 @@ from .bucket.blocking import BlockingBucket
 from .key.blocking import BlockingKey
 from .key.awaiting import AwaitingKey
 
-from .settings import BucketSettings, KeySettings
+from .settings import BucketSettings, KeySettings, DownloadSettings
 
 
 __version__ = "0.0.1"
@@ -47,8 +47,48 @@ class Awaiting(Base, AwaitingHTTP):
 
         await self._client.aclose()
 
+    async def download_by_name(self, settings: DownloadSettings,
+                               bucket_name: str, file_name: str) -> bytes:
+        """Used to download a file by its name.
+
+        Parameters
+        ----------
+        settings : DownloadSettings
+        bucket_name : str
+            Name of bucket.
+        file_name : str
+            Name of file to download.
+
+        Returns
+        -------
+        bytes
+
+        Notes
+        -----
+        Use bucket.file.download instead whenever you can.
+        """
+
+        if not settings:
+            params = None
+            headers = None
+        else:
+            params = settings.parameters
+            headers = settings.headers
+
+        return await self._get(
+            url="{}/{}/{}".format(
+                self._routes.download.file,
+                bucket_name,
+                file_name
+            ),
+            headers=headers,
+            params=params,
+            resp_json=False,
+            include_account=False
+        )
+
     async def create_key(self, settings: KeySettings
-                         ) -> (KeyModel, AwaitingKey):
+                         ) -> typing.Tuple[KeyModel, AwaitingKey]:
         """Used to create a key.
 
         Parameters
@@ -116,7 +156,7 @@ class Awaiting(Base, AwaitingHTTP):
         return AwaitingKey(self, key_id)
 
     async def create_bucket(self, settings: BucketSettings
-                            ) -> (BucketModel, AwaitingBucket):
+                            ) -> typing.Tuple[BucketModel, AwaitingBucket]:
         """Used to create a bucket.
 
         Parameters
@@ -230,8 +270,48 @@ class Blocking(Base, BlockingHTTP):
 
         self._client.close()
 
+    def download_by_name(self, settings: DownloadSettings,
+                         bucket_name: str, file_name: str) -> bytes:
+        """Used to download a file by its name.
+
+        Parameters
+        ----------
+        settings : DownloadSettings
+        bucket_name : str
+            Name of bucket.
+        file_name : str
+            Name of file to download.
+
+        Returns
+        -------
+        bytes
+
+        Notes
+        -----
+        Use bucket.file.download instead whenever you can.
+        """
+
+        if not settings:
+            params = None
+            headers = None
+        else:
+            params = settings.parameters
+            headers = settings.headers
+
+        return self._get(
+            url="{}/{}/{}".format(
+                self._routes.download.file,
+                bucket_name,
+                file_name
+            ),
+            headers=headers,
+            params=params,
+            resp_json=False,
+            include_account=False
+        )
+
     def create_key(self, settings: KeySettings
-                   ) -> (KeyModel, BlockingKey):
+                   ) -> typing.Tuple[KeyModel, BlockingKey]:
         """Used to create a key.
 
         Parameters
@@ -296,7 +376,7 @@ class Blocking(Base, BlockingHTTP):
         return BlockingKey(self, key_id)
 
     def create_bucket(self, settings: BucketSettings
-                      ) -> (BucketModel, BlockingBucket):
+                      ) -> typing.Tuple[BucketModel, BlockingBucket]:
         """Used to create a bucket.
 
         Parameters

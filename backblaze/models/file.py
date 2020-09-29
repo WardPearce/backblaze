@@ -44,7 +44,7 @@ class UploadUrlModel:
         self.bucket_id = data["bucketId"] if "bucketId" in data else None
 
 
-class PartDeleteModel:
+class PartCancelModel:
     def __init__(self, data) -> None:
         self.file_id = data["fileId"]
         self.account_id = data["accountId"]

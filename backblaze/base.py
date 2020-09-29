@@ -37,7 +37,7 @@ class Base:
         DownloadRoute
     ]
 
-    def __init__(self, key_id: str, key: str, timeout: int = 120) -> None:
+    def __init__(self, key_id: str, key: str, timeout: int = 30) -> None:
         """Used to interact with B2 account.
 
         Parameters

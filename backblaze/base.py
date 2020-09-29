@@ -1,4 +1,3 @@
-import typing
 from httpx import BasicAuth
 
 from .routes import (

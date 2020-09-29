@@ -36,10 +36,15 @@ class UploadUrlCache:
         return upload_model
 
 
-def read_in_chunks(file, chunk_size=1024) -> typing.Generator[bytes, None]:
+def read_in_chunks(file, chunk_size: int = 1024
+                   ) -> typing.Generator[bytes, None]:
     data = b""
 
     while data:
         data = file.read(chunk_size)
         if data:
             yield data
+
+
+def encode_name(name: str, encoding: str = "utf-8") -> str:
+    return name.replace(" ", "-").encode(encoding).decode(encoding)

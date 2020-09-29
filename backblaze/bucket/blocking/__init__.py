@@ -9,12 +9,34 @@ from ...models.file import FileModel, UploadUrlModel
 
 from .file import BlockingFile
 
-from ...settings import FileSettings, UploadSettings
+from ...settings import FileSettings, UploadSettings, PartSettings
 
 from ...utils import UploadUrlCache
 
 
 class BlockingBucket(BaseBucket):
+    def create_part(self, settings: PartSettings
+                    ) -> typing.Tuple[FileModel, BlockingFile]:
+        """Used to create a part.
+
+        Parameters
+        ----------
+        settings : PartSettings
+
+        Returns
+        -------
+        FileModel
+        BlockingFile
+        """
+
+        data = self.context._post(
+            url=self.context._routes.file.start_large,
+            json={"bucketId": self.bucket_id, **settings.payload},
+            include_account=False
+        )
+
+        return FileModel(data), self.file(data["fileId"])
+
     def file_versions(self, settings: FileSettings = None
                       ) -> typing.Generator[typing.Any, None, None]:
         """Used to list file by version.

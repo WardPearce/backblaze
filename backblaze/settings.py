@@ -2,6 +2,8 @@ from typing import List, Dict
 from datetime import datetime
 from urllib import parse
 
+from .utils import encode_name
+
 
 ENCODING = "utf-8"
 
@@ -12,7 +14,7 @@ class CorSettings:
     def __init__(self, name: str, origins: list, allowed_headers: list,
                  operations: list, expose_headers: list, max_age: int) -> None:
 
-        self.payload["corsRuleName"] = name.replace(" ", "-")
+        self.payload["corsRuleName"] = encode_name(name)
         self.payload["allowedOrigins"] = origins
         self.payload["allowedHeaders"] = allowed_headers
         self.payload["allowedOperations"] = operations
@@ -38,7 +40,7 @@ class BucketSettings:
                  info: str = None, cors: List[CorSettings] = None,
                  lifecycle: LifecycleSettings = None) -> None:
 
-        self.payload["bucketName"] = name.replace(" ", "-")
+        self.payload["bucketName"] = encode_name(name)
         self.payload["bucketType"] = "allPrivate" if private else "allPublic"
 
         if info:
@@ -63,7 +65,7 @@ class KeySettings:
                  prefix: str = None) -> None:
 
         self.payload["capabilities"] = capabilities
-        self.payload["keyName"] = name.replace(" ", "-")
+        self.payload["keyName"] = encode_name(name)
 
         if duration:
             self.payload["validDurationInSeconds"] = duration
@@ -160,3 +162,26 @@ class UploadSettings:
         if custom_headers:
             for header, value in custom_headers.items():
                 self.headers["X-Bz-Info-{}".format(header)] = value
+
+
+class PartSettings:
+    payload = {}
+
+    def __init__(self, name: str, content_type: str = "b2/x-auto",
+                 last_modified: datetime = None, sha1: str = None) -> None:
+
+        self.payload["fileName"] = encode_name(name)
+        self.payload["contentType"] = content_type
+
+        if last_modified:
+            if "fileInfo" not in self.payload:
+                self.payload["fileInfo"] = {}
+
+            self.payload["fileInfo"]["src_last_modified_millis"] = \
+                last_modified.timestamp() * 1000
+
+        if sha1:
+            if "fileInfo" not in self.payload:
+                self.payload["fileInfo"] = {}
+
+            self.payload["fileInfo"]["large_file_sha1"] = sha1

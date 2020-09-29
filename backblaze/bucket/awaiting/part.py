@@ -7,7 +7,7 @@ from ..base import BasePart
 from ...models.file import PartModel, FileModel
 
 
-class AwaitingPart(BasePart):
+class AwaitingParts(BasePart):
     async def data(self, data: bytes) -> PartModel:
         """Uploads a part.
 
@@ -37,7 +37,8 @@ class AwaitingPart(BasePart):
                     "Authorization": upload.authorization_token
                 },
                 include_account=False,
-                url=upload.upload_url
+                url=upload.upload_url,
+                data=data
             )
         )
 

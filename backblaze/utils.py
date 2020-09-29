@@ -36,8 +36,8 @@ class UploadUrlCache:
         return upload_model
 
 
-def read_in_chunks(file, chunk_size: int = 1024
-                   ) -> typing.Generator[bytes, None]:
+def read_in_chunks(file, chunk_size: int = 5000024
+                   ) -> typing.Generator[bytes, None, None]:
     data = b""
 
     while data:

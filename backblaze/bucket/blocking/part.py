@@ -7,7 +7,7 @@ from ...models.file import PartModel, FileModel
 from ...utils import read_in_chunks
 
 
-class BlockingPart(BasePart):
+class BlockingParts(BasePart):
     def data(self, data: bytes) -> PartModel:
         """Uploads a part.
 
@@ -37,7 +37,8 @@ class BlockingPart(BasePart):
                     "Authorization": upload.authorization_token
                 },
                 include_account=False,
-                url=upload.upload_url
+                url=upload.upload_url,
+                data=data
             )
         )
 

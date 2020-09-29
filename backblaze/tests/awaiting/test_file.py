@@ -6,7 +6,7 @@ from os import path
 
 from .client import CLIENT
 
-from ...settings import BucketSettings, UploadSettings
+from ...settings import BucketSettings, UploadSettings, PartSettings
 
 from ...models.file import FileModel
 
@@ -48,5 +48,28 @@ class TestAwaitingFile(asynctest.TestCase):
         await file.delete(
             file_data.file_name
         )
+
+        local_path = path.join(
+            path.dirname(path.realpath(__file__)),
+            "../parts_test"
+        )
+
+        details, file = await bucket.create_part(PartSettings(
+            "test part.png"
+        ))
+
+        parts = file.parts()
+
+        data = b""
+        async with aiofiles.open(local_path, "rb") as f:
+            data = await f.read()
+
+        chunk_size = 5000000
+        for chunk in range(0, len(data), chunk_size):
+            await parts.data(data[chunk:chunk + chunk_size])
+
+        await parts.finish()
+
+        await file.delete(details.file_name)
 
         await bucket.delete()

@@ -37,7 +37,7 @@ class Base:
         DownloadRoute
     ]
 
-    def __init__(self, key_id: str, key: str, timeout: int = 30) -> None:
+    def __init__(self, key_id: str, key: str, timeout: int = 120) -> None:
         """Used to interact with B2 account.
 
         Parameters
@@ -78,8 +78,5 @@ class Base:
             )
 
     def _format_routes(self, api_url: str, download_url: str) -> None:
-        for route in self.__api_routes:
-            self.__format_route(api_url, route)
-
-        for route in self.__download_routes:
-            self.__format_route(download_url, route)
+        self.__format_route(api_url, self.__api_routes)
+        self.__format_route(download_url, self.__download_routes)

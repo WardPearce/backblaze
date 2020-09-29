@@ -3,7 +3,7 @@ import aiofiles
 
 from ..base import BaseFile
 
-from .part import AwaitingPart
+from .part import AwaitingParts
 
 from ...models.file import (
     FileModel,
@@ -18,7 +18,7 @@ from ...utils import UploadUrlCache
 
 
 class AwaitingFile(BaseFile):
-    def part(self, part_number: int = 0) -> AwaitingPart:
+    def parts(self, part_number: int = 0) -> AwaitingParts:
         """Used to upload a part.
 
         Parameters
@@ -28,10 +28,10 @@ class AwaitingFile(BaseFile):
 
         Returns
         -------
-        AwaitingPart
+        AwaitingParts
         """
 
-        return AwaitingPart(
+        return AwaitingParts(
             self,
             self.context,
             part_number
@@ -114,11 +114,11 @@ class AwaitingFile(BaseFile):
 
         return cache.save(UploadUrlModel(
             await self.context._post(
-                url=self.content._routes.upload.upload_part,
+                url=self.context._routes.upload.upload_part,
                 json={
-                    "bucketId": self.bucket_id,
                     "fileId": self.file_id
-                }
+                },
+                include_account=False
             )
         ))
 

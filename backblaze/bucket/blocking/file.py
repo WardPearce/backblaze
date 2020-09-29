@@ -1,6 +1,6 @@
 from ..base import BaseFile
 
-from .part import BlockingPart
+from .part import BlockingParts
 
 from ...models.file import (
     FileModel,
@@ -17,7 +17,7 @@ from ...utils import UploadUrlCache
 
 
 class BlockingFile(BaseFile):
-    def part(self, part_number: int = 0) -> BlockingPart:
+    def parts(self, part_number: int = 0) -> BlockingParts:
         """Used to upload a part.
 
         Parameters
@@ -27,10 +27,10 @@ class BlockingFile(BaseFile):
 
         Returns
         -------
-        BlockingPart
+        BlockingParts
         """
 
-        return BlockingPart(
+        return BlockingParts(
             self,
             self.context,
             part_number
@@ -113,11 +113,11 @@ class BlockingFile(BaseFile):
 
         return cache.save(UploadUrlModel(
             self.context._post(
-                url=self.content._routes.upload.upload_part,
+                url=self.context._routes.upload.upload_part,
                 json={
-                    "bucketId": self.bucket_id,
                     "fileId": self.file_id
-                }
+                },
+                include_account=False
             )
         ))
 

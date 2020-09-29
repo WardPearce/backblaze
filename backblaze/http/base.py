@@ -19,7 +19,7 @@ class BaseHTTP:
 
         Parameters
         ----------
-        resp
+        resp : Response
             HTTPX response object.
 
         Returns

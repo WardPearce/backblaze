@@ -1,4 +1,5 @@
 from httpx import BasicAuth
+from datetime import datetime
 
 from .routes import (
     BucketRoute,
@@ -8,6 +9,7 @@ from .routes import (
     DownloadRoute
 )
 from .utils import format_route_name
+from .cache import Cache
 
 
 class Routes:
@@ -19,12 +21,8 @@ class Routes:
 
 
 class Base:
-    _routes = Routes()
     _auth_url = "https://api.backblazeb2.com/b2api/v2/b2_authorize_account"
     _refresh_seconds = 84600
-    _running_task = False
-
-    account_id = None
 
     __api_routes = [
         BucketRoute,
@@ -70,6 +68,10 @@ class Base:
         self._timeout = timeout
         self.chunk_size = chunk_size
 
+        self._routes = Routes()
+        self._running_task = False
+        self.account_id = None
+
     def __format_route(self, url, routes) -> None:
         for route in routes:
             route_obj = route(url)
@@ -84,3 +86,23 @@ class Base:
     def _format_routes(self, api_url: str, download_url: str) -> None:
         self.__format_route(api_url, self.__api_routes)
         self.__format_route(download_url, self.__download_routes)
+
+    def _check_cache(self) -> None:
+        """Checks upload_parts_urls & upload_urls for any
+        expired URls. This is mainly for upload_parts_urls what
+        is cached on a per file ID basis.
+
+        Notes
+        -----
+        This is ran in the background as part of __authorize_background.
+        """
+
+        now = datetime.now()
+
+        for index, cached_upload in dict(Cache.upload_parts_urls).items():
+            if now >= cached_upload["expires"]:
+                Cache.upload_parts_urls.pop(index, None)
+
+        for index, cached_upload in dict(Cache.upload_urls).items():
+            if now >= cached_upload["expires"]:
+                Cache.upload_urls.pop(index, None)

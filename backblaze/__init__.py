@@ -228,6 +228,7 @@ class Awaiting(Base, AwaitingHTTP):
         self._running_task = False
 
         await self.authorize()
+        self._check_cache()
 
     async def authorize(self) -> AuthModel:
         """Used to authorize B2 account.
@@ -448,6 +449,7 @@ class Blocking(Base, BlockingHTTP):
         self._running_task = False
 
         self.authorize()
+        self._check_cache()
 
     def authorize(self) -> AuthModel:
         """Used to authorize B2 account.

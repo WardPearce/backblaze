@@ -8,7 +8,7 @@ from .client import CLIENT
 
 from ...settings import BucketSettings, UploadSettings, PartSettings
 
-from ...models.file import FileModel
+from ...models.file import FileModel, PartModel
 
 from ...bucket.awaiting import AwaitingFile
 
@@ -67,6 +67,9 @@ class TestAwaitingFile(asynctest.TestCase):
         chunk_size = 5000000
         for chunk in range(0, len(data), chunk_size):
             await parts.data(data[chunk:chunk + chunk_size])
+
+        async for part, _ in file.parts().list():
+            self.assertIsInstance(part, PartModel)
 
         await parts.finish()
 

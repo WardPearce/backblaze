@@ -19,7 +19,7 @@ from ...utils import UploadUrlCache
 
 class AwaitingFile(BaseFile):
     def parts(self, part_number: int = 0) -> AwaitingParts:
-        """Used to upload a part.
+        """Used to upload a parts.
 
         Parameters
         ----------

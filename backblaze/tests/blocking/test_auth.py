@@ -10,6 +10,3 @@ class TestBlockingAuth(unittest.TestCase):
         self.assertTrue(
             type(CLIENT.authorize()) == AuthModel
         )
-
-    def tearDown(self):
-        CLIENT.close()

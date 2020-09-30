@@ -37,7 +37,8 @@ class Base:
         DownloadRoute
     ]
 
-    def __init__(self, key_id: str, key: str, timeout: int = 30) -> None:
+    def __init__(self, key_id: str, key: str, timeout: int = 30,
+                 chunk_size: int = 5000024) -> None:
         """Used to interact with B2 account.
 
         Parameters
@@ -48,6 +49,8 @@ class Base:
             Application Key
         timeout : int, optional
             Max time a request can take, by default 30
+        chunk_size : int, optional
+            File reading chunk size, must be above 5mb, by default 5000024
 
         Notes
         -----
@@ -65,6 +68,7 @@ class Base:
         )
 
         self._timeout = timeout
+        self.chunk_size = chunk_size
 
     def __format_route(self, url, routes) -> None:
         for route in routes:

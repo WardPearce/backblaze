@@ -1,13 +1,38 @@
 from hashlib import sha1
+from typing import Generator
 
 from ..base import BasePart
 
 from ...models.file import PartModel, FileModel
 
-from ...utils import read_in_chunks
-
 
 class BlockingParts(BasePart):
+    def list(self, limit: int = 100) -> Generator[PartModel, int, None]:
+        """Used to list parts.
+
+        Yields
+        -------
+        PartModel
+        int
+            Next part number.
+        limit : int
+            Part limit.
+        """
+
+        data = self.context._post(
+            json={
+                "fileId": self.file.file_id,
+                "startPartNumber":
+                self.part_number if self.part_number > 0 else 1,
+                "maxPartCount": limit
+            },
+            include_account=False,
+            url=self.context._routes.file.list_parts
+        )
+
+        for part in data["parts"]:
+            yield PartModel(part), data["nextPartNumber"]
+
     def data(self, data: bytes) -> PartModel:
         """Uploads a part.
 
@@ -52,8 +77,12 @@ class BlockingParts(BasePart):
         """
 
         with open(pathway, "rb") as file:
-            for chunk in read_in_chunks(file):
-                self.data(chunk)
+            chunk = b""
+
+            while chunk:
+                chunk = file.read(self.context.chunk_size)
+                if chunk:
+                    self.data(chunk)
 
     def finish(self) -> FileModel:
         """Used to complete a part upload.

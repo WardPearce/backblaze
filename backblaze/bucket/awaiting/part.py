@@ -1,6 +1,7 @@
 import aiofiles
 
 from hashlib import sha1
+from typing import AsyncGenerator
 
 from ..base import BasePart
 
@@ -8,6 +9,32 @@ from ...models.file import PartModel, FileModel
 
 
 class AwaitingParts(BasePart):
+    async def list(self, limit: int = 100) -> AsyncGenerator[PartModel, int]:
+        """Used to list parts.
+
+        Yields
+        -------
+        PartModel
+        int
+            Next part number.
+        limit : int
+            Part limit.
+        """
+
+        data = await self.context._post(
+            json={
+                "fileId": self.file.file_id,
+                "startPartNumber":
+                self.part_number if self.part_number > 0 else 1,
+                "maxPartCount": limit
+            },
+            include_account=False,
+            url=self.context._routes.file.list_parts
+        )
+
+        for part in data["parts"]:
+            yield PartModel(part), data["nextPartNumber"]
+
     async def data(self, data: bytes) -> PartModel:
         """Uploads a part.
 
@@ -52,8 +79,12 @@ class AwaitingParts(BasePart):
         """
 
         async with aiofiles.open(pathway, "rb") as file:
-            async for chunk in file:
-                await self.data(chunk)
+            chunk = b""
+
+            while chunk:
+                chunk = await file.read(self.context.chunk_size)
+                if chunk:
+                    await self.data(chunk)
 
     async def finish(self) -> FileModel:
         """Used to complete a part upload.

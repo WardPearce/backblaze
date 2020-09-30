@@ -1,5 +1,3 @@
-import typing
-
 from datetime import datetime, timedelta
 
 from .models.file import UploadUrlModel
@@ -34,16 +32,6 @@ class UploadUrlCache:
         }
 
         return upload_model
-
-
-def read_in_chunks(file, chunk_size: int = 5000024
-                   ) -> typing.Generator[bytes, None, None]:
-    data = b""
-
-    while data:
-        data = file.read(chunk_size)
-        if data:
-            yield data
 
 
 def encode_name(name: str, encoding: str = "utf-8") -> str:

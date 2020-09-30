@@ -63,6 +63,7 @@ class FileRoute(Route):
     start_large = "b2_start_large_file"
     finish_large = "b2_finish_large_file"
     cancel_large = "b2_cancel_large_file"
+    list_parts = "b2_list_parts"
     download_by_id = "b2_download_file_by_id"
     download_by_name = "b2_download_file_by_name"
     delete = "b2_delete_file_version"

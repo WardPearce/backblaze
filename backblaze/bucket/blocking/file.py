@@ -18,7 +18,7 @@ from ...utils import UploadUrlCache
 
 class BlockingFile(BaseFile):
     def parts(self, part_number: int = 0) -> BlockingParts:
-        """Used to upload a part.
+        """Used to upload a parts.
 
         Parameters
         ----------

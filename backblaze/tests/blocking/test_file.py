@@ -7,7 +7,7 @@ from .client import CLIENT
 
 from ...settings import BucketSettings, UploadSettings, PartSettings
 
-from ...models.file import FileModel
+from ...models.file import FileModel, PartModel
 
 from ...bucket.blocking import BlockingFile
 
@@ -61,6 +61,9 @@ class TestBlockingFile(unittest.TestCase):
         chunk_size = 5000000
         for chunk in range(0, len(data), chunk_size):
             parts.data(data[chunk:chunk + chunk_size])
+
+        for part, _ in file.parts().list():
+            self.assertIsInstance(part, PartModel)
 
         parts.finish()
 

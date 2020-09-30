@@ -38,7 +38,18 @@ class BaseHTTP:
             Raised when none of the above are.
         """
 
-        if resp.status_code == 400:
+        if resp.status_code != 200:
+            try:
+                print(resp.json())
+            except Exception:
+                pass
+
+        if resp.status_code == 200:
+            if json:
+                return resp.json()
+            else:
+                return resp.read()
+        elif resp.status_code == 400:
             raise BadRequest()
         elif resp.status_code == 401:
             raise UnAuthorized()
@@ -52,10 +63,5 @@ class BaseHTTP:
             raise InternalError()
         elif resp.status_code == 503:
             raise ServiceUnavailable()
-        elif resp.status_code != 200:
-            resp.raise_for_status()
-
-        if json:
-            return resp.json()
         else:
-            return resp.read()
+            resp.raise_for_status()

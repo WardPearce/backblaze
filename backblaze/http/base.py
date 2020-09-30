@@ -38,12 +38,6 @@ class BaseHTTP:
             Raised when none of the above are.
         """
 
-        if resp.status_code != 200:
-            try:
-                print(resp.json())
-            except Exception:
-                pass
-
         if resp.status_code == 200:
             if json:
                 return resp.json()

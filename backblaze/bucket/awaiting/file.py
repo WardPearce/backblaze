@@ -128,7 +128,7 @@ class AwaitingFile(BaseFile):
         Caching is used.
         """
 
-        cache = UploadUrlCache(self.bucket_id, parts=True)
+        cache = UploadUrlCache(self.bucket_id, self.file_id)
 
         upload_url = cache.find()
         if upload_url:

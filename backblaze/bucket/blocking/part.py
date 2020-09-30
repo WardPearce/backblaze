@@ -23,7 +23,7 @@ class BlockingParts(BasePart):
 
         data = self.context._post(
             json={
-                "fileId": self.file.file_id,
+                "fileId": self._file.file_id,
                 "startPartNumber":
                 self.part_number if self.part_number > 0 else 1,
                 "maxPartCount": limit
@@ -50,7 +50,7 @@ class BlockingParts(BasePart):
         return PartModel(self.context._post(
             url=self.context._routes.file.copy_part,
             json={
-                "sourceFileId": self.file.file_id,
+                "sourceFileId": self._file.file_id,
                 "partNumber":
                 self.part_number if self.part_number > 0 else 1,
                 **settings.payload
@@ -73,7 +73,7 @@ class BlockingParts(BasePart):
 
         self.part_number += 1
 
-        upload = self.file.upload_url()
+        upload = self._file.upload_url()
 
         sha1_str = sha1(data).hexdigest()
         self.sha1s_append(sha1_str)
@@ -101,11 +101,11 @@ class BlockingParts(BasePart):
             Local file pathway.
         """
 
-        with open(pathway, "rb") as file:
-            chunk = b""
+        with open(pathway, "rb") as fp:
+            chunk = True
 
             while chunk:
-                chunk = file.read(self.context.chunk_size)
+                chunk = fp.read(self.context.chunk_size)
                 if chunk:
                     self.data(chunk)
 
@@ -122,7 +122,7 @@ class BlockingParts(BasePart):
             self.context._post(
                 url=self.context._routes.file.finish_large,
                 json={
-                    "fileId": self.file.file_id,
+                    "fileId": self._file.file_id,
                     "partSha1Array": self.sha1s
                 },
                 include_account=False

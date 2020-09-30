@@ -86,7 +86,8 @@ class FileSettings:
         self.payload = {}
 
         if start_name:
-            self.payload["startFileName"] = start_name
+            self.payload["startFileName"] = encode_name(
+                start_name, replace=False)
 
         if limit:
             self.payload["maxFileCount"] = limit
@@ -135,7 +136,7 @@ class UploadSettings:
                  cache_control: str = None, encoding: str = None,
                  custom_headers: Dict[str, str] = None) -> None:
         self.headers = {
-            "X-Bz-File-Name": parse.quote(name.encode(ENCODING)),
+            "X-Bz-File-Name": parse.quote(encode_name(name, replace=False)),
             "Content-Type": content_type
         }
 
@@ -167,7 +168,7 @@ class PartSettings:
     def __init__(self, name: str, content_type: str = "b2/x-auto",
                  last_modified: datetime = None, sha1: str = None) -> None:
         self.payload = {
-            "fileName": encode_name(name),
+            "fileName": encode_name(name, replace=False),
             "contentType": content_type
         }
 
@@ -190,7 +191,7 @@ class CopyFileSettings:
                  destination_bucket_id: str = None, range: int = None,
                  directive: str = None, info: dict = None) -> None:
         self.payload = {
-            "fileName": encode_name(name),
+            "fileName": encode_name(name, replace=False),
         }
 
         if content_type:

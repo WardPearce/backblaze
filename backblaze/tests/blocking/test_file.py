@@ -84,4 +84,15 @@ class TestBlockingFile(unittest.TestCase):
 
         file.delete(details.file_name)
 
+        details, file = bucket.create_part(PartSettings(
+            "test part upload.png"
+        ))
+
+        parts = file.parts()
+
+        parts.file(local_path)
+        parts.finish()
+
+        file.delete(details.file_name)
+
         bucket.delete()

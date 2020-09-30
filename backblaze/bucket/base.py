@@ -14,7 +14,7 @@ class BaseFile(BaseBucket):
 class BasePart:
     def __init__(self, file: object, context: object,
                  part_number: int = 0) -> None:
-        self.file = file
+        self._file = file
         self.context = context
         self.part_number = part_number
         self.sha1s = []

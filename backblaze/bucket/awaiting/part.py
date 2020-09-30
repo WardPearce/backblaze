@@ -1,5 +1,4 @@
-import aiofiles
-
+from aiofile import AIOFile, Reader
 from hashlib import sha1
 from typing import AsyncGenerator
 
@@ -25,7 +24,7 @@ class AwaitingParts(BasePart):
 
         data = await self.context._post(
             json={
-                "fileId": self.file.file_id,
+                "fileId": self._file.file_id,
                 "startPartNumber":
                 self.part_number if self.part_number > 0 else 1,
                 "maxPartCount": limit
@@ -52,7 +51,7 @@ class AwaitingParts(BasePart):
         return PartModel(await self.context._post(
             url=self.context._routes.file.copy_part,
             json={
-                "sourceFileId": self.file.file_id,
+                "sourceFileId": self._file.file_id,
                 "partNumber":
                 self.part_number if self.part_number > 0 else 1,
                 **settings.payload
@@ -75,7 +74,7 @@ class AwaitingParts(BasePart):
 
         self.part_number += 1
 
-        upload = await self.file.upload_url()
+        upload = await self._file.upload_url()
 
         sha1_str = sha1(data).hexdigest()
         self.sha1s_append(sha1_str)
@@ -103,13 +102,10 @@ class AwaitingParts(BasePart):
             Local file pathway.
         """
 
-        async with aiofiles.open(pathway, "rb") as file:
-            chunk = b""
-
-            while chunk:
-                chunk = await file.read(self.context.chunk_size)
-                if chunk:
-                    await self.data(chunk)
+        async with AIOFile(pathway, "rb") as afp:
+            async for chunk in Reader(afp,
+                                      chunk_size=self.context.chunk_size):
+                await self.data(chunk)
 
     async def finish(self) -> FileModel:
         """Used to complete a part upload.
@@ -124,7 +120,7 @@ class AwaitingParts(BasePart):
             await self.context._post(
                 url=self.context._routes.file.finish_large,
                 json={
-                    "fileId": self.file.file_id,
+                    "fileId": self._file.file_id,
                     "partSha1Array": self.sha1s
                 },
                 include_account=False

@@ -10,23 +10,23 @@ def format_route_name(name: str) -> str:
 
 
 class UploadUrlCache:
-    def __init__(self, bucket_id: str, parts: bool = False) -> None:
-        if not parts:
+    def __init__(self, bucket_id: str, file_id: str = None) -> None:
+        if not file_id:
             self.upload_cache = Cache.upload_urls
+            self.index = bucket_id
         else:
             self.upload_cache = Cache.upload_parts_urls
-
-        self.bucket_id = bucket_id
+            self.index = bucket_id + file_id
 
     def find(self) -> UploadUrlModel:
-        if self.bucket_id in self.upload_cache:
-            if datetime.now() >= self.upload_cache[self.bucket_id]["expires"]:
-                self.upload_cache.pop(self.bucket_id, None)
+        if self.index in self.upload_cache:
+            if datetime.now() >= self.upload_cache[self.index]["expires"]:
+                self.upload_cache.pop(self.index, None)
             else:
-                return self.upload_cache[self.bucket_id]["model"]
+                return self.upload_cache[self.index]["model"]
 
     def save(self, upload_model: UploadUrlModel) -> UploadUrlModel:
-        self.upload_cache[self.bucket_id] = {
+        self.upload_cache[self.index] = {
             "expires": datetime.now() + timedelta(hours=23, minutes=50),
             "model": upload_model
         }
@@ -34,5 +34,9 @@ class UploadUrlCache:
         return upload_model
 
 
-def encode_name(name: str, encoding: str = "utf-8") -> str:
-    return name.replace(" ", "-").encode(encoding).decode(encoding)
+def encode_name(name: str, encoding: str = "utf-8",
+                replace: bool = True) -> str:
+    if replace:
+        name = name.replace(" ", "-")
+
+    return name.encode(encoding).decode(encoding)

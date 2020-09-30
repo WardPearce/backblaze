@@ -75,7 +75,6 @@ class TestAwaitingFile(asynctest.TestCase):
 
         parts = file.parts()
 
-        data = b""
         async with aiofiles.open(local_path, "rb") as f:
             data = await f.read()
 
@@ -86,6 +85,17 @@ class TestAwaitingFile(asynctest.TestCase):
         async for part, _ in file.parts().list():
             self.assertIsInstance(part, PartModel)
 
+        await parts.finish()
+
+        await file.delete(details.file_name)
+
+        details, file = await bucket.create_part(PartSettings(
+            "test part upload.png"
+        ))
+
+        parts = file.parts()
+
+        await parts.file(local_path)
         await parts.finish()
 
         await file.delete(details.file_name)

@@ -11,33 +11,33 @@ ENCODING = "utf-8"
 class CorSettings:
     def __init__(self, name: str, origins: list, allowed_headers: list,
                  operations: list, expose_headers: list, max_age: int) -> None:
-        self.payload = {}
-
-        self.payload["corsRuleName"] = encode_name(name)
-        self.payload["allowedOrigins"] = origins
-        self.payload["allowedHeaders"] = allowed_headers
-        self.payload["allowedOperations"] = operations
-        self.payload["exposeHeaders"] = expose_headers
-        self.payload["maxAgeSeconds"] = max_age
+        self.payload = {
+            "corsRuleName": encode_name(name),
+            "allowedOrigins": origins,
+            "allowedHeaders": allowed_headers,
+            "allowedOperations": operations,
+            "exposeHeaders": expose_headers,
+            "maxAgeSeconds": max_age
+        }
 
 
 class LifecycleSettings:
     def __init__(self, hiding_to_delete: int,
                  uploading_to_hide: int, prefix: str) -> None:
-        self.payload = {}
-
-        self.payload["daysFromHidingToDeleting"] = hiding_to_delete
-        self.payload["daysFromUploadingToHiding"] = uploading_to_hide
-        self.payload["fileNamePrefix"] = prefix
+        self.payload = {
+            "daysFromHidingToDeleting": hiding_to_delete,
+            "daysFromUploadingToHiding": uploading_to_hide,
+            "fileNamePrefix": prefix
+        }
 
 
 class BucketUpdateSettings:
     def __init__(self, private: bool = None,
                  info: str = None, cors: List[CorSettings] = None,
                  lifecycle: LifecycleSettings = None) -> None:
-        self.payload = {}
-
-        self.payload["bucketType"] = "allPrivate" if private else "allPublic"
+        self.payload = {
+            "bucketType": "allPrivate" if private else "allPublic"
+        }
 
         if info:
             self.payload["bucketInfo"] = info
@@ -64,10 +64,10 @@ class KeySettings:
     def __init__(self, capabilities: list, name: str,
                  duration: int = None, bucket_id: str = None,
                  prefix: str = None) -> None:
-        self.payload = {}
-
-        self.payload["capabilities"] = capabilities
-        self.payload["keyName"] = encode_name(name)
+        self.payload = {
+            "capabilities": capabilities,
+            "keyName": encode_name(name)
+        }
 
         if duration:
             self.payload["validDurationInSeconds"] = duration
@@ -80,13 +80,13 @@ class KeySettings:
 
 
 class FileSettings:
-    def __init__(self, start_file_name: str = None,
+    def __init__(self, start_name: str = None,
                  limit: int = 100, prefix: str = "",
                  delimiter: str = None) -> None:
         self.payload = {}
 
-        if start_file_name:
-            self.payload["startFileName"] = start_file_name
+        if start_name:
+            self.payload["startFileName"] = start_name
 
         if limit:
             self.payload["maxFileCount"] = limit
@@ -134,10 +134,10 @@ class UploadSettings:
                  language: str = None, expires: datetime = None,
                  cache_control: str = None, encoding: str = None,
                  custom_headers: Dict[str, str] = None) -> None:
-        self.headers = {}
-
-        self.headers["X-Bz-File-Name"] = parse.quote(name.encode(ENCODING))
-        self.headers["Content-Type"] = content_type
+        self.headers = {
+            "X-Bz-File-Name": parse.quote(name.encode(ENCODING)),
+            "Content-Type": content_type
+        }
 
         if last_modified:
             self.headers["X-Bz-Info-src_last_modified_millis"
@@ -166,10 +166,10 @@ class UploadSettings:
 class PartSettings:
     def __init__(self, name: str, content_type: str = "b2/x-auto",
                  last_modified: datetime = None, sha1: str = None) -> None:
-        self.payload = {}
-
-        self.payload["fileName"] = encode_name(name)
-        self.payload["contentType"] = content_type
+        self.payload = {
+            "fileName": encode_name(name),
+            "contentType": content_type
+        }
 
         if last_modified:
             if "fileInfo" not in self.payload:
@@ -183,3 +183,27 @@ class PartSettings:
                 self.payload["fileInfo"] = {}
 
             self.payload["fileInfo"]["large_file_sha1"] = sha1
+
+
+class CopyFileSettings:
+    def __init__(self, name: str, content_type: str = None,
+                 destination_bucket_id: str = None, range: int = None,
+                 directive: str = None, info: dict = None) -> None:
+        self.payload = {
+            "fileName": encode_name(name),
+        }
+
+        if content_type:
+            self.payload["contentType"] = content_type
+
+        if destination_bucket_id:
+            self.payload["destinationBucketId"] = destination_bucket_id
+
+        if range:
+            self.payload["range"] = range
+
+        if directive:
+            self.payload["metadataDirective"] = directive
+
+        if info:
+            self.payload["fileInfo"] = info

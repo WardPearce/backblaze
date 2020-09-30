@@ -6,7 +6,12 @@ from os import path
 
 from .client import CLIENT
 
-from ...settings import BucketSettings, UploadSettings, PartSettings
+from ...settings import (
+    BucketSettings,
+    UploadSettings,
+    PartSettings,
+    CopyFileSettings
+)
 
 from ...models.file import FileModel, PartModel
 
@@ -26,7 +31,6 @@ class TestAwaitingFile(asynctest.TestCase):
             "../test_file.png"
         )
 
-        data = None
         async with aiofiles.open(local_path, "rb") as f:
             data = await f.read()
 
@@ -42,8 +46,19 @@ class TestAwaitingFile(asynctest.TestCase):
 
         self.assertTrue(type(await file.download()) == bytes)
 
+        copy_data, copy_file = await file.copy(CopyFileSettings(
+            "copied file.png"
+        ))
+
+        self.assertIsInstance(copy_data, FileModel)
+        self.assertIsInstance(copy_file, AwaitingFile)
+
         async for chunk in file.download_iterate():
             self.assertTrue(type(chunk) == bytes)
+
+        await copy_file.delete(
+            copy_data.file_name
+        )
 
         await file.delete(
             file_data.file_name

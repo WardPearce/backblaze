@@ -5,7 +5,12 @@ from os import path
 
 from .client import CLIENT
 
-from ...settings import BucketSettings, UploadSettings, PartSettings
+from ...settings import (
+    BucketSettings,
+    UploadSettings,
+    PartSettings,
+    CopyFileSettings
+)
 
 from ...models.file import FileModel, PartModel
 
@@ -23,7 +28,6 @@ class TestBlockingFile(unittest.TestCase):
             "../test_file.png"
         )
 
-        data = None
         with open(local_path, "rb") as f:
             data = f.read()
 
@@ -38,6 +42,17 @@ class TestBlockingFile(unittest.TestCase):
         self.assertIsInstance(file, BlockingFile)
 
         self.assertTrue(type(file.download()) == bytes)
+
+        copy_data, copy_file = file.copy(CopyFileSettings(
+            "copied file.png"
+        ))
+
+        self.assertIsInstance(copy_data, FileModel)
+        self.assertIsInstance(copy_file, BlockingFile)
+
+        copy_file.delete(
+            copy_data.file_name
+        )
 
         file.delete(
             file_data.file_name

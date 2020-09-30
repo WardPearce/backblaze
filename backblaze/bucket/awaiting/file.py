@@ -12,7 +12,7 @@ from ...models.file import (
     PartCancelModel
 )
 
-from ...settings import DownloadSettings
+from ...settings import DownloadSettings, CopyFileSettings
 
 from ...utils import UploadUrlCache
 
@@ -36,6 +36,28 @@ class AwaitingFile(BaseFile):
             self.context,
             part_number
         )
+
+    async def copy(self, settings: CopyFileSettings) -> typing.Any:
+        """Used copy a file.
+
+        Parameters
+        ----------
+        settings : CopyFileSettings
+
+        Returns
+        -------
+        FileModel
+        AwaitingFile
+        """
+
+        data = await self.context._post(
+            url=self.context._routes.file.copy,
+            json={"sourceFileId": self.file_id, **settings.payload},
+            include_account=False
+        )
+
+        return FileModel(data), AwaitingFile(
+            data["fileId"], self.context, self.bucket_id)
 
     async def cancel(self) -> PartCancelModel:
         """Used for cancelling a uncompleted file.

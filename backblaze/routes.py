@@ -68,6 +68,7 @@ class FileRoute(Route):
     download_by_id = "b2_download_file_by_id"
     download_by_name = "b2_download_file_by_name"
     delete = "b2_delete_file_version"
+    copy = "b2_copy_file"
 
 
 class UploadRoute(Route):

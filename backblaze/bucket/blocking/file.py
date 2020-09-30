@@ -1,3 +1,5 @@
+import typing
+
 from ..base import BaseFile
 
 from .part import BlockingParts
@@ -9,7 +11,7 @@ from ...models.file import (
     PartCancelModel
 )
 
-from ...settings import DownloadSettings
+from ...settings import DownloadSettings, CopyFileSettings
 
 from ...exceptions import AwaitingOnly
 
@@ -35,6 +37,28 @@ class BlockingFile(BaseFile):
             self.context,
             part_number
         )
+
+    def copy(self, settings: CopyFileSettings) -> typing.Any:
+        """Used copy a file.
+
+        Parameters
+        ----------
+        settings : CopyFileSettings
+
+        Returns
+        -------
+        FileModel
+        BlockingFile
+        """
+
+        data = self.context._post(
+            url=self.context._routes.file.copy,
+            json={"sourceFileId": self.file_id, **settings.payload},
+            include_account=False
+        )
+
+        return FileModel(data), BlockingFile(
+            data["fileId"], self.context, self.bucket_id)
 
     def cancel(self) -> PartCancelModel:
         """Used for cancelling a uncompleted file.

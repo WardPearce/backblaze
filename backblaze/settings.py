@@ -207,3 +207,13 @@ class CopyFileSettings:
 
         if info:
             self.payload["fileInfo"] = info
+
+
+class CopyPartSettings:
+    def __init__(self, file_id: str, range: int = None) -> None:
+        self.payload = {
+            "largeFileId": file_id
+        }
+
+        if range:
+            self.payload["range"] = range

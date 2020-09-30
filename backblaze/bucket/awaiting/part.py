@@ -7,6 +7,8 @@ from ..base import BasePart
 
 from ...models.file import PartModel, FileModel
 
+from ...settings import CopyPartSettings
+
 
 class AwaitingParts(BasePart):
     async def list(self, limit: int = 100) -> AsyncGenerator[PartModel, int]:
@@ -34,6 +36,29 @@ class AwaitingParts(BasePart):
 
         for part in data["parts"]:
             yield PartModel(part), data["nextPartNumber"]
+
+    async def copy(self, settings: CopyPartSettings) -> PartModel:
+        """Used to copy a part.
+
+        Parameters
+        ----------
+        settings : CopyPartSettings
+
+        Returns
+        -------
+        PartModel
+        """
+
+        return PartModel(await self.context._post(
+            url=self.context._routes.file.copy_part,
+            json={
+                "sourceFileId": self.file.file_id,
+                "partNumber":
+                self.part_number if self.part_number > 0 else 1,
+                **settings.payload
+            },
+            include_account=False,
+        ))
 
     async def data(self, data: bytes) -> PartModel:
         """Uploads a part.

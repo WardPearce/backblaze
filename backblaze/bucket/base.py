@@ -18,3 +18,4 @@ class BasePart:
         self.context = context
         self.part_number = part_number
         self.sha1s = []
+        self.sha1s_append = self.sha1s.append

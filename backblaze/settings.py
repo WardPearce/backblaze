@@ -9,10 +9,9 @@ ENCODING = "utf-8"
 
 
 class CorSettings:
-    payload = {}
-
     def __init__(self, name: str, origins: list, allowed_headers: list,
                  operations: list, expose_headers: list, max_age: int) -> None:
+        self.payload = {}
 
         self.payload["corsRuleName"] = encode_name(name)
         self.payload["allowedOrigins"] = origins
@@ -23,24 +22,21 @@ class CorSettings:
 
 
 class LifecycleSettings:
-    payload = {}
-
     def __init__(self, hiding_to_delete: int,
                  uploading_to_hide: int, prefix: str) -> None:
+        self.payload = {}
 
         self.payload["daysFromHidingToDeleting"] = hiding_to_delete
         self.payload["daysFromUploadingToHiding"] = uploading_to_hide
         self.payload["fileNamePrefix"] = prefix
 
 
-class BucketSettings:
-    payload = {}
-
-    def __init__(self, name: str, private: bool = True,
+class BucketUpdateSettings:
+    def __init__(self, private: bool = None,
                  info: str = None, cors: List[CorSettings] = None,
                  lifecycle: LifecycleSettings = None) -> None:
+        self.payload = {}
 
-        self.payload["bucketName"] = encode_name(name)
         self.payload["bucketType"] = "allPrivate" if private else "allPublic"
 
         if info:
@@ -57,12 +53,18 @@ class BucketSettings:
                 cors_append(cor.payload)
 
 
-class KeySettings:
-    payload = {}
+class BucketSettings(BucketUpdateSettings):
+    def __init__(self, name: str, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
+        self.payload["bucketName"] = encode_name(name)
+
+
+class KeySettings:
     def __init__(self, capabilities: list, name: str,
                  duration: int = None, bucket_id: str = None,
                  prefix: str = None) -> None:
+        self.payload = {}
 
         self.payload["capabilities"] = capabilities
         self.payload["keyName"] = encode_name(name)
@@ -78,11 +80,10 @@ class KeySettings:
 
 
 class FileSettings:
-    payload = {}
-
     def __init__(self, start_file_name: str = None,
                  limit: int = 100, prefix: str = "",
                  delimiter: str = None) -> None:
+        self.payload = {}
 
         if start_file_name:
             self.payload["startFileName"] = start_file_name
@@ -98,13 +99,12 @@ class FileSettings:
 
 
 class DownloadSettings:
-    headers = {}
-    parameters = {}
-
     def __init__(self, range: int = None, disposition: str = None,
                  language: str = None, expires: datetime = None,
                  cache_control: str = None, encoding: str = None,
                  content_type: str = None) -> None:
+        self.headers = {}
+        self.parameters = {}
 
         if range:
             self.headers["Range"] = range
@@ -129,13 +129,12 @@ class DownloadSettings:
 
 
 class UploadSettings:
-    headers = {}
-
     def __init__(self, name: str, content_type: str = "b2/x-auto",
                  last_modified: datetime = None, disposition: str = None,
                  language: str = None, expires: datetime = None,
                  cache_control: str = None, encoding: str = None,
                  custom_headers: Dict[str, str] = None) -> None:
+        self.headers = {}
 
         self.headers["X-Bz-File-Name"] = parse.quote(name.encode(ENCODING))
         self.headers["Content-Type"] = content_type
@@ -165,10 +164,9 @@ class UploadSettings:
 
 
 class PartSettings:
-    payload = {}
-
     def __init__(self, name: str, content_type: str = "b2/x-auto",
                  last_modified: datetime = None, sha1: str = None) -> None:
+        self.payload = {}
 
         self.payload["fileName"] = encode_name(name)
         self.payload["contentType"] = content_type

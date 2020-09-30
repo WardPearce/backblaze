@@ -51,7 +51,7 @@ class BlockingParts(BasePart):
         upload = self.file.upload_url()
 
         sha1_str = sha1(data).hexdigest()
-        self.sha1s.append(sha1_str)
+        self.sha1s_append(sha1_str)
 
         return PartModel(
             self.context._post(

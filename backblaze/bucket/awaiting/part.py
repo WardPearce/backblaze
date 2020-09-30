@@ -53,7 +53,7 @@ class AwaitingParts(BasePart):
         upload = await self.file.upload_url()
 
         sha1_str = sha1(data).hexdigest()
-        self.sha1s.append(sha1_str)
+        self.sha1s_append(sha1_str)
 
         return PartModel(
             await self.context._post(

@@ -4,7 +4,7 @@ from uuid import uuid4
 
 from .client import CLIENT
 
-from ...settings import BucketSettings
+from ...settings import BucketSettings, BucketUpdateSettings
 
 from ...bucket.blocking import BlockingBucket
 from ...models.bucket import BucketModel
@@ -14,6 +14,10 @@ class TestBucketBlocking(unittest.TestCase):
     def test_bucket(self):
         data, bucket = CLIENT.create_bucket(BucketSettings(
             "test-bucket-{}".format(uuid4())
+        ))
+
+        bucket.update(BucketUpdateSettings(
+            private=False
         ))
 
         self.assertIsInstance(

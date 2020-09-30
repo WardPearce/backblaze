@@ -9,12 +9,36 @@ from ...models.file import FileModel, UploadUrlModel
 
 from .file import AwaitingFile
 
-from ...settings import FileSettings, UploadSettings, PartSettings
+from ...settings import (
+    FileSettings,
+    UploadSettings,
+    PartSettings,
+    BucketUpdateSettings
+)
 
 from ...utils import UploadUrlCache
 
 
 class AwaitingBucket(BaseBucket):
+    async def update(self, settings: BucketUpdateSettings) -> BucketModel:
+        """Updates bucket details.
+
+        Parameters
+        ----------
+        settings : BucketUpdateSettings
+
+        Returns
+        -------
+        BucketModel
+        """
+
+        return BucketModel(
+            await self.context._post(
+                url=self.context._routes.bucket.update,
+                json={"bucketId": self.bucket_id, **settings.payload}
+            )
+        )
+
     async def create_part(self, settings: PartSettings
                           ) -> typing.Tuple[FileModel, AwaitingFile]:
         """Used to create a part.

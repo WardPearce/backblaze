@@ -6,7 +6,7 @@
 Welcome to Backblaze's unofficial documentation!
 ================================================
 
-This is a unofficial asynchronous & synchronous wrapper for Backblaze's API.
+This is a unofficial asynchronous & synchronous wrapper for Backblaze's B2 API.
 
 **Features:**
 
@@ -36,6 +36,7 @@ Documentation Contents
    intro
    settings
    models
+   api
    exceptions
 
 

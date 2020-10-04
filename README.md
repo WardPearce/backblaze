@@ -1,6 +1,10 @@
 ## Welcome to Backblaze's unofficial python wrapper!
 This is a unofficial asynchronous & synchronous wrapper for Backblaze's B2 API.
 
+
+The awaiting version requires Python ``3.7`` or above!
+
+
 ### Features:
 - Full API coverage.
 - Background authentication.

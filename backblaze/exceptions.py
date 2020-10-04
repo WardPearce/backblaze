@@ -29,6 +29,7 @@ class Forbidden(Exception):
 
 class RequestTimeout(Exception):
     """The service timed out trying to read your request.
+    This isn't raised for a HTTPX timeout, this is when backblaze times out.
     """
 
     pass

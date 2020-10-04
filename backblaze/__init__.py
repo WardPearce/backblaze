@@ -251,7 +251,7 @@ class Awaiting(Base, AwaitingHTTP):
             data.download_url
         )
 
-        self._client.headers["Authorization"] = data.auth_token
+        self._client.headers["Authorization"] = data.authorization_token
 
         if not self._running_task:
             asyncio.create_task(self.__authorize_background())
@@ -472,7 +472,7 @@ class Blocking(Base, BlockingHTTP):
             data.download_url
         )
 
-        self._client.headers["Authorization"] = data.auth_token
+        self._client.headers["Authorization"] = data.authorization_token
 
         if not self._running_task:
             threading.Thread(target=self.__authorize_background)

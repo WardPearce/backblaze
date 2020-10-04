@@ -2,6 +2,14 @@ from typing import Generator
 
 
 class LifecycleModel:
+    """
+    Attributes
+    ----------
+    hiding_to_delete : int
+    uploading_to_hide : int
+    prefix : str
+    """
+
     def __init__(self, data: dict) -> None:
         self.hiding_to_delete = data["daysFromHidingToDeleting"]
         self.uploading_to_hide = data["daysFromUploadingToHiding"]
@@ -9,6 +17,17 @@ class LifecycleModel:
 
 
 class CorModel:
+    """
+    Attributes
+    ----------
+    name : str
+    origins : list
+    allowed_headers : list
+    operations : list
+    expose_headers : list
+    max_age : int
+    """
+
     def __init__(self, data: dict) -> None:
         self.name = data["corsRuleName"]
         self.origins = data["allowedOrigins"]
@@ -19,6 +38,18 @@ class CorModel:
 
 
 class BucketModel:
+    """
+    Attributes
+    ----------
+    bucket_id : str
+    name : str
+    type : str
+    info : str
+    revision : str
+    options : list
+    lifecycle : list
+    """
+
     def __init__(self, data: dict) -> None:
         self.bucket_id = data["bucketId"]
         self.name = data["bucketName"]

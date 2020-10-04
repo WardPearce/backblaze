@@ -33,7 +33,7 @@ class TestBlockingFile(unittest.TestCase):
 
         file_data, file = bucket.upload(
             UploadSettings(
-                name="Test file.png"
+                name="ウィーブ.png"
             ),
             data=data
         )

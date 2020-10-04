@@ -36,7 +36,7 @@ class TestAwaitingFile(asynctest.TestCase):
 
         file_data, file = await bucket.upload(
             UploadSettings(
-                name="Test file.png"
+                name="ウィーブ.png"
             ),
             data=data
         )

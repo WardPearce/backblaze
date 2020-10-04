@@ -5,6 +5,9 @@ Lucily for you the API for asynchronous (awaiting) & synchronous (blocking) is i
 
 Application keys can be made `here <https://secure.backblaze.com/app_keys.htm>`_.
 
+Using '_' correctly is important, this wrapper uses Tuple's for returns.
+For any variable what's return what you don't need use '_'. 
+
 
 Getting started
 ---------------

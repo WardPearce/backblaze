@@ -55,7 +55,7 @@ class BucketUpdateSettings:
     Parameters
     ----------
     private : bool, optional
-        by default None
+        by default True
     info : str, optional
         by default None
     cors : List[CorSettings], optional
@@ -64,7 +64,7 @@ class BucketUpdateSettings:
         by default None
     """
 
-    def __init__(self, private: bool = None,
+    def __init__(self, private: bool = True,
                  info: str = None, cors: List[CorSettings] = None,
                  lifecycle: LifecycleSettings = None) -> None:
         self.payload = {

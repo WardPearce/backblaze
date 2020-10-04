@@ -34,6 +34,7 @@ Documentation Contents
    :maxdepth: 3
 
    intro
+   examples
    settings
    models
    api

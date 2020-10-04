@@ -1,5 +1,5 @@
-## Welcome to Dathost’s unofficial python wrapper!
-This is a unofficial asynchronous & synchronous wrapper for Dathost’s API.
+## Welcome to Backblaze's unofficial python wrapper!
+This is a unofficial asynchronous & synchronous wrapper for Backblaze's B2 API.
 
 ### Features:
 - Full API coverage.

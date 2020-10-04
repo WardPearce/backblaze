@@ -11,10 +11,11 @@ This is a unofficial asynchronous & synchronous wrapper for Backblaze's API.
 **Features:**
 
 - Full API coverage.
+- Background authentication.
 - Asynchronous & synchronous support.
 - Easy to use with an object oriented design.
 - 100% test coverage.
-- Memory caching.
+- Upload URL caching.
 
 Install
 -------
@@ -33,6 +34,7 @@ Documentation Contents
    :maxdepth: 3
 
    intro
+   settings
    models
    exceptions
 

@@ -9,6 +9,17 @@ ENCODING = "utf-8"
 
 
 class CorSettings:
+    """
+    Parameters
+    ----------
+    name : str
+    origins : list
+    allowed_headers : list
+    operations : list
+    expose_headers : list
+    max_age : int
+    """
+
     def __init__(self, name: str, origins: list, allowed_headers: list,
                  operations: list, expose_headers: list, max_age: int) -> None:
         self.payload = {
@@ -22,6 +33,14 @@ class CorSettings:
 
 
 class LifecycleSettings:
+    """
+    Parameters
+    ----------
+    hiding_to_delete : int
+    uploading_to_hide : int
+    prefix : str
+    """
+
     def __init__(self, hiding_to_delete: int,
                  uploading_to_hide: int, prefix: str) -> None:
         self.payload = {
@@ -32,6 +51,19 @@ class LifecycleSettings:
 
 
 class BucketUpdateSettings:
+    """
+    Parameters
+    ----------
+    private : bool, optional
+        by default None
+    info : str, optional
+        by default None
+    cors : List[CorSettings], optional
+        by default None
+    lifecycle : LifecycleSettings, optional
+        by default None
+    """
+
     def __init__(self, private: bool = None,
                  info: str = None, cors: List[CorSettings] = None,
                  lifecycle: LifecycleSettings = None) -> None:
@@ -54,6 +86,20 @@ class BucketUpdateSettings:
 
 
 class BucketSettings(BucketUpdateSettings):
+    """
+    Parameters
+    ----------
+    name : str
+    private : bool, optional
+        by default None
+    info : str, optional
+        by default None
+    cors : List[CorSettings], optional
+        by default None
+    lifecycle : LifecycleSettings, optional
+        by default None
+    """
+
     def __init__(self, name: str, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
@@ -61,6 +107,19 @@ class BucketSettings(BucketUpdateSettings):
 
 
 class KeySettings:
+    """
+    Parameters
+    ----------
+    capabilities : list
+    name : str
+    duration : int, optional
+        by default None
+    bucket_id : str, optional
+        by default None
+    prefix : str, optional
+        by default None
+    """
+
     def __init__(self, capabilities: list, name: str,
                  duration: int = None, bucket_id: str = None,
                  prefix: str = None) -> None:
@@ -80,6 +139,19 @@ class KeySettings:
 
 
 class FileSettings:
+    """
+    Parameters
+    ----------
+    start_name : str, optional
+        by default None
+    limit : int, optional
+        by default 100
+    prefix : str, optional
+        by default ""
+    delimiter : str, optional
+        by default None
+    """
+
     def __init__(self, start_name: str = None,
                  limit: int = 100, prefix: str = "",
                  delimiter: str = None) -> None:
@@ -100,6 +172,25 @@ class FileSettings:
 
 
 class DownloadSettings:
+    """
+    Parameters
+    ----------
+    range : int, optional
+        by default None
+    disposition : str, optional
+        by default None
+    language : str, optional
+        by default None
+    expires : datetime, optional
+        by default None
+    cache_control : str, optional
+        by default None
+    encoding : str, optional
+        by default None
+    content_type : str, optional
+        by default None
+    """
+
     def __init__(self, range: int = None, disposition: str = None,
                  language: str = None, expires: datetime = None,
                  cache_control: str = None, encoding: str = None,
@@ -130,6 +221,28 @@ class DownloadSettings:
 
 
 class UploadSettings:
+    """
+    Parameters
+    ----------
+    name : str
+    content_type : str, optional
+        by default "b2/x-auto"
+    last_modified : datetime, optional
+        by default None
+    disposition : str, optional
+        by default None
+    language : str, optional
+        by default None
+    expires : datetime, optional
+        by default None
+    cache_control : str, optional
+        by default None
+    encoding : str, optional
+        by default None
+    custom_headers : Dict[str, str], optional
+        by default None
+    """
+
     def __init__(self, name: str, content_type: str = "b2/x-auto",
                  last_modified: datetime = None, disposition: str = None,
                  language: str = None, expires: datetime = None,
@@ -165,6 +278,18 @@ class UploadSettings:
 
 
 class PartSettings:
+    """
+    Parameters
+    ----------
+    name : str
+    content_type : str, optional
+        by default "b2/x-auto"
+    last_modified : datetime, optional
+        by default None
+    sha1 : str, optional
+        by default None
+    """
+
     def __init__(self, name: str, content_type: str = "b2/x-auto",
                  last_modified: datetime = None, sha1: str = None) -> None:
         self.payload = {
@@ -187,6 +312,22 @@ class PartSettings:
 
 
 class CopyFileSettings:
+    """
+    Parameters
+    ----------
+    name : str
+    content_type : str, optional
+        by default None
+    destination_bucket_id : str, optional
+        by default None
+    range : int, optional
+        by default None
+    directive : str, optional
+        by default None
+    info : dict, optional
+        by default None
+    """
+
     def __init__(self, name: str, content_type: str = None,
                  destination_bucket_id: str = None, range: int = None,
                  directive: str = None, info: dict = None) -> None:
@@ -211,6 +352,14 @@ class CopyFileSettings:
 
 
 class CopyPartSettings:
+    """
+    Parameters
+    ----------
+    file_id : str
+    range : int, optional
+        by default None
+    """
+
     def __init__(self, file_id: str, range: int = None) -> None:
         self.payload = {
             "largeFileId": file_id

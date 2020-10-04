@@ -1,5 +1,7 @@
 Exceptions
 ==========
+Quick note, if none of the below exceptions are raised a `HTTPX exception <https://www.python-httpx.org/exceptions/#the-exception-hierarchy>`_ will be.
+
 
 .. autoclass:: backblaze.exceptions.AwaitingOnly
     :members:

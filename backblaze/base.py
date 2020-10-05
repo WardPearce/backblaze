@@ -1,4 +1,4 @@
-from httpx import BasicAuth
+from httpx import BasicAuth, Limits
 from datetime import datetime
 
 from .routes import (
@@ -66,6 +66,10 @@ class Base:
         )
 
         self._timeout = timeout
+        self._limits = Limits(
+            max_connections=None,
+            max_keepalive_connections=None
+        )
         self.chunk_size = chunk_size
 
         self._routes = Routes()

@@ -1,4 +1,6 @@
 import typing
+import logging
+from json import JSONDecodeError
 
 from httpx import Response
 
@@ -43,19 +45,25 @@ class BaseHTTP:
                 return resp.json()
             else:
                 return resp.read()
-        elif resp.status_code == 400:
-            raise BadRequest()
-        elif resp.status_code == 401:
-            raise UnAuthorized()
-        elif resp.status_code == 403:
-            raise Forbidden()
-        elif resp.status_code == 408:
-            raise RequestTimeout()
-        elif resp.status_code == 429:
-            raise TooManyRequests()
-        elif resp.status_code == 500:
-            raise InternalError()
-        elif resp.status_code == 503:
-            raise ServiceUnavailable()
         else:
-            resp.raise_for_status()
+            try:
+                logging.debug(resp.json())
+            except JSONDecodeError:
+                pass
+
+            if resp.status_code == 400:
+                raise BadRequest()
+            elif resp.status_code == 401:
+                raise UnAuthorized()
+            elif resp.status_code == 403:
+                raise Forbidden()
+            elif resp.status_code == 408:
+                raise RequestTimeout()
+            elif resp.status_code == 429:
+                raise TooManyRequests()
+            elif resp.status_code == 500:
+                raise InternalError()
+            elif resp.status_code == 503:
+                raise ServiceUnavailable()
+            else:
+                resp.raise_for_status()

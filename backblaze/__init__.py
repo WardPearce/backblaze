@@ -24,7 +24,7 @@ from .key.awaiting import AwaitingKey
 from .settings import BucketSettings, KeySettings, DownloadSettings
 
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __url__ = "https://backblaze.readthedocs.io/en/latest/"
 __description__ = "Wrapper for Backblaze's B2."
 __author__ = "WardPearce"
@@ -39,7 +39,10 @@ class Awaiting(Base, AwaitingHTTP):
 
         super().__init__(*args, **kwargs)
 
-        self._client = AsyncClient(timeout=self._timeout)
+        self._client = AsyncClient(
+            timeout=self._timeout,
+            limits=self._limits
+        )
 
     async def close(self) -> None:
         """Closes any underlying TCP sessions.
@@ -263,7 +266,10 @@ class Blocking(Base, BlockingHTTP):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
-        self._client = Client(timeout=self._timeout)
+        self._client = Client(
+            timeout=self._timeout,
+            limits=self._limits
+        )
 
     def close(self) -> None:
         """Closes any underlying TCP sessions.

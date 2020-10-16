@@ -68,6 +68,8 @@ class AwaitingFile(BaseFile):
             Holds details on canceled file.
         """
 
+        UploadUrlCache(self.bucket_id, self.file_id).delete()
+
         return PartCancelModel(
             await self.context._post(
                 url=self.context._routes.file.cancel_large,

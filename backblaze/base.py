@@ -103,10 +103,12 @@ class Base:
 
         now = datetime.now()
 
-        for index, cached_upload in dict(Cache.upload_parts_urls).items():
-            if now >= cached_upload["expires"]:
-                Cache.upload_parts_urls.pop(index, None)
+        if Cache.upload_parts_urls:
+            for index, cached_upload in dict(Cache.upload_parts_urls).items():
+                if now >= cached_upload["expires"]:
+                    Cache.upload_parts_urls.pop(index, None)
 
-        for index, cached_upload in dict(Cache.upload_urls).items():
-            if now >= cached_upload["expires"]:
-                Cache.upload_urls.pop(index, None)
+        if Cache.upload_urls:
+            for index, cached_upload in dict(Cache.upload_urls).items():
+                if now >= cached_upload["expires"]:
+                    Cache.upload_urls.pop(index, None)

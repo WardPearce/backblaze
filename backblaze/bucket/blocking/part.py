@@ -7,6 +7,8 @@ from ...models.file import PartModel, FileModel
 
 from ...settings import CopyPartSettings
 
+from ...utils import UploadUrlCache
+
 
 class BlockingParts(BasePart):
     def list(self, limit: int = 100) -> Generator[PartModel, int, None]:
@@ -117,6 +119,11 @@ class BlockingParts(BasePart):
         FileModel
             Holds details on uploaded file.
         """
+
+        UploadUrlCache(
+            self._file.bucket_id,
+            self._file.file_id
+        ).delete()
 
         return FileModel(
             self.context._post(

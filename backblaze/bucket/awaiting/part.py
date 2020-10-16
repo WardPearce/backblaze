@@ -8,6 +8,8 @@ from ...models.file import PartModel, FileModel
 
 from ...settings import CopyPartSettings
 
+from ...utils import UploadUrlCache
+
 
 class AwaitingParts(BasePart):
     async def list(self, limit: int = 100) -> AsyncGenerator[PartModel, int]:
@@ -115,6 +117,11 @@ class AwaitingParts(BasePart):
         FileModel
             Holds details on uploaded file.
         """
+
+        UploadUrlCache(
+            self._file.bucket_id,
+            self._file.file_id
+        ).delete()
 
         return FileModel(
             await self.context._post(

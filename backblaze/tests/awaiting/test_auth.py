@@ -12,6 +12,3 @@ class TestAwaitingAuth(asynctest.TestCase):
         self.assertIsInstance(
             await CLIENT.authorize(), AuthModel
         )
-
-    async def tearDown(self):
-        await CLIENT.close()

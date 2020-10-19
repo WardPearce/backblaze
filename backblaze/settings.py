@@ -248,6 +248,11 @@ class UploadSettings:
                  language: str = None, expires: datetime = None,
                  cache_control: str = None, encoding: str = None,
                  custom_headers: Dict[str, str] = None) -> None:
+
+        # Needed for bucket.upload_file
+        self._name = name
+        self._content_type = content_type
+
         self.headers = {
             "X-Bz-File-Name": parse.quote(encode_name(name, replace=False)),
             "Content-Type": content_type

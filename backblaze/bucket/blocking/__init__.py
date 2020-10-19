@@ -1,4 +1,5 @@
 import typing
+import os
 
 from hashlib import sha1
 
@@ -138,6 +139,44 @@ class BlockingBucket(BaseBucket):
         for file in data["files"]:
             yield FileModel(file), self.file(file["fileId"]), \
                 file["nextFileName"]
+
+    def upload_file(self, settings: UploadSettings, pathway: str
+                    ) -> typing.Tuple[FileModel, BlockingFile]:
+        """Used to upload a file to the bucket.
+
+        Parameters
+        ----------
+        settings : UploadSettings
+        pathway : str
+
+        Returns
+        -------
+        FileModel
+            Holds details on the uploaded file.
+        BlockingFile
+            Used to interact with the file.
+
+        Notes
+        -----
+        If file size above 5mb file will be uploaded in parts.
+        """
+
+        if os.path.getsize(pathway) > 5000000:
+            data, file = self.create_part(PartSettings(
+                settings._name,
+                settings._content_type
+            ))
+
+            parts = file.parts()
+            parts.file(pathway)
+            parts.finish()
+        else:
+            with open(pathway, "rb") as f:
+                data, file = self.upload(
+                    settings, f.read()
+                )
+
+        return data, file
 
     def upload(self, settings: UploadSettings, data: bytes
                ) -> typing.Tuple[FileModel, BlockingFile]:

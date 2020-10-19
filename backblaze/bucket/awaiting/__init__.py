@@ -1,4 +1,6 @@
 import typing
+import os
+import aiofiles
 
 from hashlib import sha1
 
@@ -138,6 +140,44 @@ class AwaitingBucket(BaseBucket):
         for file in data["files"]:
             yield FileModel(file), self.file(file["fileId"]), \
                 file["nextFileName"]
+
+    async def upload_file(self, settings: UploadSettings, pathway: str
+                          ) -> typing.Tuple[FileModel, AwaitingFile]:
+        """Used to upload a file to the bucket.
+
+        Parameters
+        ----------
+        settings : UploadSettings
+        pathway : str
+
+        Returns
+        -------
+        FileModel
+            Holds details on the uploaded file.
+        AwaitingFile
+            Used to interact with the file.
+
+        Notes
+        -----
+        If file size above 5mb file will be uploaded in parts.
+        """
+
+        if os.path.getsize(pathway) > 5000000:
+            data, file = await self.create_part(PartSettings(
+                settings._name,
+                settings._content_type
+            ))
+
+            parts = file.parts()
+            await parts.file(pathway)
+            await parts.finish()
+        else:
+            async with aiofiles.open(pathway, "rb") as f:
+                data, file = await self.upload(
+                    settings, await f.read()
+                )
+
+        return data, file
 
     async def upload(self, settings: UploadSettings, data: bytes
                      ) -> typing.Tuple[FileModel, AwaitingFile]:

@@ -100,4 +100,21 @@ class TestAwaitingFile(asynctest.TestCase):
 
         await file.delete(details.file_name)
 
+        data, file = await bucket.upload_file(
+            UploadSettings("test part upload.bin"),
+            local_path
+        )
+        await file.delete(data.file_name)
+
+        local_path = path.join(
+            path.dirname(path.realpath(__file__)),
+            "../test_file.png"
+        )
+
+        data, file = await bucket.upload_file(
+            UploadSettings("test upload file.png"),
+            local_path
+        )
+        await file.delete(data.file_name)
+
         await bucket.delete()

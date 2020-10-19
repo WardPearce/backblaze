@@ -24,7 +24,7 @@ from .key.awaiting import AwaitingKey
 from .settings import BucketSettings, KeySettings, DownloadSettings
 
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 __url__ = "https://backblaze.readthedocs.io/en/latest/"
 __description__ = "Wrapper for Backblaze's B2."
 __author__ = "WardPearce"

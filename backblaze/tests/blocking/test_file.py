@@ -95,4 +95,21 @@ class TestBlockingFile(unittest.TestCase):
 
         file.delete(details.file_name)
 
+        data, file = bucket.upload_file(
+            UploadSettings("test part.bin"),
+            local_path
+        )
+        file.delete(data.file_name)
+
+        local_path = path.join(
+            path.dirname(path.realpath(__file__)),
+            "../test_file.png"
+        )
+
+        data, file = bucket.upload_file(
+            UploadSettings("test file upload.png"),
+            local_path
+        )
+        file.delete(data.file_name)
+
         bucket.delete()

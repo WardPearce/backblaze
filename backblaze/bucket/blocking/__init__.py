@@ -140,7 +140,8 @@ class BlockingBucket(BaseBucket):
             yield FileModel(file), self.file(file["fileId"]), \
                 file["nextFileName"]
 
-    def upload_file(self, settings: UploadSettings, pathway: str
+    def upload_file(self, settings: UploadSettings, pathway: str,
+                    allow_parts: bool = True
                     ) -> typing.Tuple[FileModel, BlockingFile]:
         """Used to upload a file to the bucket.
 
@@ -148,6 +149,8 @@ class BlockingBucket(BaseBucket):
         ----------
         settings : UploadSettings
         pathway : str
+        allow_parts : bool, optional
+            by default True
 
         Returns
         -------
@@ -161,15 +164,16 @@ class BlockingBucket(BaseBucket):
         If file size above 5mb file will be uploaded in parts.
         """
 
-        if os.path.getsize(pathway) > 5000000:
-            data, file = self.create_part(PartSettings(
+        if allow_parts and os.path.getsize(pathway) > 5000000:
+            _, file = self.create_part(PartSettings(
                 settings._name,
                 settings._content_type
             ))
 
             parts = file.parts()
             parts.file(pathway)
-            parts.finish()
+
+            data = parts.finish()
         else:
             with open(pathway, "rb") as f:
                 data, file = self.upload(

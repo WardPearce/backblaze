@@ -141,7 +141,8 @@ class AwaitingBucket(BaseBucket):
             yield FileModel(file), self.file(file["fileId"]), \
                 file["nextFileName"]
 
-    async def upload_file(self, settings: UploadSettings, pathway: str
+    async def upload_file(self, settings: UploadSettings, pathway: str,
+                          allow_parts: bool = True
                           ) -> typing.Tuple[FileModel, AwaitingFile]:
         """Used to upload a file to the bucket.
 
@@ -149,6 +150,8 @@ class AwaitingBucket(BaseBucket):
         ----------
         settings : UploadSettings
         pathway : str
+        allow_parts : bool, optional
+            by default True
 
         Returns
         -------
@@ -162,15 +165,16 @@ class AwaitingBucket(BaseBucket):
         If file size above 5mb file will be uploaded in parts.
         """
 
-        if os.path.getsize(pathway) > 5000000:
-            data, file = await self.create_part(PartSettings(
+        if allow_parts and os.path.getsize(pathway) > 5000000:
+            _, file = await self.create_part(PartSettings(
                 settings._name,
                 settings._content_type
             ))
 
             parts = file.parts()
             await parts.file(pathway)
-            await parts.finish()
+
+            data = await parts.finish()
         else:
             async with aiofiles.open(pathway, "rb") as f:
                 data, file = await self.upload(

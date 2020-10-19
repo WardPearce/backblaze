@@ -6,6 +6,17 @@ from .cache import Cache
 
 
 def format_route_name(name: str) -> str:
+    """Used to format route name.
+
+    Parameters
+    ----------
+    name : str
+
+    Returns
+    -------
+    str
+    """
+
     return name.replace("Route", "").lower()
 
 
@@ -66,11 +77,29 @@ class UploadUrlCache:
         return upload_model
 
     def delete(self) -> None:
+        """Deletes upload out of the cache.
+        """
+
         self.upload_cache.pop(self.index, None)
 
 
 def encode_name(name: str, encoding: str = "utf-8",
                 replace: bool = True) -> str:
+    """Used to encode names correctly for b2.
+
+    Parameters
+    ----------
+    name : str
+    encoding : str, optional
+        by default "utf-8"
+    replace : bool, optional
+        by default True
+
+    Returns
+    -------
+    str
+    """
+
     if replace:
         name = name.replace(" ", "-")
 

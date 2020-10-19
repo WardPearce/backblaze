@@ -41,6 +41,28 @@ Interacting with a bucket
     bucket.update(...)
 
 
+Uploading a file
+~~~~~~~~~~~~~~~~
+.. code-block:: python
+
+    import os
+    from backblaze.settings import UploadSettings
+
+
+    bucket = client.bucket(bucket_id="...")
+
+    local_path = os.path.join(
+        os.path.dirname(path.realpath(__file__)),
+        "/amazing_file.png"
+    )
+
+    # If the file is above 5mb, the file will be
+    # uploaded in parts.
+    data, file = bucket.upload_file(
+        UploadSettings("kinda cool.png"),
+        local_path
+    )
+
 Uploading parts
 ~~~~~~~~~~~~~~~
 .. code-block:: python

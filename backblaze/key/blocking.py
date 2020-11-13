@@ -1,4 +1,3 @@
-from sys import implementation
 from .base import BaseKey
 
 from ..models.key import KeyModel

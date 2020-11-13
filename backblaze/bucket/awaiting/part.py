@@ -1,4 +1,3 @@
-from sys import implementation
 from aiofile import AIOFile, Reader
 from hashlib import sha1
 from typing import AsyncGenerator

@@ -1,4 +1,3 @@
-from sys import implementation
 import typing
 
 from ..base import BaseFile

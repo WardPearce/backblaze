@@ -1,4 +1,3 @@
-from sys import implementation
 import typing
 import os
 

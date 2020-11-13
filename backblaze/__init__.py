@@ -24,7 +24,7 @@ from .key.awaiting import AwaitingKey
 from .settings import BucketSettings, KeySettings, DownloadSettings
 
 
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 __url__ = "https://backblaze.readthedocs.io/en/latest/"
 __description__ = "Wrapper for Backblaze's B2."
 __author__ = "WardPearce"
@@ -50,17 +50,18 @@ class Awaiting(Base, AwaitingHTTP):
 
         await self._client.aclose()
 
-    async def download_by_name(self, settings: DownloadSettings,
-                               bucket_name: str, file_name: str) -> bytes:
+    async def download_by_name(self, bucket_name: str, file_name: str,
+                               settings: DownloadSettings = None) -> bytes:
         """Used to download a file by its name.
 
         Parameters
         ----------
-        settings : DownloadSettings
         bucket_name : str
             Name of bucket.
         file_name : str
             Name of file to download.
+        settings : DownloadSettings, optional
+            by default None
 
         Returns
         -------
@@ -277,17 +278,18 @@ class Blocking(Base, BlockingHTTP):
 
         self._client.close()
 
-    def download_by_name(self, settings: DownloadSettings,
-                         bucket_name: str, file_name: str) -> bytes:
+    def download_by_name(self, bucket_name: str, file_name: str,
+                         settings: DownloadSettings = None) -> bytes:
         """Used to download a file by its name.
 
         Parameters
         ----------
-        settings : DownloadSettings
         bucket_name : str
             Name of bucket.
         file_name : str
             Name of file to download.
+        settings : DownloadSettings, optional
+            by default None
 
         Returns
         -------
@@ -342,7 +344,7 @@ class Blocking(Base, BlockingHTTP):
 
     def keys(self, limit: int = 100,
              start_key_id: str = None
-             ) -> typing.AsyncGenerator[KeyModel, AwaitingKey]:
+             ) -> typing.Generator[KeyModel, AwaitingKey]:
         """Used to list keys.
 
         Parameters

@@ -19,3 +19,5 @@ Quick note, if none of the below exceptions are raised a `HTTPX exception <https
     :members:
 .. autoclass:: backblaze.exceptions.ServiceUnavailable
     :members:
+.. autoclass:: backblaze.exceptions.AuthorizeRequired
+    :members:

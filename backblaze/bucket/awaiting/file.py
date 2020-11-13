@@ -1,3 +1,4 @@
+from sys import implementation
 import typing
 import aiofiles
 
@@ -15,6 +16,8 @@ from ...models.file import (
 from ...settings import DownloadSettings, CopyFileSettings
 
 from ...utils import UploadUrlCache
+
+from ...decorators import authorize_required
 
 
 class AwaitingFile(BaseFile):
@@ -37,6 +40,7 @@ class AwaitingFile(BaseFile):
             part_number
         )
 
+    @authorize_required
     async def copy(self, settings: CopyFileSettings) -> typing.Any:
         """Used copy a file.
 
@@ -59,6 +63,7 @@ class AwaitingFile(BaseFile):
         return FileModel(data), AwaitingFile(
             data["fileId"], self.context, self.bucket_id)
 
+    @authorize_required
     async def cancel(self) -> PartCancelModel:
         """Used for cancelling a uncompleted file.
 
@@ -78,6 +83,7 @@ class AwaitingFile(BaseFile):
             )
         )
 
+    @authorize_required
     async def get(self) -> FileModel:
         """Used to get details on a file.
 
@@ -95,6 +101,7 @@ class AwaitingFile(BaseFile):
             )
         )
 
+    @authorize_required
     async def delete(self, name: str) -> FileDeleteModel:
         """Deletes give file.
 
@@ -117,6 +124,7 @@ class AwaitingFile(BaseFile):
             )
         )
 
+    @authorize_required
     async def upload_url(self) -> UploadUrlModel:
         """Used to get a part upload URL.
 
@@ -146,6 +154,7 @@ class AwaitingFile(BaseFile):
             )
         ))
 
+    @authorize_required
     async def download(self, settings: DownloadSettings = None) -> bytes:
         """Used to download file into memory.
 
@@ -173,6 +182,7 @@ class AwaitingFile(BaseFile):
             include_account=False,
         )
 
+    @authorize_required
     async def download_iterate(self, settings: DownloadSettings = None
                                ) -> typing.AsyncGenerator[bytes, None]:
         """Used to iterate over the download.

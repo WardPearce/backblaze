@@ -2,8 +2,11 @@ from .base import BaseKey
 
 from ..models.key import KeyModel
 
+from ..decorators import authorize_required
+
 
 class AwaitingKey(BaseKey):
+    @authorize_required
     async def delete(self) -> KeyModel:
         """Used delete key.
 

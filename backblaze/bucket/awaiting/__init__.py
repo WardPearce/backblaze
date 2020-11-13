@@ -1,3 +1,4 @@
+from sys import implementation
 import typing
 import os
 import aiofiles
@@ -20,8 +21,11 @@ from ...settings import (
 
 from ...utils import UploadUrlCache
 
+from ...decorators import authorize_required
+
 
 class AwaitingBucket(BaseBucket):
+    @authorize_required
     async def update(self, settings: BucketUpdateSettings) -> BucketModel:
         """Updates bucket details.
 
@@ -41,6 +45,7 @@ class AwaitingBucket(BaseBucket):
             )
         )
 
+    @authorize_required
     async def create_part(self, settings: PartSettings
                           ) -> typing.Tuple[FileModel, AwaitingFile]:
         """Used to create a part.
@@ -63,6 +68,7 @@ class AwaitingBucket(BaseBucket):
 
         return FileModel(data), self.file(data["fileId"])
 
+    @authorize_required
     async def file_versions(self, settings: FileSettings = None
                             ) -> typing.AsyncGenerator[typing.Any, None]:
         """Used to list file by version.
@@ -103,6 +109,7 @@ class AwaitingBucket(BaseBucket):
             yield FileModel(file), self.file(file["fileId"]), \
                 file["nextFileName"], file["nextFileId"]
 
+    @authorize_required
     async def file_names(self, settings: FileSettings = None
                          ) -> typing.AsyncGenerator[typing.Any, None]:
         """Used to list file by name.
@@ -183,6 +190,7 @@ class AwaitingBucket(BaseBucket):
 
         return data, file
 
+    @authorize_required
     async def upload(self, settings: UploadSettings, data: bytes
                      ) -> typing.Tuple[FileModel, AwaitingFile]:
         """Used to upload a file to b2.
@@ -217,6 +225,7 @@ class AwaitingBucket(BaseBucket):
 
         return file, self.file(file.file_id)
 
+    @authorize_required
     async def upload_url(self) -> UploadUrlModel:
         """Used to get a upload URL.
 
@@ -259,6 +268,7 @@ class AwaitingBucket(BaseBucket):
 
         return AwaitingFile(file_id, self.context, self.bucket_id)
 
+    @authorize_required
     async def delete(self) -> BucketModel:
         """Used to delete a bucket.
 

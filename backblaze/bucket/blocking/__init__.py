@@ -1,3 +1,4 @@
+from sys import implementation
 import typing
 import os
 
@@ -19,8 +20,11 @@ from ...settings import (
 
 from ...utils import UploadUrlCache
 
+from ...decorators import authorize_required
+
 
 class BlockingBucket(BaseBucket):
+    @authorize_required
     def update(self, settings: BucketUpdateSettings) -> BucketModel:
         """Updates bucket details.
 
@@ -40,6 +44,7 @@ class BlockingBucket(BaseBucket):
             )
         )
 
+    @authorize_required
     def create_part(self, settings: PartSettings
                     ) -> typing.Tuple[FileModel, BlockingFile]:
         """Used to create a part.
@@ -62,6 +67,7 @@ class BlockingBucket(BaseBucket):
 
         return FileModel(data), self.file(data["fileId"])
 
+    @authorize_required
     def file_versions(self, settings: FileSettings = None
                       ) -> typing.Generator[typing.Any, None, None]:
         """Used to list file by version.
@@ -102,6 +108,7 @@ class BlockingBucket(BaseBucket):
             yield FileModel(file), self.file(file["fileId"]), \
                 file["nextFileName"], file["nextFileId"]
 
+    @authorize_required
     def file_names(self, settings: FileSettings = None
                    ) -> typing.Generator[typing.Any, None, None]:
         """Used to list file by name.
@@ -182,6 +189,7 @@ class BlockingBucket(BaseBucket):
 
         return data, file
 
+    @authorize_required
     def upload(self, settings: UploadSettings, data: bytes
                ) -> typing.Tuple[FileModel, BlockingFile]:
         """Used to upload a file to b2.
@@ -216,6 +224,7 @@ class BlockingBucket(BaseBucket):
 
         return file, self.file(file.file_id)
 
+    @authorize_required
     def upload_url(self) -> UploadUrlModel:
         """Used to get a upload URL.
 
@@ -258,6 +267,7 @@ class BlockingBucket(BaseBucket):
 
         return BlockingFile(file_id, self.context, self.bucket_id)
 
+    @authorize_required
     def delete(self) -> BucketModel:
         """Used to delete a bucket.
 

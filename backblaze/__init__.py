@@ -23,6 +23,8 @@ from .key.awaiting import AwaitingKey
 
 from .settings import BucketSettings, KeySettings, DownloadSettings
 
+from .decorators import authorize_required
+
 
 __version__ = "0.0.5"
 __url__ = "https://backblaze.readthedocs.io/en/latest/"
@@ -50,6 +52,7 @@ class Awaiting(Base, AwaitingHTTP):
 
         await self._client.aclose()
 
+    @authorize_required
     async def download_by_name(self, bucket_name: str, file_name: str,
                                settings: DownloadSettings = None) -> bytes:
         """Used to download a file by its name.
@@ -91,6 +94,7 @@ class Awaiting(Base, AwaitingHTTP):
             include_account=False
         )
 
+    @authorize_required
     async def create_key(self, settings: KeySettings
                          ) -> typing.Tuple[KeyModel, AwaitingKey]:
         """Used to create a key.
@@ -114,6 +118,7 @@ class Awaiting(Base, AwaitingHTTP):
 
         return KeyModel(data), self.key(data["applicationKeyId"])
 
+    @authorize_required
     async def keys(self, limit: int = 100,
                    start_key_id: str = None
                    ) -> typing.AsyncGenerator[typing.Any, None]:
@@ -159,6 +164,7 @@ class Awaiting(Base, AwaitingHTTP):
 
         return AwaitingKey(self, key_id)
 
+    @authorize_required
     async def create_bucket(self, settings: BucketSettings
                             ) -> typing.Tuple[BucketModel, AwaitingBucket]:
         """Used to create a bucket.
@@ -183,6 +189,7 @@ class Awaiting(Base, AwaitingHTTP):
 
         return data, self.bucket(data.bucket_id)
 
+    @authorize_required
     async def buckets(self, types: list = ["all"]
                       ) -> typing.AsyncGenerator[BucketModel, AwaitingBucket]:
         """Lists buckets.
@@ -278,6 +285,7 @@ class Blocking(Base, BlockingHTTP):
 
         self._client.close()
 
+    @authorize_required
     def download_by_name(self, bucket_name: str, file_name: str,
                          settings: DownloadSettings = None) -> bytes:
         """Used to download a file by its name.
@@ -319,6 +327,7 @@ class Blocking(Base, BlockingHTTP):
             include_account=False
         )
 
+    @authorize_required
     def create_key(self, settings: KeySettings
                    ) -> typing.Tuple[KeyModel, BlockingKey]:
         """Used to create a key.
@@ -342,9 +351,10 @@ class Blocking(Base, BlockingHTTP):
 
         return KeyModel(data), self.key(data["applicationKeyId"])
 
+    @authorize_required
     def keys(self, limit: int = 100,
              start_key_id: str = None
-             ) -> typing.Generator[KeyModel, AwaitingKey]:
+             ) -> typing.Generator[KeyModel, AwaitingKey, None]:
         """Used to list keys.
 
         Parameters
@@ -384,6 +394,7 @@ class Blocking(Base, BlockingHTTP):
 
         return BlockingKey(self, key_id)
 
+    @authorize_required
     def create_bucket(self, settings: BucketSettings
                       ) -> typing.Tuple[BucketModel, BlockingBucket]:
         """Used to create a bucket.
@@ -408,6 +419,7 @@ class Blocking(Base, BlockingHTTP):
 
         return data, self.bucket(data.bucket_id)
 
+    @authorize_required
     def buckets(self, types: list = ["all"]
                 ) -> typing.Generator[BucketModel, BlockingBucket, None]:
         """Lists buckets.

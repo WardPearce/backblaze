@@ -54,3 +54,11 @@ class ServiceUnavailable(Exception):
     """
 
     pass
+
+
+class AuthorizeRequired(Exception):
+    """Blocking.authorize or Awaiting.authorize hasn't been called
+    before running a function what requires it.
+    """
+
+    pass

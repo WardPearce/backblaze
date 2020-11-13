@@ -1,3 +1,4 @@
+from sys import implementation
 import typing
 
 from ..base import BaseFile
@@ -16,6 +17,8 @@ from ...settings import DownloadSettings, CopyFileSettings
 from ...exceptions import AwaitingOnly
 
 from ...utils import UploadUrlCache
+
+from ...decorators import authorize_required
 
 
 class BlockingFile(BaseFile):
@@ -38,6 +41,7 @@ class BlockingFile(BaseFile):
             part_number
         )
 
+    @authorize_required
     def copy(self, settings: CopyFileSettings) -> typing.Any:
         """Used copy a file.
 
@@ -60,6 +64,7 @@ class BlockingFile(BaseFile):
         return FileModel(data), BlockingFile(
             data["fileId"], self.context, self.bucket_id)
 
+    @authorize_required
     def cancel(self) -> PartCancelModel:
         """Used for cancelling a uncompleted file.
 
@@ -79,6 +84,7 @@ class BlockingFile(BaseFile):
             )
         )
 
+    @authorize_required
     def get(self) -> FileModel:
         """Used to get details on a file.
 
@@ -96,6 +102,7 @@ class BlockingFile(BaseFile):
             )
         )
 
+    @authorize_required
     def delete(self, name: str) -> FileDeleteModel:
         """Deletes give file.
 
@@ -118,6 +125,7 @@ class BlockingFile(BaseFile):
             )
         )
 
+    @authorize_required
     def upload_url(self) -> UploadUrlModel:
         """Used to get a part upload URL.
 
@@ -147,6 +155,7 @@ class BlockingFile(BaseFile):
             )
         ))
 
+    @authorize_required
     def download(self, settings: DownloadSettings = None) -> bytes:
         """Used to download file into memory.
 

@@ -9,8 +9,11 @@ from ...settings import CopyPartSettings
 
 from ...utils import UploadUrlCache
 
+from ...decorators import authorize_required
+
 
 class BlockingParts(BasePart):
+    @authorize_required
     def list(self, limit: int = 100) -> Generator[PartModel, int, None]:
         """Used to list parts.
 
@@ -37,6 +40,7 @@ class BlockingParts(BasePart):
         for part in data["parts"]:
             yield PartModel(part), data["nextPartNumber"]
 
+    @authorize_required
     def copy(self, settings: CopyPartSettings) -> PartModel:
         """Used to copy a part.
 
@@ -60,6 +64,7 @@ class BlockingParts(BasePart):
             include_account=False,
         ))
 
+    @authorize_required
     def data(self, data: bytes) -> PartModel:
         """Uploads a part.
 
@@ -111,6 +116,7 @@ class BlockingParts(BasePart):
                 if chunk:
                     self.data(chunk)
 
+    @authorize_required
     def finish(self) -> FileModel:
         """Used to complete a part upload.
 

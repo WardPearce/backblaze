@@ -1,3 +1,4 @@
+from sys import implementation
 from aiofile import AIOFile, Reader
 from hashlib import sha1
 from typing import AsyncGenerator
@@ -10,8 +11,11 @@ from ...settings import CopyPartSettings
 
 from ...utils import UploadUrlCache
 
+from ...decorators import authorize_required
+
 
 class AwaitingParts(BasePart):
+    @authorize_required
     async def list(self, limit: int = 100) -> AsyncGenerator[PartModel, int]:
         """Used to list parts.
 
@@ -38,6 +42,7 @@ class AwaitingParts(BasePart):
         for part in data["parts"]:
             yield PartModel(part), data["nextPartNumber"]
 
+    @authorize_required
     async def copy(self, settings: CopyPartSettings) -> PartModel:
         """Used to copy a part.
 
@@ -61,6 +66,7 @@ class AwaitingParts(BasePart):
             include_account=False,
         ))
 
+    @authorize_required
     async def data(self, data: bytes) -> PartModel:
         """Uploads a part.
 
@@ -109,6 +115,7 @@ class AwaitingParts(BasePart):
                                       chunk_size=self.context.chunk_size):
                 await self.data(chunk)
 
+    @authorize_required
     async def finish(self) -> FileModel:
         """Used to complete a part upload.
 

@@ -1,9 +1,13 @@
+from sys import implementation
 from .base import BaseKey
 
 from ..models.key import KeyModel
 
+from ..decorators import authorize_required
+
 
 class BlockingKey(BaseKey):
+    @authorize_required
     def delete(self) -> KeyModel:
         """Used delete key.
 

@@ -26,7 +26,7 @@ from .settings import BucketSettings, KeySettings, DownloadSettings
 from .decorators import authorize_required
 
 
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 __url__ = "https://backblaze.readthedocs.io/en/latest/"
 __description__ = "Wrapper for Backblaze's B2."
 __author__ = "WardPearce"

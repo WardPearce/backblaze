@@ -3,21 +3,23 @@ Exceptions
 Quick note, if none of the below exceptions are raised a `HTTPX exception <https://www.python-httpx.org/exceptions/#the-exception-hierarchy>`_ will be.
 
 
-.. autoclass:: backblaze.exceptions.AwaitingOnly
+.. autoclass:: backblaze.exceptions.BackblazeException()
     :members:
-.. autoclass:: backblaze.exceptions.BadRequest
+.. autoclass:: backblaze.exceptions.AwaitingOnly()
     :members:
-.. autoclass:: backblaze.exceptions.UnAuthorized
+.. autoclass:: backblaze.exceptions.BadRequest()
     :members:
-.. autoclass:: backblaze.exceptions.Forbidden
+.. autoclass:: backblaze.exceptions.UnAuthorized()
     :members:
-.. autoclass:: backblaze.exceptions.RequestTimeout
+.. autoclass:: backblaze.exceptions.Forbidden()
     :members:
-.. autoclass:: backblaze.exceptions.TooManyRequests
+.. autoclass:: backblaze.exceptions.RequestTimeout()
     :members:
-.. autoclass:: backblaze.exceptions.InternalError
+.. autoclass:: backblaze.exceptions.TooManyRequests()
     :members:
-.. autoclass:: backblaze.exceptions.ServiceUnavailable
+.. autoclass:: backblaze.exceptions.InternalError()
     :members:
-.. autoclass:: backblaze.exceptions.AuthorizeRequired
+.. autoclass:: backblaze.exceptions.ServiceUnavailable()
+    :members:
+.. autoclass:: backblaze.exceptions.AuthorizeRequired()
     :members:

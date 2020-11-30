@@ -31,7 +31,7 @@ class Routes:
 
 class Base:
     _auth_url = "https://api.backblazeb2.com/b2api/v2/b2_authorize_account"
-    _refresh_seconds = 84600
+    _refresh_seconds = 82800
 
     __api_routes = [
         BucketRoute,

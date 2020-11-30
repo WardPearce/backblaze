@@ -15,21 +15,15 @@ class BlockingHTTP(BaseHTTP):
             else:
                 kwargs["json"] = {"accountId": self.account_id}
 
-        for attempt in range(0, 2):
+        for _ in range(0, 2):
             resp = request(*args, **kwargs)
-            if attempt == 0:
-                if resp.status_code == 401:
-                    self.authorize()
-                elif resp.status_code == 503 or resp.status_code == 429:
-                    if "Retry-After" in resp.headers:
-                        sleep(float(resp.headers["Retry-After"]))
-                    else:
-                        sleep(1.0)
+            if resp.status_code == 401:
+                self.authorize()
+            elif resp.status_code == 503 or resp.status_code == 429:
+                if "Retry-After" in resp.headers:
+                    sleep(float(resp.headers["Retry-After"]))
                 else:
-                    return self.handle_resp(
-                        resp,
-                        resp_json,
-                    )
+                    sleep(1.0)
             else:
                 return self.handle_resp(
                     resp,

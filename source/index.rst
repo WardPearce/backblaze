@@ -16,6 +16,7 @@ This is a unofficial asynchronous & synchronous wrapper for Backblaze's B2 API.
 - Easy to use with an object oriented design.
 - 100% test coverage.
 - Upload URL caching.
+- Rate limit handler.
 
 Install
 -------

@@ -12,6 +12,7 @@ The awaiting version requires Python ``3.7`` or above!
 - Easy to use with an object oriented design.
 - 100% test coverage.
 - Upload URL caching.
+- Rate limit handler.
 
 
 ### Install

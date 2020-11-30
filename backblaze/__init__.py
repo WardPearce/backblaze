@@ -5,6 +5,7 @@ import time
 import typing
 
 from httpx import AsyncClient, Client
+from random import randint
 
 from .base import Base
 
@@ -228,7 +229,7 @@ class Awaiting(Base, AwaitingHTTP):
         """
 
         self._running_task = True
-        await asyncio.sleep(self._refresh_seconds)
+        await asyncio.sleep(self._refresh_seconds + randint(0, 1500))
         self._running_task = False
 
         await self.authorize()
@@ -459,7 +460,7 @@ class Blocking(Base, BlockingHTTP):
         """
 
         self._running_task = True
-        time.sleep(self._refresh_seconds)
+        time.sleep(self._refresh_seconds + randint(0, 1500))
         self._running_task = False
 
         self.authorize()

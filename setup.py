@@ -15,7 +15,7 @@ def get_long_description():
 
 
 def get_variable(variable):
-    with open(os.path.join("backblaze", "__init__.py")) as f:
+    with open(os.path.join("backblaze", "base.py")) as f:
         return re.search(
             "{} = ['\"]([^'\"]+)['\"]".format(variable), f.read()
         ).group(1)

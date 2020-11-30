@@ -26,14 +26,6 @@ from .settings import BucketSettings, KeySettings, DownloadSettings
 from .decorators import authorize_required
 
 
-__version__ = "0.0.6"
-__url__ = "https://backblaze.readthedocs.io/en/latest/"
-__description__ = "Wrapper for Backblaze's B2."
-__author__ = "WardPearce"
-__author_email__ = "wardpearce@protonmail.com"
-__license__ = "GPL-3.0 License"
-
-
 class Awaiting(Base, AwaitingHTTP):
     def __init__(self, *args, **kwargs) -> None:
         if not sys.version_info[1] >= 7:
@@ -43,7 +35,8 @@ class Awaiting(Base, AwaitingHTTP):
 
         self._client = AsyncClient(
             timeout=self._timeout,
-            limits=self._limits
+            limits=self._limits,
+            headers={"User-Agent": self._user_agent}
         )
 
     async def close(self) -> None:
@@ -276,7 +269,8 @@ class Blocking(Base, BlockingHTTP):
 
         self._client = Client(
             timeout=self._timeout,
-            limits=self._limits
+            limits=self._limits,
+            headers={"User-Agent": self._user_agent}
         )
 
     def close(self) -> None:

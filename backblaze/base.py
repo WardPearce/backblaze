@@ -1,3 +1,4 @@
+from sys import version_info
 from httpx import BasicAuth, Limits
 from datetime import datetime
 
@@ -10,6 +11,14 @@ from .routes import (
 )
 from .utils import format_route_name
 from .cache import Cache
+
+
+__version__ = "0.0.7"
+__url__ = "https://backblaze.readthedocs.io/en/latest/"
+__description__ = "Wrapper for Backblaze's B2."
+__author__ = "WardPearce"
+__author_email__ = "wardpearce@protonmail.com"
+__license__ = "GPL-3.0 License"
 
 
 class Routes:
@@ -70,6 +79,10 @@ class Base:
             max_connections=None,
             max_keepalive_connections=None
         )
+        self._user_agent = \
+            "backblaze/{0}+python/{1.major}.{1.minor}.{1.micro}".format(
+                __version__, version_info
+            )
         self.chunk_size = chunk_size
 
         self._routes = Routes()

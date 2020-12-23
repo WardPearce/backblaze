@@ -24,7 +24,7 @@ copyright = '2020, WardPearce'
 author = 'WardPearce'
 
 version = ''
-with open('../backblaze/__init__.py') as f:
+with open('../backblaze/base.py') as f:
     version = re.search(
         r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE
     ).group(1)

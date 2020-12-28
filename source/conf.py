@@ -70,7 +70,12 @@ master_doc = 'index'
 
 html_show_sourcelink = True
 html_sidebars = {
-    "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
+    "**": [
+        "logo-text.html",
+        "globaltoc.html",
+        "localtoc.html",
+        "searchbox.html"
+    ]
 }
 
 html_theme_options = {

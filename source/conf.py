@@ -59,7 +59,7 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'material'
+html_theme = 'sphinx_material'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -68,6 +68,32 @@ html_static_path = ['_static']
 
 master_doc = 'index'
 
+html_show_sourcelink = True
+html_sidebars = {
+    "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
+}
+
 html_theme_options = {
-    'theme_primary': '#430e8e'
+
+    # Set the name of the project to appear in the navigation.
+    'nav_title': 'backblaze',
+
+    # Specify a base_url used to generate sitemap.xml. If not
+    # specified, then no sitemap will be built.
+    'base_url': 'https://backblaze.readthedocs.io/en/latest/',
+
+    # Set the color and the accent color
+    'color_primary': 'blue',
+    'color_accent': 'light-blue',
+
+    # Set the repo location to get a badge with stats
+    'repo_url': 'https://github.com/WardPearce/backblaze',
+    'repo_name': 'backblaze',
+
+    # Visible levels of the global TOC; -1 means unlimited
+    'globaltoc_depth': 3,
+    # If False, expand all TOC entries
+    'globaltoc_collapse': False,
+    # If True, show hidden TOC entries
+    'globaltoc_includehidden': False,
 }

@@ -79,3 +79,22 @@ Uploading parts
     parts = file.parts()
     parts.file(pathway="path/to/weeb/file.jpg")
     parts.finish()
+
+Downloading
+~~~~~~~~~~~
+.. code-block:: python
+
+    data = bucket.file(file_id="...").download()
+
+Async download iterate
+~~~~~~~~~~~~~~~~~~~~~~
+.. code-block:: python
+
+    async for data in bucket.file(file_id="...").download_iterate():
+        pass
+
+Download by name
+~~~~~~~~~~~~~~~~
+.. code-block:: python
+
+    data = client.download_by_name(bucket_name="...", file_name="foobar.jpg")

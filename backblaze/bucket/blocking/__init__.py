@@ -105,7 +105,7 @@ class BlockingBucket(BaseBucket):
 
         for file in data["files"]:
             yield FileModel(file), self.file(file["fileId"]), \
-                file["nextFileName"], file["nextFileId"]
+                file["fileName"]
 
     @authorize_required
     def file_names(self, settings: FileSettings = None
@@ -144,7 +144,7 @@ class BlockingBucket(BaseBucket):
 
         for file in data["files"]:
             yield FileModel(file), self.file(file["fileId"]), \
-                file["nextFileName"]
+                file["fileName"]
 
     def upload_file(self, settings: UploadSettings, pathway: str,
                     allow_parts: bool = True

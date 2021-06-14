@@ -56,9 +56,7 @@ class TestAwaitingFile(asynctest.TestCase):
         async for chunk in file.download_iterate():
             self.assertTrue(type(chunk) == bytes)
 
-        await copy_file.delete(
-            copy_data.file_name
-        )
+        await copy_file.delete()
 
         await file.delete(
             file_data.file_name

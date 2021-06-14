@@ -102,19 +102,23 @@ class AwaitingFile(BaseFile):
         )
 
     @authorize_required
-    async def delete(self, name: str) -> FileDeleteModel:
+    async def delete(self, name: str = None) -> FileDeleteModel:
         """Deletes give file.
 
         Parameters
         ----------
-        name : str
-            Name of file.
+        name : str, optional
+            Name of file, if not given calls self.get,
+            by default None.
 
         Returns
         -------
         FileDeleteModel
             Holds details on delete file.
         """
+
+        if not name:
+            name = (await self.get()).file_name
 
         return FileDeleteModel(
             await self.context._post(

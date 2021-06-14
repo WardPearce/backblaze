@@ -50,9 +50,7 @@ class TestBlockingFile(unittest.TestCase):
         self.assertIsInstance(copy_data, FileModel)
         self.assertIsInstance(copy_file, BlockingFile)
 
-        copy_file.delete(
-            copy_data.file_name
-        )
+        copy_file.delete()
 
         file.delete(
             file_data.file_name

@@ -13,7 +13,7 @@ from .utils import format_route_name
 from .cache import Cache
 
 
-__version__ = "0.0.7"
+__version__ = "0.0.8"
 __url__ = "https://backblaze.readthedocs.io/en/latest/"
 __description__ = "Wrapper for Backblaze's B2."
 __author__ = "WardPearce"
@@ -79,10 +79,11 @@ class Base:
             max_connections=None,
             max_keepalive_connections=None
         )
-        self._user_agent = \
+        self._user_agent = (
             "backblaze/{0}+python/{1.major}.{1.minor}.{1.micro}".format(
                 __version__, version_info
             )
+        )
         self.chunk_size = chunk_size
 
         self._routes = Routes()

@@ -306,8 +306,9 @@ class PartSettings:
             if "fileInfo" not in self.payload:
                 self.payload["fileInfo"] = {}
 
-            self.payload["fileInfo"]["src_last_modified_millis"] = \
-                last_modified.timestamp() * 1000
+            self.payload["fileInfo"][
+                "src_last_modified_millis"
+            ] = last_modified.timestamp() * 1000
 
         if sha1:
             if "fileInfo" not in self.payload:

@@ -1,7 +1,7 @@
-import typing
 import os
 
 from hashlib import sha1
+from typing import Tuple, Generator, Any
 
 from ..base import BaseBucket
 
@@ -45,7 +45,7 @@ class BlockingBucket(BaseBucket):
 
     @authorize_required
     def create_part(self, settings: PartSettings
-                    ) -> typing.Tuple[FileModel, BlockingFile]:
+                    ) -> Tuple[FileModel, BlockingFile]:
         """Used to create a part.
 
         Parameters
@@ -68,7 +68,7 @@ class BlockingBucket(BaseBucket):
 
     @authorize_required
     def file_versions(self, settings: FileSettings = None
-                      ) -> typing.Generator[typing.Any, None, None]:
+                      ) -> Generator[Any, None, None]:
         """Used to list file by version.
 
         Parameters
@@ -104,12 +104,15 @@ class BlockingBucket(BaseBucket):
         )
 
         for file in data["files"]:
-            yield FileModel(file), self.file(file["fileId"]), \
+            yield (
+                FileModel(file),
+                self.file(file["fileId"]),
                 file["fileName"]
+            )
 
     @authorize_required
     def file_names(self, settings: FileSettings = None
-                   ) -> typing.Generator[typing.Any, None, None]:
+                   ) -> Generator[Any, None, None]:
         """Used to list file by name.
 
         Parameters
@@ -143,12 +146,15 @@ class BlockingBucket(BaseBucket):
         )
 
         for file in data["files"]:
-            yield FileModel(file), self.file(file["fileId"]), \
+            yield (
+                FileModel(file),
+                self.file(file["fileId"]),
                 file["fileName"]
+            )
 
     def upload_file(self, settings: UploadSettings, pathway: str,
                     allow_parts: bool = True
-                    ) -> typing.Tuple[FileModel, BlockingFile]:
+                    ) -> Tuple[FileModel, BlockingFile]:
         """Used to upload a file to the bucket.
 
         Parameters
@@ -190,7 +196,7 @@ class BlockingBucket(BaseBucket):
 
     @authorize_required
     def upload(self, settings: UploadSettings, data: bytes
-               ) -> typing.Tuple[FileModel, BlockingFile]:
+               ) -> Tuple[FileModel, BlockingFile]:
         """Used to upload a file to b2.
 
         Parameters

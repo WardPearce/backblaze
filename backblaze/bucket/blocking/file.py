@@ -1,4 +1,4 @@
-import typing
+from typing import Any
 
 from ..base import BaseFile
 
@@ -41,7 +41,7 @@ class BlockingFile(BaseFile):
         )
 
     @authorize_required
-    def copy(self, settings: CopyFileSettings) -> typing.Any:
+    def copy(self, settings: CopyFileSettings) -> Any:
         """Used copy a file.
 
         Parameters
@@ -102,19 +102,23 @@ class BlockingFile(BaseFile):
         )
 
     @authorize_required
-    def delete(self, name: str) -> FileDeleteModel:
+    def delete(self, name: str = None) -> FileDeleteModel:
         """Deletes give file.
 
         Parameters
         ----------
-        name : str
-            Name of file.
+        name : str, optional
+            Name of file, if not given calls self.get,
+            by default None.
 
         Returns
         -------
         FileDeleteModel
             Holds details on delete file.
         """
+
+        if not name:
+            name = (self.get()).file_name
 
         return FileDeleteModel(
             self.context._post(

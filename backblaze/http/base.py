@@ -1,6 +1,7 @@
-import typing
 import logging
+
 from json import JSONDecodeError
+from typing import Any
 
 from httpx import Response
 
@@ -16,7 +17,7 @@ from ..exceptions import (
 
 
 class BaseHTTP:
-    def handle_resp(self, resp: Response, json: bool = True) -> typing.Any:
+    def handle_resp(self, resp: Response, json: bool = True) -> Any:
         """Handles resp response.
 
         Parameters
@@ -25,7 +26,7 @@ class BaseHTTP:
 
         Returns
         -------
-        typing.Any
+        Any
 
         Raises
         ------

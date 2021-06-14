@@ -1,4 +1,5 @@
 import unittest
+import sys
 
 from backblaze.tests.blocking.test_auth import *  # noqa: F403, F401
 from backblaze.tests.blocking.test_bucket import *  # noqa: F403, F401
@@ -17,4 +18,4 @@ from backblaze.tests.awaiting.test_misc import *  # noqa: F403, F401
 
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(argv=[sys.argv[0]])

@@ -28,6 +28,6 @@ jobs:
           flake8 . --count --max-line-length=80 --statistics --exclude .git,__pycache__,docs/source/conf.py,old,build,dist
       - name: Run unit tests
         env:
-          EMAIL: ${{ secrets.KEY_ID }}
-          PASSWORD: ${{ secrets.KEY }}
-        run: python run_tests.py --key $KEY_ID --key_id $KEY
+          KEY_ID: ${{ secrets.KEY_ID }}
+          KEY: ${{ secrets.KEY }}
+        run: python run_tests.py --key_id $KEY_ID --key $KEY

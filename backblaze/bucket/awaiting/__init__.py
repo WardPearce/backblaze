@@ -1,8 +1,8 @@
-import typing
 import os
 import aiofiles
 
 from hashlib import sha1
+from typing import Any, AsyncGenerator, Tuple
 
 from ..base import BaseBucket
 
@@ -46,7 +46,7 @@ class AwaitingBucket(BaseBucket):
 
     @authorize_required
     async def create_part(self, settings: PartSettings
-                          ) -> typing.Tuple[FileModel, AwaitingFile]:
+                          ) -> Tuple[FileModel, AwaitingFile]:
         """Used to create a part.
 
         Parameters
@@ -69,7 +69,7 @@ class AwaitingBucket(BaseBucket):
 
     @authorize_required
     async def file_versions(self, settings: FileSettings = None
-                            ) -> typing.AsyncGenerator[typing.Any, None]:
+                            ) -> AsyncGenerator[Any, None]:
         """Used to list file by version.
 
         Parameters
@@ -105,12 +105,16 @@ class AwaitingBucket(BaseBucket):
         )
 
         for file in data["files"]:
-            yield FileModel(file), self.file(file["fileId"]), \
-                file["nextFileName"], file["nextFileId"]
+            yield (
+                FileModel(file),
+                self.file(file["fileId"]),
+                file["nextFileName"],
+                file["nextFileId"]
+            )
 
     @authorize_required
     async def file_names(self, settings: FileSettings = None
-                         ) -> typing.AsyncGenerator[typing.Any, None]:
+                         ) -> AsyncGenerator[Any, None]:
         """Used to list file by name.
 
         Parameters
@@ -144,12 +148,15 @@ class AwaitingBucket(BaseBucket):
         )
 
         for file in data["files"]:
-            yield FileModel(file), self.file(file["fileId"]), \
+            yield (
+                FileModel(file),
+                self.file(file["fileId"]),
                 file["nextFileName"]
+            )
 
     async def upload_file(self, settings: UploadSettings, pathway: str,
                           allow_parts: bool = True
-                          ) -> typing.Tuple[FileModel, AwaitingFile]:
+                          ) -> Tuple[FileModel, AwaitingFile]:
         """Used to upload a file to the bucket.
 
         Parameters
@@ -191,7 +198,7 @@ class AwaitingBucket(BaseBucket):
 
     @authorize_required
     async def upload(self, settings: UploadSettings, data: bytes
-                     ) -> typing.Tuple[FileModel, AwaitingFile]:
+                     ) -> Tuple[FileModel, AwaitingFile]:
         """Used to upload a file to b2.
 
         Parameters

@@ -1,5 +1,6 @@
-import typing
 import aiofiles
+
+from typing import Any, AsyncGenerator
 
 from ..base import BaseFile
 
@@ -40,7 +41,7 @@ class AwaitingFile(BaseFile):
         )
 
     @authorize_required
-    async def copy(self, settings: CopyFileSettings) -> typing.Any:
+    async def copy(self, settings: CopyFileSettings) -> Any:
         """Used copy a file.
 
         Parameters
@@ -183,7 +184,7 @@ class AwaitingFile(BaseFile):
 
     @authorize_required
     async def download_iterate(self, settings: DownloadSettings = None
-                               ) -> typing.AsyncGenerator[bytes, None]:
+                               ) -> AsyncGenerator[bytes, None]:
         """Used to iterate over the download.
 
         Parameters

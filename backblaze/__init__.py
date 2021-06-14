@@ -2,9 +2,9 @@ import sys
 import asyncio
 import threading
 import time
-import typing
 
 from httpx import AsyncClient, Client
+from typing import Any, Generator, AsyncGenerator, Tuple
 from random import randint
 
 from .base import Base
@@ -90,7 +90,7 @@ class Awaiting(Base, AwaitingHTTP):
 
     @authorize_required
     async def create_key(self, settings: KeySettings
-                         ) -> typing.Tuple[KeyModel, AwaitingKey]:
+                         ) -> Tuple[KeyModel, AwaitingKey]:
         """Used to create a key.
 
         Parameters
@@ -115,7 +115,7 @@ class Awaiting(Base, AwaitingHTTP):
     @authorize_required
     async def keys(self, limit: int = 100,
                    start_key_id: str = None
-                   ) -> typing.AsyncGenerator[typing.Any, None]:
+                   ) -> AsyncGenerator[Any, None]:
         """Used to list keys.
 
         Parameters
@@ -140,8 +140,11 @@ class Awaiting(Base, AwaitingHTTP):
         )
 
         for key in data["keys"]:
-            yield KeyModel(key), self.key(key["applicationKeyId"]), \
+            yield (
+                KeyModel(key),
+                self.key(key["applicationKeyId"]),
                 data["nextApplicationKeyId"]
+            )
 
     def key(self, key_id: str) -> AwaitingKey:
         """Used to interact with key.
@@ -160,7 +163,7 @@ class Awaiting(Base, AwaitingHTTP):
 
     @authorize_required
     async def create_bucket(self, settings: BucketSettings
-                            ) -> typing.Tuple[BucketModel, AwaitingBucket]:
+                            ) -> Tuple[BucketModel, AwaitingBucket]:
         """Used to create a bucket.
 
         Parameters
@@ -185,7 +188,7 @@ class Awaiting(Base, AwaitingHTTP):
 
     @authorize_required
     async def buckets(self, types: list = ["all"]
-                      ) -> typing.AsyncGenerator[BucketModel, AwaitingBucket]:
+                      ) -> AsyncGenerator[BucketModel, AwaitingBucket]:
         """Lists buckets.
 
         Parameters
@@ -324,7 +327,7 @@ class Blocking(Base, BlockingHTTP):
 
     @authorize_required
     def create_key(self, settings: KeySettings
-                   ) -> typing.Tuple[KeyModel, BlockingKey]:
+                   ) -> Tuple[KeyModel, BlockingKey]:
         """Used to create a key.
 
         Parameters
@@ -349,7 +352,7 @@ class Blocking(Base, BlockingHTTP):
     @authorize_required
     def keys(self, limit: int = 100,
              start_key_id: str = None
-             ) -> typing.Generator[KeyModel, AwaitingKey, None]:
+             ) -> Generator[KeyModel, AwaitingKey, None]:
         """Used to list keys.
 
         Parameters
@@ -391,7 +394,7 @@ class Blocking(Base, BlockingHTTP):
 
     @authorize_required
     def create_bucket(self, settings: BucketSettings
-                      ) -> typing.Tuple[BucketModel, BlockingBucket]:
+                      ) -> Tuple[BucketModel, BlockingBucket]:
         """Used to create a bucket.
 
         Parameters
@@ -416,7 +419,7 @@ class Blocking(Base, BlockingHTTP):
 
     @authorize_required
     def buckets(self, types: list = ["all"]
-                ) -> typing.Generator[BucketModel, BlockingBucket, None]:
+                ) -> Generator[BucketModel, BlockingBucket, None]:
         """Lists buckets.
 
         Parameters

@@ -1,4 +1,4 @@
-import typing
+from typing import Any
 
 from ..base import BaseFile
 
@@ -41,7 +41,7 @@ class BlockingFile(BaseFile):
         )
 
     @authorize_required
-    def copy(self, settings: CopyFileSettings) -> typing.Any:
+    def copy(self, settings: CopyFileSettings) -> Any:
         """Used copy a file.
 
         Parameters

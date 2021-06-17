@@ -17,7 +17,8 @@ from ..exceptions import (
 
 
 class BaseHTTP:
-    def handle_resp(self, resp: Response, json: bool = True) -> Union[dict, bytes, None]:
+    def handle_resp(self, resp: Response, json: bool = True
+                    ) -> Union[dict, bytes, None]:
         """Handles resp response.
 
         Parameters

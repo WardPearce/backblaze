@@ -81,7 +81,8 @@ class BlockingBucket(BaseBucket):
 
     @authorize_required
     def file_versions(self, settings: FileSettings = None
-                      ) -> Generator[Tuple[FileModel, BlockingFile, str], None, None]:
+                      ) -> Generator[
+                          Tuple[FileModel, BlockingFile, str], None, None]:
         """Used to list file by version.
 
         Parameters
@@ -128,7 +129,8 @@ class BlockingBucket(BaseBucket):
 
     @authorize_required
     def file_names(self, settings: FileSettings = None
-                   ) -> Generator[Tuple[FileModel, BlockingFile, str], None, None]:
+                   ) -> Generator[
+                       Tuple[FileModel, BlockingFile, str], None, None]:
         """Used to list file by name.
 
         Parameters

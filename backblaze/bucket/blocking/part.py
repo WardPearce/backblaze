@@ -21,7 +21,8 @@ class BlockingParts(BasePart):
     _file: BlockingFile
 
     @authorize_required
-    def list(self, limit: int = 100) -> Generator[Tuple[PartModel, int], int, None]:
+    def list(self, limit: int = 100
+             ) -> Generator[Tuple[PartModel, int], int, None]:
         """Used to list parts.
 
         Yields

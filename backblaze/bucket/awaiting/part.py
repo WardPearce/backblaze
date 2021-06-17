@@ -22,7 +22,8 @@ class AwaitingParts(BasePart):
     _file: AwaitingFile
 
     @authorize_required
-    async def list(self, limit: int = 100) -> AsyncGenerator[Tuple[PartModel, int], None]:
+    async def list(self, limit: int = 100
+                   ) -> AsyncGenerator[Tuple[PartModel, int], None]:
         """Used to list parts.
 
         Yields

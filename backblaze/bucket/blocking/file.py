@@ -41,7 +41,8 @@ class BlockingFile(BaseFile):
         )
 
     @authorize_required
-    def copy(self, settings: CopyFileSettings) -> Tuple[FileModel, "BlockingFile"]:
+    def copy(self, settings: CopyFileSettings
+             ) -> Tuple[FileModel, "BlockingFile"]:
         """Used copy a file.
 
         Parameters

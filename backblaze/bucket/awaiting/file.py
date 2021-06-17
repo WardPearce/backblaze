@@ -46,7 +46,8 @@ class AwaitingFile(BaseFile):
         )
 
     @authorize_required
-    async def copy(self, settings: CopyFileSettings) -> Tuple[FileModel, "AwaitingFile"]:
+    async def copy(self, settings: CopyFileSettings
+                   ) -> Tuple[FileModel, "AwaitingFile"]:
         """Used copy a file.
 
         Parameters

@@ -80,7 +80,9 @@ class AwaitingBucket(BaseBucket):
 
     @authorize_required
     async def file_versions(self, settings: FileSettings = None
-                            ) -> AsyncGenerator[Tuple[FileModel, AwaitingFile, str, str], None]:
+                            ) -> AsyncGenerator[
+                                Tuple[FileModel, AwaitingFile, str, str],
+                                None]:
         """Used to list file by version.
 
         Parameters
@@ -128,7 +130,8 @@ class AwaitingBucket(BaseBucket):
 
     @authorize_required
     async def file_names(self, settings: FileSettings = None
-                         ) -> AsyncGenerator[Tuple[FileModel, AwaitingFile, str], None]:
+                         ) -> AsyncGenerator[
+                             Tuple[FileModel, AwaitingFile, str], None]:
         """Used to list file by name.
 
         Parameters

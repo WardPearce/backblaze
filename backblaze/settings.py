@@ -308,6 +308,7 @@ class PartSettings:
                     **cast(dict, self.payload["fileInfo"])
                 }
 
+
 class CopyFileSettings:
     """
     Parameters

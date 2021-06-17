@@ -121,7 +121,8 @@ class Awaiting(Base, AwaitingHTTP):
     @authorize_required
     async def keys(self, limit: int = 100,
                    start_key_id: str = None
-                   ) -> AsyncGenerator[Tuple[KeyModel, AwaitingKey, str], None]:
+                   ) -> AsyncGenerator[
+                       Tuple[KeyModel, AwaitingKey, str], None]:
         """Used to list keys.
 
         Parameters
@@ -144,7 +145,10 @@ class Awaiting(Base, AwaitingHTTP):
             dict,
             await self._post(
                 url=self._routes.key.list,
-                json={"maxKeyCount": limit, "startApplicationKeyId": start_key_id}
+                json={
+                    "maxKeyCount": limit,
+                    "startApplicationKeyId": start_key_id
+                }
             )
         )
 
@@ -202,7 +206,8 @@ class Awaiting(Base, AwaitingHTTP):
 
     @authorize_required
     async def buckets(self, types: list = ["all"]
-                      ) -> AsyncGenerator[Tuple[BucketModel, AwaitingBucket], None]:
+                      ) -> AsyncGenerator[
+                          Tuple[BucketModel, AwaitingBucket], None]:
         """Lists buckets.
 
         Parameters
@@ -396,7 +401,10 @@ class Blocking(Base, BlockingHTTP):
             dict,
             self._post(
                 url=self._routes.key.list,
-                json={"maxKeyCount": limit, "startApplicationKeyId": start_key_id}
+                json={
+                    "maxKeyCount": limit,
+                    "startApplicationKeyId": start_key_id
+                }
             )
         )
 

@@ -81,8 +81,8 @@ class BlockingBucket(BaseBucket):
 
     @authorize_required
     def file_versions(self, settings: FileSettings = None
-                      ) -> Generator[
-                          Tuple[FileModel, BlockingFile, str], None, None]:
+                      ) -> Generator[Tuple[
+                          FileModel, BlockingFile, str, str], None, None]:
         """Used to list file by version.
 
         Parameters
@@ -98,7 +98,7 @@ class BlockingBucket(BaseBucket):
         str
             Next file name.
         str
-            Next file ID.
+            Next file ID
         """
 
         json = {
@@ -124,7 +124,8 @@ class BlockingBucket(BaseBucket):
             yield (
                 FileModel(file),
                 self.file(file["fileId"]),
-                file["fileName"]
+                file["fileName"],
+                file["nextFileId"]
             )
 
     @authorize_required

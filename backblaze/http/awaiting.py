@@ -61,7 +61,8 @@ class AwaitingHTTP(BaseHTTP):
         )
 
     async def _stream(self, *args, **kwargs) -> AsyncGenerator[bytes, None]:
-        async with self._client.stream("GET", *args, **kwargs) as resp:
+        async with self._client.stream(  # type: ignore
+                "GET", *args, **kwargs) as resp:
             resp.raise_for_status()
 
             async for chunk in resp.aiter_bytes():

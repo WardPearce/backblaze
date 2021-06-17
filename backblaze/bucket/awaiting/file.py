@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 
 
 class AwaitingFile(BaseFile):
-    _context: Awaiting
+    _context: "Awaiting"
 
     def parts(self, part_number: int = 0) -> AwaitingParts:
         """Used to upload a parts.

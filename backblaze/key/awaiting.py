@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 class AwaitingKey(BaseKey):
-    _context: Awaiting
+    _context: "Awaiting"
 
     @authorize_required
     async def delete(self) -> KeyModel:

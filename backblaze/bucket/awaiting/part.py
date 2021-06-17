@@ -18,8 +18,8 @@ if TYPE_CHECKING:
 
 
 class AwaitingParts(BasePart):
-    _context: Awaiting
-    _file: AwaitingFile
+    _context: "Awaiting"
+    _file: "AwaitingFile"
 
     @authorize_required
     async def list(self, limit: int = 100

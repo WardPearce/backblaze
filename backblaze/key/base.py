@@ -5,7 +5,7 @@ if TYPE_CHECKING:
 
 
 class BaseKey:
-    def __init__(self, _context: Union[Awaiting, Blocking],
+    def __init__(self, _context: Union["Awaiting", "Blocking"],
                  key_id: str) -> None:
         self._context = _context
         self.key_id = key_id

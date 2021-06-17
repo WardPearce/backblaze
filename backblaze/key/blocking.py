@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 class BlockingKey(BaseKey):
-    _context: Blocking
+    _context: "Blocking"
 
     @authorize_required
     def delete(self) -> KeyModel:

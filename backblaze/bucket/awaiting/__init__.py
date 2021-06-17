@@ -27,7 +27,7 @@ if TYPE_CHECKING:
 
 
 class AwaitingBucket(BaseBucket):
-    _context: Awaiting
+    _context: "Awaiting"
 
     @authorize_required
     async def update(self, settings: BucketUpdateSettings) -> BucketModel:

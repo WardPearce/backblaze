@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 
 
 class BaseBucket:
-    def __init__(self, _context: Union[Awaiting, Blocking],
+    def __init__(self, _context: Union["Awaiting", "Blocking"],
                  bucket_id: str) -> None:
         self._context = _context
         self.bucket_id = bucket_id
@@ -23,8 +23,8 @@ class BaseFile(BaseBucket):
 
 class BasePart:
     def __init__(self,
-                 file: Union[AwaitingFile, BlockingFile],
-                 _context: Union[Awaiting, Blocking],
+                 file: Union["AwaitingFile", "BlockingFile"],
+                 _context: Union["Awaiting", "Blocking"],
                  part_number: int = 0) -> None:
 
         self._file = file

@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 
 
 class BlockingBucket(BaseBucket):
-    _context: Blocking
+    _context: "Blocking"
 
     @authorize_required
     def update(self, settings: BucketUpdateSettings) -> BucketModel:

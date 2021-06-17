@@ -17,8 +17,8 @@ if TYPE_CHECKING:
 
 
 class BlockingParts(BasePart):
-    _context: Blocking
-    _file: BlockingFile
+    _context: "Blocking"
+    _file: "BlockingFile"
 
     @authorize_required
     def list(self, limit: int = 100

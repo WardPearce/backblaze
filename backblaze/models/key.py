@@ -21,9 +21,12 @@ class KeyModel:
         self.application_key_id = data["applicationKeyId"]
         self.capabilities = data["capabilities"]
         self.account_id = data["accountId"]
-        self.expires = datetime.utcfromtimestamp(
-            data["expirationTimestamp"] / 1000
-        ) if "expirationTimestamp" in data else None
+        if "expirationTimestamp" in data:
+            self.expires = datetime.utcfromtimestamp(
+                data["expirationTimestamp"] / 1000
+            )
+        else:
+            self.expires = None
         self.bucket_id = data["bucketId"]
         self.name_prefix = data["namePrefix"]
         self.options = data["options"]

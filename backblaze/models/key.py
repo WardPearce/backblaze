@@ -21,7 +21,8 @@ class KeyModel:
         self.application_key_id = data["applicationKeyId"]
         self.capabilities = data["capabilities"]
         self.account_id = data["accountId"]
-        if "expirationTimestamp" in data:
+        if ("expirationTimestamp" in data and
+                data["expirationTimestamp"] is not None):
             self.expires = datetime.utcfromtimestamp(
                 data["expirationTimestamp"] / 1000
             )

@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from typing import Union
 
 from .models.file import UploadUrlModel
 
@@ -43,7 +44,7 @@ class UploadUrlCache:
             self.upload_cache = Cache.upload_parts_urls
             self.index = bucket_id + file_id
 
-    def find(self) -> UploadUrlModel:
+    def find(self) -> Union[None, "UploadUrlCache"]:
         """Looks for cached item.
 
         Returns

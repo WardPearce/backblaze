@@ -1,6 +1,6 @@
 from aiofile import AIOFile, Reader
 from hashlib import sha1
-from typing import AsyncGenerator
+from typing import cast, AsyncGenerator, TYPE_CHECKING, Tuple
 
 from ..base import BasePart
 
@@ -12,10 +12,17 @@ from ...utils import UploadUrlCache
 
 from ...decorators import authorize_required
 
+if TYPE_CHECKING:
+    from ... import Awaiting
+    from .file import AwaitingFile
+
 
 class AwaitingParts(BasePart):
+    _context: Awaiting
+    _file: AwaitingFile
+
     @authorize_required
-    async def list(self, limit: int = 100) -> AsyncGenerator[PartModel, int]:
+    async def list(self, limit: int = 100) -> AsyncGenerator[Tuple[PartModel, int], None]:
         """Used to list parts.
 
         Yields
@@ -27,15 +34,18 @@ class AwaitingParts(BasePart):
             Part limit.
         """
 
-        data = await self.context._post(
-            json={
-                "fileId": self._file.file_id,
-                "startPartNumber":
-                self.part_number if self.part_number > 0 else 1,
-                "maxPartCount": limit
-            },
-            include_account=False,
-            url=self.context._routes.file.list_parts
+        data = cast(
+            dict,
+            await self._context._post(
+                json={
+                    "fileId": self._file.file_id,
+                    "startPartNumber":
+                    self.part_number if self.part_number > 0 else 1,
+                    "maxPartCount": limit
+                },
+                include_account=False,
+                url=self._context._routes.file.list_parts
+            )
         )
 
         for part in data["parts"]:
@@ -54,8 +64,8 @@ class AwaitingParts(BasePart):
         PartModel
         """
 
-        return PartModel(await self.context._post(
-            url=self.context._routes.file.copy_part,
+        return PartModel(await self._context._post(
+            url=self._context._routes.file.copy_part,
             json={
                 "sourceFileId": self._file.file_id,
                 "partNumber":
@@ -87,7 +97,7 @@ class AwaitingParts(BasePart):
         self.sha1s_append(sha1_str)
 
         return PartModel(
-            await self.context._post(
+            await self._context._post(
                 headers={
                     "Content-Length": str(len(data)),
                     "X-Bz-Part-Number": str(self.part_number),
@@ -111,7 +121,7 @@ class AwaitingParts(BasePart):
 
         async with AIOFile(pathway, "rb") as afp:
             async for chunk in Reader(afp,
-                                      chunk_size=self.context.chunk_size):
+                                      chunk_size=self._context.chunk_size):
                 await self.data(chunk)
 
     @authorize_required
@@ -130,8 +140,8 @@ class AwaitingParts(BasePart):
         ).delete()
 
         return FileModel(
-            await self.context._post(
-                url=self.context._routes.file.finish_large,
+            await self._context._post(
+                url=self._context._routes.file.finish_large,
                 json={
                     "fileId": self._file.file_id,
                     "partSha1Array": self.sha1s

@@ -1,5 +1,5 @@
 from hashlib import sha1
-from typing import Generator
+from typing import Generator, Tuple, cast, TYPE_CHECKING
 
 from ..base import BasePart
 
@@ -11,10 +11,17 @@ from ...utils import UploadUrlCache
 
 from ...decorators import authorize_required
 
+if TYPE_CHECKING:
+    from ... import Blocking
+    from .file import BlockingFile
+
 
 class BlockingParts(BasePart):
+    _context: Blocking
+    _file: BlockingFile
+
     @authorize_required
-    def list(self, limit: int = 100) -> Generator[PartModel, int, None]:
+    def list(self, limit: int = 100) -> Generator[Tuple[PartModel, int], int, None]:
         """Used to list parts.
 
         Yields
@@ -26,15 +33,18 @@ class BlockingParts(BasePart):
             Part limit.
         """
 
-        data = self.context._post(
-            json={
-                "fileId": self._file.file_id,
-                "startPartNumber":
-                self.part_number if self.part_number > 0 else 1,
-                "maxPartCount": limit
-            },
-            include_account=False,
-            url=self.context._routes.file.list_parts
+        data = cast(
+            dict,
+            self._context._post(
+                json={
+                    "fileId": self._file.file_id,
+                    "startPartNumber":
+                    self.part_number if self.part_number > 0 else 1,
+                    "maxPartCount": limit
+                },
+                include_account=False,
+                url=self._context._routes.file.list_parts
+            )
         )
 
         for part in data["parts"]:
@@ -53,8 +63,8 @@ class BlockingParts(BasePart):
         PartModel
         """
 
-        return PartModel(self.context._post(
-            url=self.context._routes.file.copy_part,
+        return PartModel(self._context._post(
+            url=self._context._routes.file.copy_part,
             json={
                 "sourceFileId": self._file.file_id,
                 "partNumber":
@@ -86,7 +96,7 @@ class BlockingParts(BasePart):
         self.sha1s_append(sha1_str)
 
         return PartModel(
-            self.context._post(
+            self._context._post(
                 headers={
                     "Content-Length": str(len(data)),
                     "X-Bz-Part-Number": str(self.part_number),
@@ -112,7 +122,7 @@ class BlockingParts(BasePart):
             chunk = True
 
             while chunk:
-                chunk = fp.read(self.context.chunk_size)
+                chunk = fp.read(self._context.chunk_size)
                 if chunk:
                     self.data(chunk)
 
@@ -132,8 +142,8 @@ class BlockingParts(BasePart):
         ).delete()
 
         return FileModel(
-            self.context._post(
-                url=self.context._routes.file.finish_large,
+            self._context._post(
+                url=self._context._routes.file.finish_large,
                 json={
                     "fileId": self._file.file_id,
                     "partSha1Array": self.sha1s

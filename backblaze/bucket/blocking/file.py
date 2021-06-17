@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Tuple, cast
 
 from ..base import BaseFile
 
@@ -36,12 +36,12 @@ class BlockingFile(BaseFile):
 
         return BlockingParts(
             self,
-            self.context,
+            self._context,
             part_number
         )
 
     @authorize_required
-    def copy(self, settings: CopyFileSettings) -> Any:
+    def copy(self, settings: CopyFileSettings) -> Tuple[FileModel, "BlockingFile"]:
         """Used copy a file.
 
         Parameters
@@ -54,14 +54,19 @@ class BlockingFile(BaseFile):
         BlockingFile
         """
 
-        data = self.context._post(
-            url=self.context._routes.file.copy,
-            json={"sourceFileId": self.file_id, **settings.payload},
-            include_account=False
+        data = cast(
+            dict,
+            self._context._post(
+                url=self._context._routes.file.copy,
+                json={"sourceFileId": self.file_id, **settings.payload},
+                include_account=False
+            )
         )
 
-        return FileModel(data), BlockingFile(
-            data["fileId"], self.context, self.bucket_id)
+        return (
+            FileModel(data),
+            BlockingFile(data["fileId"], self._context, self.bucket_id)
+        )
 
     @authorize_required
     def cancel(self) -> PartCancelModel:
@@ -76,8 +81,8 @@ class BlockingFile(BaseFile):
         UploadUrlCache(self.bucket_id, self.file_id).delete()
 
         return PartCancelModel(
-            self.context._post(
-                url=self.context._routes.file.cancel_large,
+            self._context._post(
+                url=self._context._routes.file.cancel_large,
                 json={"fileId": self.file_id},
                 include_account=False
             )
@@ -94,8 +99,8 @@ class BlockingFile(BaseFile):
         """
 
         return FileModel(
-            self.context._post(
-                url=self.context._routes.file.get,
+            self._context._post(
+                url=self._context._routes.file.get,
                 json={"fileId": self.file_id},
                 include_account=False
             )
@@ -121,8 +126,8 @@ class BlockingFile(BaseFile):
             name = (self.get()).file_name
 
         return FileDeleteModel(
-            self.context._post(
-                url=self.context._routes.file.delete,
+            self._context._post(
+                url=self._context._routes.file.delete,
                 json={"fileName": name, "fileId": self.file_id},
                 include_account=False
             )
@@ -146,11 +151,14 @@ class BlockingFile(BaseFile):
 
         upload_url = cache.find()
         if upload_url:
-            return upload_url
+            return cast(
+                UploadUrlModel,
+                upload_url
+            )
 
         return cache.save(UploadUrlModel(
-            self.context._post(
-                url=self.context._routes.upload.upload_part,
+            self._context._post(
+                url=self._context._routes.upload.upload_part,
                 json={
                     "fileId": self.file_id
                 },
@@ -178,12 +186,15 @@ class BlockingFile(BaseFile):
             params = {"fileId": self.file_id, **settings.parameters}
             headers = settings.headers
 
-        return self.context._get(
-            url=self.context._routes.file.download_by_id,
-            headers=headers,
-            params=params,
-            resp_json=False,
-            include_account=False,
+        return cast(
+            bytes,
+            self._context._get(
+                url=self._context._routes.file.download_by_id,
+                headers=headers,
+                params=params,
+                resp_json=False,
+                include_account=False,
+            )
         )
 
     def download_iterate(self) -> None:

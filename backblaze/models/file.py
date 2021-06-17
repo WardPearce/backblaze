@@ -83,8 +83,8 @@ class UploadUrlModel:
     def __init__(self, data) -> None:
         self.authorization_token = data["authorizationToken"]
         self.upload_url = data["uploadUrl"]
-        self.file_id = data["fileId"] if "fileId" in data else None
-        self.bucket_id = data["bucketId"] if "bucketId" in data else None
+        self.file_id = data.get("fileId")
+        self.bucket_id = data.get("bucketId")
 
 
 class PartCancelModel:

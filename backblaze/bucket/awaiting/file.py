@@ -1,6 +1,6 @@
 import aiofiles
 
-from typing import Any, AsyncGenerator
+from typing import AsyncGenerator, Tuple, TYPE_CHECKING, cast
 
 from ..base import BaseFile
 
@@ -19,8 +19,13 @@ from ...utils import UploadUrlCache
 
 from ...decorators import authorize_required
 
+if TYPE_CHECKING:
+    from ... import Awaiting
+
 
 class AwaitingFile(BaseFile):
+    _context: Awaiting
+
     def parts(self, part_number: int = 0) -> AwaitingParts:
         """Used to upload a parts.
 
@@ -36,12 +41,12 @@ class AwaitingFile(BaseFile):
 
         return AwaitingParts(
             self,
-            self.context,
+            self._context,
             part_number
         )
 
     @authorize_required
-    async def copy(self, settings: CopyFileSettings) -> Any:
+    async def copy(self, settings: CopyFileSettings) -> Tuple[FileModel, "AwaitingFile"]:
         """Used copy a file.
 
         Parameters
@@ -54,14 +59,19 @@ class AwaitingFile(BaseFile):
         AwaitingFile
         """
 
-        data = await self.context._post(
-            url=self.context._routes.file.copy,
-            json={"sourceFileId": self.file_id, **settings.payload},
-            include_account=False
+        data = cast(
+            dict,
+            await self._context._post(
+                url=self._context._routes.file.copy,
+                json={"sourceFileId": self.file_id, **settings.payload},
+                include_account=False
+            )
         )
 
-        return FileModel(data), AwaitingFile(
-            data["fileId"], self.context, self.bucket_id)
+        return (
+            FileModel(data),
+            AwaitingFile(data["fileId"], self._context, self.bucket_id)
+        )
 
     @authorize_required
     async def cancel(self) -> PartCancelModel:
@@ -76,8 +86,8 @@ class AwaitingFile(BaseFile):
         UploadUrlCache(self.bucket_id, self.file_id).delete()
 
         return PartCancelModel(
-            await self.context._post(
-                url=self.context._routes.file.cancel_large,
+            await self._context._post(
+                url=self._context._routes.file.cancel_large,
                 json={"fileId": self.file_id},
                 include_account=False
             )
@@ -94,8 +104,8 @@ class AwaitingFile(BaseFile):
         """
 
         return FileModel(
-            await self.context._post(
-                url=self.context._routes.file.get,
+            await self._context._post(
+                url=self._context._routes.file.get,
                 json={"fileId": self.file_id},
                 include_account=False
             )
@@ -121,8 +131,8 @@ class AwaitingFile(BaseFile):
             name = (await self.get()).file_name
 
         return FileDeleteModel(
-            await self.context._post(
-                url=self.context._routes.file.delete,
+            await self._context._post(
+                url=self._context._routes.file.delete,
                 json={"fileName": name, "fileId": self.file_id},
                 include_account=False
             )
@@ -146,11 +156,14 @@ class AwaitingFile(BaseFile):
 
         upload_url = cache.find()
         if upload_url:
-            return upload_url
+            return cast(
+                UploadUrlModel,
+                upload_url
+            )
 
         return cache.save(UploadUrlModel(
-            await self.context._post(
-                url=self.context._routes.upload.upload_part,
+            await self._context._post(
+                url=self._context._routes.upload.upload_part,
                 json={
                     "fileId": self.file_id
                 },
@@ -178,12 +191,15 @@ class AwaitingFile(BaseFile):
             params = {"fileId": self.file_id, **settings.parameters}
             headers = settings.headers
 
-        return await self.context._get(
-            url=self.context._routes.file.download_by_id,
-            headers=headers,
-            params=params,
-            resp_json=False,
-            include_account=False,
+        return cast(
+            bytes,
+            await self._context._get(
+                url=self._context._routes.file.download_by_id,
+                headers=headers,
+                params=params,
+                resp_json=False,
+                include_account=False,
+            )
         )
 
     @authorize_required
@@ -212,8 +228,8 @@ class AwaitingFile(BaseFile):
             params = {"fileId": self.file_id, **settings.parameters}
             headers = settings.headers
 
-        async for chunk in self.context._stream(
-            url=self.context._routes.file.download_by_id,
+        async for chunk in self._context._stream(
+            url=self._context._routes.file.download_by_id,
             headers=headers,
             params=params,
         ):

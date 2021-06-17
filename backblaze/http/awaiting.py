@@ -1,13 +1,19 @@
-from typing import Any, AsyncGenerator
+from typing import AsyncGenerator, Callable, Union
 from asyncio import sleep
+from httpx import AsyncClient
 
 from .base import BaseHTTP
+from ..exceptions import RequestAttemptsFailed
 
 
 class AwaitingHTTP(BaseHTTP):
+    authorize: Callable
+    account_id: str
+    _client: AsyncClient
+
     async def __handle(self, request, resp_json: bool = True,
                        include_account: bool = True,
-                       *args, **kwargs) -> Any:
+                       *args, **kwargs) -> Union[dict, bytes, None]:
 
         if include_account:
             if "json" in kwargs:
@@ -15,7 +21,7 @@ class AwaitingHTTP(BaseHTTP):
             else:
                 kwargs["json"] = {"accountId": self.account_id}
 
-        for _ in range(0, 2):
+        for _ in range(0, 3):
             resp = await request(*args, **kwargs)
             if resp.status_code == 401:
                 await self.authorize()
@@ -30,9 +36,11 @@ class AwaitingHTTP(BaseHTTP):
                     resp_json,
                 )
 
+        raise RequestAttemptsFailed()
+
     async def _get(self, resp_json: bool = True,
                    include_account: bool = True,
-                   *args, **kwargs) -> Any:
+                   *args, **kwargs) -> Union[dict, bytes, None]:
         return await self.__handle(
             self._client.get,
             resp_json,
@@ -43,7 +51,7 @@ class AwaitingHTTP(BaseHTTP):
 
     async def _post(self, resp_json: bool = True,
                     include_account: bool = True,
-                    *args, **kwargs) -> Any:
+                    *args, **kwargs) -> Union[dict, bytes, None]:
         return await self.__handle(
             self._client.post,
             resp_json,

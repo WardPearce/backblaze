@@ -23,6 +23,12 @@ class BadRequest(BackblazeException):
         super().__init__(msg, *args, **kwargs)
 
 
+class RequestAttemptsFailed(BackblazeException):
+    def __init__(self, msg="After 3 attempts, request didn't finish",
+                 *args, **kwargs) -> None:
+        super().__init__(msg=msg, *args, **kwargs)
+
+
 class UnAuthorized(BackblazeException):
     """The code unauthorized means that the application key is bad.
     """

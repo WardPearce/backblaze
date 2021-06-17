@@ -36,6 +36,8 @@ class AwaitingHTTP(BaseHTTP):
                     resp_json,
                 )
 
+        print(resp.status_code)  # type: ignore
+
         raise RequestAttemptsFailed()
 
     async def _get(self, resp_json: bool = True,

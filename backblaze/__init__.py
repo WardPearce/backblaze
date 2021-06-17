@@ -4,7 +4,7 @@ import threading
 import time
 
 from httpx import AsyncClient, Client
-from typing import Any, Generator, AsyncGenerator, Tuple
+from typing import Generator, AsyncGenerator, Tuple, cast
 from random import randint
 
 from .base import Base
@@ -76,16 +76,19 @@ class Awaiting(Base, AwaitingHTTP):
             params = settings.parameters
             headers = settings.headers
 
-        return await self._get(
-            url="{}/{}/{}".format(
-                self._routes.download.file,
-                bucket_name,
-                file_name
-            ),
-            headers=headers,
-            params=params,
-            resp_json=False,
-            include_account=False
+        return cast(
+            bytes,
+            await self._get(
+                url="{}/{}/{}".format(
+                    self._routes.download.file,
+                    bucket_name,
+                    file_name
+                ),
+                headers=headers,
+                params=params,
+                resp_json=False,
+                include_account=False
+            )
         )
 
     @authorize_required
@@ -105,9 +108,12 @@ class Awaiting(Base, AwaitingHTTP):
         AwaitingKey
         """
 
-        data = await self._post(
-            json=settings.payload,
-            url=self._routes.key.create
+        data = cast(
+            dict,
+            await self._post(
+                json=settings.payload,
+                url=self._routes.key.create
+            )
         )
 
         return KeyModel(data), self.key(data["applicationKeyId"])
@@ -115,7 +121,8 @@ class Awaiting(Base, AwaitingHTTP):
     @authorize_required
     async def keys(self, limit: int = 100,
                    start_key_id: str = None
-                   ) -> AsyncGenerator[Any, None]:
+                   ) -> AsyncGenerator[
+                       Tuple[KeyModel, AwaitingKey, str], None]:
         """Used to list keys.
 
         Parameters
@@ -134,9 +141,15 @@ class Awaiting(Base, AwaitingHTTP):
             Next application key ID.
         """
 
-        data = await self._post(
-            url=self._routes.key.list,
-            json={"maxKeyCount": limit, "startApplicationKeyId": start_key_id}
+        data = cast(
+            dict,
+            await self._post(
+                url=self._routes.key.list,
+                json={
+                    "maxKeyCount": limit,
+                    "startApplicationKeyId": start_key_id
+                }
+            )
         )
 
         for key in data["keys"]:
@@ -179,16 +192,22 @@ class Awaiting(Base, AwaitingHTTP):
             Used to interact with a bucket.
         """
 
-        data = BucketModel(await self._post(
-            url=self._routes.bucket.create,
-            json=settings.payload
-        ))
+        data = BucketModel(
+            cast(
+                dict,
+                await self._post(
+                    url=self._routes.bucket.create,
+                    json=settings.payload
+                )
+            )
+        )
 
         return data, self.bucket(data.bucket_id)
 
     @authorize_required
     async def buckets(self, types: list = ["all"]
-                      ) -> AsyncGenerator[BucketModel, AwaitingBucket]:
+                      ) -> AsyncGenerator[
+                          Tuple[BucketModel, AwaitingBucket], None]:
         """Lists buckets.
 
         Parameters
@@ -204,9 +223,12 @@ class Awaiting(Base, AwaitingHTTP):
             Used for interacting with bucket.
         """
 
-        data = await self._post(
-            url=self._routes.bucket.list,
-            json={"bucketTypes": types}
+        data = cast(
+            dict,
+            await self._post(
+                url=self._routes.bucket.list,
+                json={"bucketTypes": types}
+            )
         )
 
         for bucket in data["buckets"]:
@@ -313,16 +335,19 @@ class Blocking(Base, BlockingHTTP):
             params = settings.parameters
             headers = settings.headers
 
-        return self._get(
-            url="{}/{}/{}".format(
-                self._routes.download.file,
-                bucket_name,
-                file_name
-            ),
-            headers=headers,
-            params=params,
-            resp_json=False,
-            include_account=False
+        return cast(
+            bytes,
+            self._get(
+                url="{}/{}/{}".format(
+                    self._routes.download.file,
+                    bucket_name,
+                    file_name
+                ),
+                headers=headers,
+                params=params,
+                resp_json=False,
+                include_account=False
+            )
         )
 
     @authorize_required
@@ -342,9 +367,12 @@ class Blocking(Base, BlockingHTTP):
         BlockingKey
         """
 
-        data = self._post(
-            json=settings.payload,
-            url=self._routes.key.create
+        data = cast(
+            dict,
+            self._post(
+                json=settings.payload,
+                url=self._routes.key.create
+            )
         )
 
         return KeyModel(data), self.key(data["applicationKeyId"])
@@ -352,7 +380,7 @@ class Blocking(Base, BlockingHTTP):
     @authorize_required
     def keys(self, limit: int = 100,
              start_key_id: str = None
-             ) -> Generator[KeyModel, AwaitingKey, None]:
+             ) -> Generator[Tuple[KeyModel, BlockingKey], None, None]:
         """Used to list keys.
 
         Parameters
@@ -366,12 +394,18 @@ class Blocking(Base, BlockingHTTP):
         -------
         KeyModel
             Holds details on key.
-        AwaitingKey
+        BlockingKey
         """
 
-        data = self._post(
-            url=self._routes.key.list,
-            json={"maxKeyCount": limit, "startApplicationKeyId": start_key_id}
+        data = cast(
+            dict,
+            self._post(
+                url=self._routes.key.list,
+                json={
+                    "maxKeyCount": limit,
+                    "startApplicationKeyId": start_key_id
+                }
+            )
         )
 
         for key in data["keys"]:
@@ -410,16 +444,21 @@ class Blocking(Base, BlockingHTTP):
             Used to interact with a bucket.
         """
 
-        data = BucketModel(self._post(
-            url=self._routes.bucket.create,
-            json=settings.payload,
-        ))
+        data = BucketModel(
+            cast(
+                dict,
+                self._post(
+                    url=self._routes.bucket.create,
+                    json=settings.payload,
+                )
+            )
+        )
 
         return data, self.bucket(data.bucket_id)
 
     @authorize_required
     def buckets(self, types: list = ["all"]
-                ) -> Generator[BucketModel, BlockingBucket, None]:
+                ) -> Generator[Tuple[BucketModel, BlockingBucket], None, None]:
         """Lists buckets.
 
         Parameters
@@ -435,9 +474,12 @@ class Blocking(Base, BlockingHTTP):
             Used for interacting with bucket.
         """
 
-        data = self._post(
-            url=self._routes.bucket.list,
-            json={"bucketTypes": types}
+        data = cast(
+            dict,
+            self._post(
+                url=self._routes.bucket.list,
+                json={"bucketTypes": types}
+            )
         )
 
         for bucket in data["buckets"]:

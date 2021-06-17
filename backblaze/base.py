@@ -13,7 +13,7 @@ from .utils import format_route_name
 from .cache import Cache
 
 
-__version__ = "0.0.8"
+__version__ = "0.1.0"
 __url__ = "https://backblaze.readthedocs.io/en/latest/"
 __description__ = "Wrapper for Backblaze's B2."
 __author__ = "WardPearce"

@@ -1,6 +1,16 @@
+from typing import TYPE_CHECKING, Union
+
+if TYPE_CHECKING:
+    from .awaiting.file import AwaitingFile
+    from .blocking.file import BlockingFile
+
+    from .. import Awaiting, Blocking
+
+
 class BaseBucket:
-    def __init__(self, context: object, bucket_id: str) -> None:
-        self.context = context
+    def __init__(self, _context: Union["Awaiting", "Blocking"],
+                 bucket_id: str) -> None:
+        self._context = _context
         self.bucket_id = bucket_id
 
 
@@ -12,10 +22,13 @@ class BaseFile(BaseBucket):
 
 
 class BasePart:
-    def __init__(self, file: object, context: object,
+    def __init__(self,
+                 file: Union["AwaitingFile", "BlockingFile"],
+                 _context: Union["Awaiting", "Blocking"],
                  part_number: int = 0) -> None:
+
         self._file = file
-        self.context = context
+        self._context = _context
         self.part_number = part_number
         self.sha1s = []
         self.sha1s_append = self.sha1s.append

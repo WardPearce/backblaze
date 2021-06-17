@@ -1,13 +1,19 @@
-from typing import Any
+from typing import Callable, Union
 from time import sleep
+from httpx import Client
 
 from .base import BaseHTTP
+from ..exceptions import RequestAttemptsFailed
 
 
 class BlockingHTTP(BaseHTTP):
+    authorize: Callable
+    account_id: str
+    _client: Client
+
     def __handle(self, request, resp_json: bool = True,
                  include_account: bool = True,
-                 *args, **kwargs) -> Any:
+                 *args, **kwargs) -> Union[dict, bytes, None]:
 
         if include_account:
             if "json" in kwargs:
@@ -15,7 +21,7 @@ class BlockingHTTP(BaseHTTP):
             else:
                 kwargs["json"] = {"accountId": self.account_id}
 
-        for _ in range(0, 2):
+        for _ in range(0, 3):
             resp = request(*args, **kwargs)
             if resp.status_code == 401:
                 self.authorize()
@@ -30,9 +36,11 @@ class BlockingHTTP(BaseHTTP):
                     resp_json,
                 )
 
+        raise RequestAttemptsFailed()
+
     def _get(self, resp_json: bool = True,
              include_account: bool = True,
-             *args, **kwargs) -> Any:
+             *args, **kwargs) -> Union[dict, bytes, None]:
         return self.__handle(
             self._client.get,
             resp_json,
@@ -43,7 +51,7 @@ class BlockingHTTP(BaseHTTP):
 
     def _post(self, resp_json: bool = True,
               include_account: bool = True,
-              *args, **kwargs) -> Any:
+              *args, **kwargs) -> Union[dict, bytes, None]:
         return self.__handle(
             self._client.post,
             resp_json,

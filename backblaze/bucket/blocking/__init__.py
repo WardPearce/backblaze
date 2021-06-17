@@ -1,7 +1,7 @@
 import os
 
 from hashlib import sha1
-from typing import Tuple, Generator, Any
+from typing import Tuple, Generator, TYPE_CHECKING, cast
 
 from ..base import BaseBucket
 
@@ -21,8 +21,13 @@ from ...utils import UploadUrlCache
 
 from ...decorators import authorize_required
 
+if TYPE_CHECKING:
+    from ... import Blocking
+
 
 class BlockingBucket(BaseBucket):
+    _context: "Blocking"
+
     @authorize_required
     def update(self, settings: BucketUpdateSettings) -> BucketModel:
         """Updates bucket details.
@@ -37,9 +42,14 @@ class BlockingBucket(BaseBucket):
         """
 
         return BucketModel(
-            self.context._post(
-                url=self.context._routes.bucket.update,
-                json={"bucketId": self.bucket_id, **settings.payload}
+            # Thanks Mark#3118 (137073073168973824)
+            # Pyright is a bit annoying, but using cast is a solution.
+            cast(
+                dict,
+                self._context._post(
+                    url=self._context._routes.bucket.update,
+                    json={"bucketId": self.bucket_id, **settings.payload}
+                )
             )
         )
 
@@ -58,17 +68,21 @@ class BlockingBucket(BaseBucket):
         BlockingFile
         """
 
-        data = self.context._post(
-            url=self.context._routes.file.start_large,
-            json={"bucketId": self.bucket_id, **settings.payload},
-            include_account=False
+        data = cast(
+            dict,
+            self._context._post(
+                url=self._context._routes.file.start_large,
+                json={"bucketId": self.bucket_id, **settings.payload},
+                include_account=False
+            )
         )
 
         return FileModel(data), self.file(data["fileId"])
 
     @authorize_required
     def file_versions(self, settings: FileSettings = None
-                      ) -> Generator[Any, None, None]:
+                      ) -> Generator[Tuple[
+                          FileModel, BlockingFile, str, str], None, None]:
         """Used to list file by version.
 
         Parameters
@@ -84,7 +98,7 @@ class BlockingBucket(BaseBucket):
         str
             Next file name.
         str
-            Next file ID.
+            Next file ID
         """
 
         json = {
@@ -97,22 +111,27 @@ class BlockingBucket(BaseBucket):
                 **settings.payload
             }
 
-        data = self.context._post(
-            url=self.context._routes.file.versions,
-            json=json,
-            include_account=False
+        data = cast(
+            dict,
+            self._context._post(
+                url=self._context._routes.file.versions,
+                json=json,
+                include_account=False
+            )
         )
 
         for file in data["files"]:
             yield (
                 FileModel(file),
                 self.file(file["fileId"]),
-                file["fileName"]
+                file["fileName"],
+                file["nextFileId"]
             )
 
     @authorize_required
     def file_names(self, settings: FileSettings = None
-                   ) -> Generator[Any, None, None]:
+                   ) -> Generator[
+                       Tuple[FileModel, BlockingFile, str], None, None]:
         """Used to list file by name.
 
         Parameters
@@ -139,10 +158,13 @@ class BlockingBucket(BaseBucket):
                 **settings.payload
             }
 
-        data = self.context._post(
-            url=self.context._routes.file.names,
-            json=json,
-            include_account=False
+        data = cast(
+            dict,
+            self._context._post(
+                url=self._context._routes.file.names,
+                json=json,
+                include_account=False
+            )
         )
 
         for file in data["files"]:
@@ -215,7 +237,7 @@ class BlockingBucket(BaseBucket):
 
         upload = self.upload_url()
 
-        file = FileModel(self.context._post(
+        file = FileModel(self._context._post(
             url=upload.upload_url,
             headers={
                 "Content-Length": str(len(data)),
@@ -247,11 +269,14 @@ class BlockingBucket(BaseBucket):
 
         upload_url = cache.find()
         if upload_url:
-            return upload_url
+            return cast(
+                UploadUrlModel,
+                upload_url
+            )
 
         return cache.save(UploadUrlModel(
-            self.context._post(
-                url=self.context._routes.upload.upload,
+            self._context._post(
+                url=self._context._routes.upload.upload,
                 json={"bucketId": self.bucket_id},
                 include_account=False
             )
@@ -270,7 +295,7 @@ class BlockingBucket(BaseBucket):
         BlockingFile
         """
 
-        return BlockingFile(file_id, self.context, self.bucket_id)
+        return BlockingFile(file_id, self._context, self.bucket_id)
 
     @authorize_required
     def delete(self) -> BucketModel:
@@ -282,9 +307,14 @@ class BlockingBucket(BaseBucket):
             Holds details on delete bucked.
         """
 
-        return BucketModel(self.context._post(
-            url=self.context._routes.bucket.delete,
-            json={
-                "bucketId": self.bucket_id
-            }
-        ))
+        return BucketModel(
+            cast(
+                dict,
+                self._context._post(
+                    url=self._context._routes.bucket.delete,
+                    json={
+                        "bucketId": self.bucket_id
+                    }
+                )
+            )
+        )

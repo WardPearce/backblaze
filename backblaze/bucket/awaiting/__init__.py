@@ -2,7 +2,7 @@ import os
 import aiofiles
 
 from hashlib import sha1
-from typing import Any, AsyncGenerator, Tuple
+from typing import AsyncGenerator, Tuple, TYPE_CHECKING, cast
 
 from ..base import BaseBucket
 
@@ -22,8 +22,13 @@ from ...utils import UploadUrlCache
 
 from ...decorators import authorize_required
 
+if TYPE_CHECKING:
+    from ... import Awaiting
+
 
 class AwaitingBucket(BaseBucket):
+    _context: "Awaiting"
+
     @authorize_required
     async def update(self, settings: BucketUpdateSettings) -> BucketModel:
         """Updates bucket details.
@@ -38,9 +43,12 @@ class AwaitingBucket(BaseBucket):
         """
 
         return BucketModel(
-            await self.context._post(
-                url=self.context._routes.bucket.update,
-                json={"bucketId": self.bucket_id, **settings.payload}
+            cast(
+                dict,
+                await self._context._post(
+                    url=self._context._routes.bucket.update,
+                    json={"bucketId": self.bucket_id, **settings.payload}
+                )
             )
         )
 
@@ -59,17 +67,22 @@ class AwaitingBucket(BaseBucket):
         AwaitingFile
         """
 
-        data = await self.context._post(
-            url=self.context._routes.file.start_large,
-            json={"bucketId": self.bucket_id, **settings.payload},
-            include_account=False
+        data = cast(
+            dict,
+            await self._context._post(
+                url=self._context._routes.file.start_large,
+                json={"bucketId": self.bucket_id, **settings.payload},
+                include_account=False
+            )
         )
 
         return FileModel(data), self.file(data["fileId"])
 
     @authorize_required
     async def file_versions(self, settings: FileSettings = None
-                            ) -> AsyncGenerator[Any, None]:
+                            ) -> AsyncGenerator[
+                                Tuple[FileModel, AwaitingFile, str, str],
+                                None]:
         """Used to list file by version.
 
         Parameters
@@ -98,10 +111,13 @@ class AwaitingBucket(BaseBucket):
                 **settings.payload
             }
 
-        data = await self.context._post(
-            url=self.context._routes.file.versions,
-            json=json,
-            include_account=False
+        data = cast(
+            dict,
+            await self._context._post(
+                url=self._context._routes.file.versions,
+                json=json,
+                include_account=False
+            )
         )
 
         for file in data["files"]:
@@ -114,7 +130,8 @@ class AwaitingBucket(BaseBucket):
 
     @authorize_required
     async def file_names(self, settings: FileSettings = None
-                         ) -> AsyncGenerator[Any, None]:
+                         ) -> AsyncGenerator[
+                             Tuple[FileModel, AwaitingFile, str], None]:
         """Used to list file by name.
 
         Parameters
@@ -141,10 +158,13 @@ class AwaitingBucket(BaseBucket):
                 **settings.payload
             }
 
-        data = await self.context._post(
-            url=self.context._routes.file.names,
-            json=json,
-            include_account=False
+        data = cast(
+            dict,
+            await self._context._post(
+                url=self._context._routes.file.names,
+                json=json,
+                include_account=False
+            )
         )
 
         for file in data["files"]:
@@ -217,7 +237,7 @@ class AwaitingBucket(BaseBucket):
 
         upload = await self.upload_url()
 
-        file = FileModel(await self.context._post(
+        file = FileModel(await self._context._post(
             url=upload.upload_url,
             headers={
                 "Content-Length": str(len(data)),
@@ -249,11 +269,14 @@ class AwaitingBucket(BaseBucket):
 
         upload_url = cache.find()
         if upload_url:
-            return upload_url
+            return cast(
+                UploadUrlModel,
+                upload_url
+            )
 
         return cache.save(UploadUrlModel(
-            await self.context._post(
-                url=self.context._routes.upload.upload,
+            await self._context._post(
+                url=self._context._routes.upload.upload,
                 json={"bucketId": self.bucket_id},
                 include_account=False
             )
@@ -272,7 +295,7 @@ class AwaitingBucket(BaseBucket):
         AwaitingFile
         """
 
-        return AwaitingFile(file_id, self.context, self.bucket_id)
+        return AwaitingFile(file_id, self._context, self.bucket_id)
 
     @authorize_required
     async def delete(self) -> BucketModel:
@@ -284,9 +307,14 @@ class AwaitingBucket(BaseBucket):
             Holds details on delete bucked.
         """
 
-        return BucketModel(await self.context._post(
-            url=self.context._routes.bucket.delete,
-            json={
-                "bucketId": self.bucket_id
-            }
-        ))
+        return BucketModel(
+            cast(
+                dict,
+                await self._context._post(
+                    url=self._context._routes.bucket.delete,
+                    json={
+                        "bucketId": self.bucket_id
+                    }
+                )
+            )
+        )

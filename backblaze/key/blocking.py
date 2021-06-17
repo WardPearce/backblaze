@@ -1,11 +1,16 @@
+from typing import cast, TYPE_CHECKING
+
 from .base import BaseKey
-
 from ..models.key import KeyModel
-
 from ..decorators import authorize_required
+
+if TYPE_CHECKING:
+    from .. import Blocking
 
 
 class BlockingKey(BaseKey):
+    _context: "Blocking"
+
     @authorize_required
     def delete(self) -> KeyModel:
         """Used delete key.
@@ -17,9 +22,12 @@ class BlockingKey(BaseKey):
         """
 
         return KeyModel(
-            self.context._post(
-                url=self.context._routes.key.delete,
-                json={"applicationKeyId": self.key_id},
-                include_account=False
+            cast(
+                dict,
+                self._context._post(
+                    url=self._context._routes.key.delete,
+                    json={"applicationKeyId": self.key_id},
+                    include_account=False
+                )
             )
         )

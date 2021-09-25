@@ -170,7 +170,7 @@ class DownloadSettings:
     """
     Parameters
     ----------
-    range : int, optional
+    range : str, optional
         by default None
     disposition : str, optional
         by default None
@@ -186,7 +186,7 @@ class DownloadSettings:
         by default None
     """
 
-    def __init__(self, range: int = None, disposition: str = None,
+    def __init__(self, range: str = None, disposition: str = None,
                  language: str = None, expires: datetime = None,
                  cache_control: str = None, encoding: str = None,
                  content_type: str = None) -> None:
@@ -318,7 +318,7 @@ class CopyFileSettings:
         by default None
     destination_bucket_id : str, optional
         by default None
-    range : int, optional
+    range : str, optional
         by default None
     directive : str, optional
         by default None
@@ -327,7 +327,7 @@ class CopyFileSettings:
     """
 
     def __init__(self, name: str, content_type: str = None,
-                 destination_bucket_id: str = None, range: int = None,
+                 destination_bucket_id: str = None, range: str = None,
                  directive: str = None, info: dict = None) -> None:
         self.payload: Dict[str, Union[str, int, dict]] = {
             "fileName": encode_name(name, replace=False),
@@ -350,11 +350,11 @@ class CopyPartSettings:
     Parameters
     ----------
     file_id : str
-    range : int, optional
+    range : str, optional
         by default None
     """
 
-    def __init__(self, file_id: str, range: int = None) -> None:
+    def __init__(self, file_id: str, range: str = None) -> None:
         self.payload: Dict[str, Union[str, int]] = {
             "largeFileId": file_id
         }

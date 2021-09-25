@@ -11,6 +11,7 @@ class LifecycleModel:
     """
 
     def __init__(self, data: dict) -> None:
+        print(data)
         self.hiding_to_delete = data["daysFromHidingToDeleting"]
         self.uploading_to_hide = data["daysFromUploadingToHiding"]
         self.prefix = data["fileNamePrefix"]

@@ -11,7 +11,6 @@ class LifecycleModel:
     """
 
     def __init__(self, data: dict) -> None:
-        print(data)
         self.hiding_to_delete = data["daysFromHidingToDeleting"]
         self.uploading_to_hide = data["daysFromUploadingToHiding"]
         self.prefix = data["fileNamePrefix"]
@@ -48,7 +47,7 @@ class BucketModel:
     info : str
     revision : str
     options : list
-    lifecycle : list
+    lifecycle : List[LifecycleModel]
     """
 
     def __init__(self, data: dict) -> None:
@@ -58,8 +57,9 @@ class BucketModel:
         self.info = data["bucketInfo"]
         self.revision = data["revision"]
         self.options = data["options"]
-        self.lifecycle = LifecycleModel(
-            data["lifecycleRules"]) if data["lifecycleRules"] else None
+        self.lifecycles = [
+            LifecycleModel(Lifecycle) for Lifecycle in data["lifecycleRules"]
+        ] if data["lifecycleRules"] else None
 
         self.__cors = data["corsRules"]
 

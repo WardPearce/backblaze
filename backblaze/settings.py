@@ -71,13 +71,13 @@ class BucketUpdateSettings:
             "bucketType": "allPrivate" if private else "allPublic"
         }
 
-        if info:
+        if info is not None:
             self.payload["bucketInfo"] = info
 
-        if lifecycle:
+        if lifecycle is not None:
             self.payload["lifecycleRules"] = lifecycle.payload
 
-        if cors:
+        if cors is not None:
             self.payload["corsRules"] = []
             cors_append = self.payload["corsRules"].append
 
@@ -130,9 +130,9 @@ class KeySettings:
 
         if duration is not None:
             self.payload["validDurationInSeconds"] = duration
-        if bucket_id:
+        if bucket_id is not None:
             self.payload["bucketId"] = bucket_id
-        if prefix:
+        if prefix is not None:
             self.payload["namePrefix"] = prefix
 
 
@@ -155,14 +155,14 @@ class FileSettings:
                  delimiter: str = None) -> None:
         self.payload = {}
 
-        if start_name:
+        if start_name is not None:
             self.payload["startFileName"] = encode_name(
                 start_name, replace=False)
-        if limit:
+        if limit is not None:
             self.payload["maxFileCount"] = limit
-        if prefix:
+        if prefix is not None:
             self.payload["prefix"] = prefix
-        if delimiter:
+        if delimiter is not None:
             self.payload["delimiter"] = delimiter
 
 
@@ -170,7 +170,7 @@ class DownloadSettings:
     """
     Parameters
     ----------
-    range : int, optional
+    range : str, optional
         by default None
     disposition : str, optional
         by default None
@@ -186,7 +186,7 @@ class DownloadSettings:
         by default None
     """
 
-    def __init__(self, range: int = None, disposition: str = None,
+    def __init__(self, range: str = None, disposition: str = None,
                  language: str = None, expires: datetime = None,
                  cache_control: str = None, encoding: str = None,
                  content_type: str = None) -> None:
@@ -195,17 +195,17 @@ class DownloadSettings:
 
         if range is not None:
             self.headers["Range"] = range
-        if disposition:
+        if disposition is not None:
             self.parameters["b2ContentDisposition"] = disposition
-        if language:
+        if language is not None:
             self.parameters["b2ContentLanguage"] = language
-        if expires:
+        if expires is not None:
             self.parameters["b2Expires"] = expires.timestamp() * 1000
-        if cache_control:
+        if cache_control is not None:
             self.parameters["b2CacheControl"] = cache_control
-        if encoding:
+        if encoding is not None:
             self.parameters["b2ContentEncoding"] = encoding
-        if content_type:
+        if content_type is not None:
             self.parameters["b2ContentType"] = content_type
 
 
@@ -247,27 +247,27 @@ class UploadSettings:
             "Content-Type": content_type
         }
 
-        if last_modified:
+        if last_modified is not None:
             self.headers[
                 "X-Bz-Info-src_last_modified_millis"
             ] = last_modified.timestamp() * 1000
 
-        if disposition:
+        if disposition is not None:
             self.headers["X-Bz-Info-b2-content-disposition"] = disposition
 
-        if language:
+        if language is not None:
             self.headers["X-Bz-Info-b2-content-language"] = language
 
-        if expires:
+        if expires is not None:
             self.headers["X-Bz-Info-b2-expires"] = expires.timestamp() * 1000
 
-        if cache_control:
+        if cache_control is not None:
             self.headers["X-Bz-Info-b2-cache-control"] = cache_control
 
-        if encoding:
+        if encoding is not None:
             self.headers["X-Bz-Info-b2-content-encoding"] = encoding
 
-        if custom_headers:
+        if custom_headers is not None:
             for header, value in custom_headers.items():
                 self.headers["X-Bz-Info-{}".format(header)] = value
 
@@ -292,12 +292,12 @@ class PartSettings:
             "contentType": content_type
         }
 
-        if last_modified:
+        if last_modified is not None:
             self.payload["fileInfo"] = {
                 "src_last_modified_millis": last_modified.timestamp() * 1000
             }
 
-        if sha1:
+        if sha1 is not None:
             if "fileInfo" not in self.payload:
                 self.payload["fileInfo"] = {
                     "large_file_sha1": sha1
@@ -318,7 +318,7 @@ class CopyFileSettings:
         by default None
     destination_bucket_id : str, optional
         by default None
-    range : int, optional
+    range : str, optional
         by default None
     directive : str, optional
         by default None
@@ -327,21 +327,21 @@ class CopyFileSettings:
     """
 
     def __init__(self, name: str, content_type: str = None,
-                 destination_bucket_id: str = None, range: int = None,
+                 destination_bucket_id: str = None, range: str = None,
                  directive: str = None, info: dict = None) -> None:
         self.payload: Dict[str, Union[str, int, dict]] = {
             "fileName": encode_name(name, replace=False),
         }
 
-        if content_type:
+        if content_type is not None:
             self.payload["contentType"] = content_type
-        if destination_bucket_id:
+        if destination_bucket_id is not None:
             self.payload["destinationBucketId"] = destination_bucket_id
         if range is not None:
             self.payload["range"] = range
-        if directive:
+        if directive is not None:
             self.payload["metadataDirective"] = directive
-        if info:
+        if info is not None:
             self.payload["fileInfo"] = info
 
 
@@ -350,11 +350,11 @@ class CopyPartSettings:
     Parameters
     ----------
     file_id : str
-    range : int, optional
+    range : str, optional
         by default None
     """
 
-    def __init__(self, file_id: str, range: int = None) -> None:
+    def __init__(self, file_id: str, range: str = None) -> None:
         self.payload: Dict[str, Union[str, int]] = {
             "largeFileId": file_id
         }

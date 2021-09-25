@@ -17,7 +17,7 @@ class TestBucketBlocking(unittest.TestCase):
         ))
 
         bucket.update(BucketUpdateSettings(
-            private=False
+            private=True
         ))
 
         self.assertIsInstance(

@@ -16,6 +16,17 @@ from ..exceptions import (
 )
 
 
+HTTP_ERRORS = {
+    400: BadRequest,
+    401: UnAuthorized,
+    403: Forbidden,
+    408: RequestTimeout,
+    429: TooManyRequests,
+    500: InternalError,
+    503: ServiceUnavailable
+}
+
+
 class BaseHTTP:
     def handle_resp(self, resp: Response, json: bool = True
                     ) -> Union[dict, bytes, None]:
@@ -38,11 +49,9 @@ class BaseHTTP:
         TooManyRequests
         InternalError
         ServiceUnavailable
-        HTTPStatusError
-            Raised when none of the above are.
         """
 
-        if resp.status_code == 200:
+        if resp.status_code not in HTTP_ERRORS:
             if json:
                 return resp.json()
             else:
@@ -53,19 +62,4 @@ class BaseHTTP:
             except JSONDecodeError:
                 pass
 
-            if resp.status_code == 400:
-                raise BadRequest()
-            elif resp.status_code == 401:
-                raise UnAuthorized()
-            elif resp.status_code == 403:
-                raise Forbidden()
-            elif resp.status_code == 408:
-                raise RequestTimeout()
-            elif resp.status_code == 429:
-                raise TooManyRequests()
-            elif resp.status_code == 500:
-                raise InternalError()
-            elif resp.status_code == 503:
-                raise ServiceUnavailable()
-            else:
-                resp.raise_for_status()
+            raise HTTP_ERRORS[resp.status_code]

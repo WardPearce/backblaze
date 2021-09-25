@@ -62,4 +62,4 @@ class BaseHTTP:
             except JSONDecodeError:
                 pass
 
-            raise HTTP_ERRORS[resp.status_code]
+            raise HTTP_ERRORS[resp.status_code]()

@@ -1,3 +1,5 @@
+# No longer being actively maintained
+
 ## Welcome to Backblaze's unofficial python wrapper!
 
 This is a unofficial asynchronous & synchronous wrapper for Backblaze's B2 API.
